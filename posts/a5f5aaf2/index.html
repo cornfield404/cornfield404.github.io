@@ -23,27 +23,33 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.21.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+    <meta name="description" content="题目： PoliFormer: Scaling On-Policy RL with Transformers Results in Masterful Navigators链接： https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;2406.20083代码： https:&#x2F;&#x2F;github.com&#x2F;allenai&#x2F;poliformer来源： CoRL 2024 (Outstanding Paper Awar">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="http://example.com/posts/8ddf18fb/index.html">
-<meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta property="og:title" content="PoliFormer">
+<meta property="og:url" content="http://example.com/posts/a5f5aaf2/index.html">
+<meta property="og:site_name" content="Corn Field">
+<meta property="og:description" content="题目： PoliFormer: Scaling On-Policy RL with Transformers Results in Masterful Navigators链接： https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;2406.20083代码： https:&#x2F;&#x2F;github.com&#x2F;allenai&#x2F;poliformer来源： CoRL 2024 (Outstanding Paper Awar">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-10-29T03:07:46.302Z">
-<meta property="article:modified_time" content="2024-11-01T07:54:26.436Z">
+<meta property="og:image" content="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-14%2013.57.35.png">
+<meta property="article:published_time" content="2024-11-13T06:29:29.000Z">
+<meta property="article:modified_time" content="2024-11-14T08:13:32.129Z">
 <meta property="article:author" content="Corn">
+<meta property="article:tag" content="论文笔记">
+<meta property="article:tag" content="Reinforcement_Learning">
+<meta property="article:tag" content="Embodied_Navigation">
+<meta property="article:tag" content="CoRL2024">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-14%2013.57.35.png">
 
 
-<link rel="canonical" href="http://example.com/posts/8ddf18fb/">
+<link rel="canonical" href="http://example.com/posts/a5f5aaf2/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/posts/8ddf18fb/","path":"posts/8ddf18fb/","title":"Hello World"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/posts/a5f5aaf2/","path":"posts/a5f5aaf2/","title":"PoliFormer"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Hello World | Hexo</title>
+<title>PoliFormer | Corn Field</title>
   
 
 
@@ -76,7 +82,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <p class="site-title">Hexo</p>
+      <p class="site-title">Corn Field</p>
       <i class="logo-line"></i>
     </a>
   </div>
@@ -91,7 +97,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
@@ -131,10 +137,10 @@
 
     <!--网易云音乐插件-->
     <!-- require APlayer -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
     <!-- require MetingJS-->
-    <script src="https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script> 
     <!--网易云playlist外链地址-->   
     <meting-js
         server="netease"
@@ -144,7 +150,7 @@
         fixed="false"
         list-folded="true"
         autoplay="false"
-        volume="0.4"
+        volume="0.7"
         theme="#FADFA3"
         order="list"
         loop="all"
@@ -165,7 +171,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Quick-Start"><span class="nav-number">1.</span> <span class="nav-text">Quick Start</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Create-a-new-post"><span class="nav-number">1.1.</span> <span class="nav-text">Create a new post</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Run-server"><span class="nav-number">1.2.</span> <span class="nav-text">Run server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Generate-static-files"><span class="nav-number">1.3.</span> <span class="nav-text">Generate static files</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deploy-to-remote-sites"><span class="nav-number">1.4.</span> <span class="nav-text">Deploy to remote sites</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B9%8B%E5%89%8D%E6%96%B9%E6%B3%95%E7%9A%84%E7%BC%BA%E9%99%B7"><span class="nav-number">1.</span> <span class="nav-text">之前方法的缺陷</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Motivation"><span class="nav-number">2.</span> <span class="nav-text">Motivation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Method"><span class="nav-number">3.</span> <span class="nav-text">Method</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">个人总结</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -182,6 +188,16 @@
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
   </nav>
 </div>
 
@@ -192,7 +208,7 @@
     </div>
     <ul class="links-of-recent-posts-list">
         <li class="links-of-recent-posts-item">
-          <a href="/posts/8ddf18fb/" title="posts&#x2F;8ddf18fb&#x2F;">Hello World</a>
+          <a href="/posts/a5f5aaf2/" title="posts&#x2F;a5f5aaf2&#x2F;">PoliFormer</a>
         </li>
     </ul>
   </div>
@@ -217,7 +233,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/8ddf18fb/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/a5f5aaf2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -225,26 +241,22 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
+      <meta itemprop="name" content="Corn Field">
       <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="Hello World | Hexo">
+      <meta itemprop="name" content="PoliFormer | Corn Field">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Hello World
+          PoliFormer
         </h1>
 
         <div class="post-meta-container">
           <div class="post-meta">
 
-  
-    <i class="fa fa-thumb-tack"></i>
-    <font color=7D26CD>置顶</font>
-    <span class="post-meta-divider">|</span>
   
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -252,14 +264,27 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2024-10-29 11:07:46" itemprop="dateCreated datePublished" datetime="2024-10-29T11:07:46+08:00">2024-10-29</time>
+      <time title="创建时间：2024-11-13 14:29:29" itemprop="dateCreated datePublished" datetime="2024-11-13T14:29:29+08:00">2024-11-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-11-01 15:54:26" itemprop="dateModified" datetime="2024-11-01T15:54:26+08:00">2024-11-01</time>
+      <time title="修改时间：2024-11-14 16:13:32" itemprop="dateModified" datetime="2024-11-14T16:13:32+08:00">2024-11-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/technology/" itemprop="url" rel="index"><span itemprop="name">technology</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/technology/papers/" itemprop="url" rel="index"><span itemprop="name">papers</span></a>
+        </span>
     </span>
 
   
@@ -271,8 +296,8 @@
     </span>
     <span class="post-meta-item-text">Waline：</span>
   
-    <a title="waline" href="/posts/8ddf18fb/#waline" itemprop="discussionUrl">
-      <span class="post-comments-count waline-comment-count" data-path="/posts/8ddf18fb/" itemprop="commentCount"></span>
+    <a title="waline" href="/posts/a5f5aaf2/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/posts/a5f5aaf2/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -283,7 +308,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>367</span>
+      <span>1.4k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -300,21 +325,25 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<span id="more"></span>
-
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+    <div class="post-body" itemprop="articleBody"><p><strong>题目：</strong> PoliFormer: Scaling On-Policy RL with Transformers Results in Masterful Navigators<br><strong>链接：</strong> <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2406.20083">https://arxiv.org/pdf/2406.20083</a><br><strong>代码：</strong> <a target="_blank" rel="noopener" href="https://github.com/allenai/poliformer">https://github.com/allenai/poliformer</a><br><strong>来源：</strong> CoRL 2024 (Outstanding Paper Award)<br><strong>单位：</strong> Allen Institute for AI</p>
+<hr>
+<h4 id="之前方法的缺陷"><a href="#之前方法的缺陷" class="headerlink" title="之前方法的缺陷"></a>之前方法的缺陷</h4><ul>
+<li>基于 GRU 的结构在简单的数据集上取得了很好的效果，但在较难的数据集上结果比较差；<font color="#a5a5a5">（However, this approach fails to result in the same breakthroughs for harder navigation problems like Object Goal Navigation (ObjectNav) where an agent must explore its environment to locate and navigate to an object of the requested type.）</font></li>
+<li>增大网络规模会导致模型训练不稳定且训练时间增加；<font color="#a5a5a5">（RL approaches for ObjectNav have generally not advanced beyond shallow GRU architectures due to challenges presented by training instability and unreasonably long training times with wider and deeper models, such as scaled-up transformers.）</font></li>
+<li>Imitation Learning 可能存在状态空间探索不足的问题。<font color="#a5a5a5">（we suspect this is a consequence of insufficient state-space exploration as expert trajectory datasets frequently contain few examples of error recovery, which can lead to sub-optimal performance due to compounding errors or non-trivial domain shifts during inference.）</font></li>
+</ul>
+<hr>
+<h4 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h4><p>从各个方面增大 RL 的 scale。</p>
+<hr>
+<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-14%2013.57.35.png" alt="截屏2024-11-14 13.57.35.png"></p>
+<ul>
+<li>Encoder 根据当前输入的 RGB 图像以及 goal 编码生成当前的状态 $s^t$，decoder 用于预测 action；</li>
+<li>Vision Transformer Model：DINOv2，训练时，该模块参数冻结，以保证模型在真实环境中的泛化性，否则视觉模块在模拟场景中的训练会影响到真实环境的性能；</li>
+<li>Goal Encoder：为了方便比较，在不同 benchmark 上用了不同的编码器；</li>
+<li>Causal Transformer Decoder：用 KV-cache 加速，使计算用时与时间成正比而非平方正比，加速计算。</li>
+</ul>
+<hr>
+<h4 id="个人总结"><a href="#个人总结" class="headerlink" title="个人总结"></a>个人总结</h4><p>这篇文章通过增大 scale 大幅提升了 embodied navigation 任务的准确性。增大 scale 既包括从模型上采用 transformer 结构增大了模型的 scale；也包括从数据层面上，采用了一系列方法加快了数据的模拟和读取；还包括直接增加训练节点数量，提升训练速度。</p>
 
     </div>
 
@@ -323,6 +352,12 @@
     
 
     <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" rel="tag"><i class="fa fa-tag"></i> 论文笔记</a>
+              <a href="/tags/Reinforcement-Learning/" rel="tag"><i class="fa fa-tag"></i> Reinforcement_Learning</a>
+              <a href="/tags/Embodied-Navigation/" rel="tag"><i class="fa fa-tag"></i> Embodied_Navigation</a>
+              <a href="/tags/CoRL2024/" rel="tag"><i class="fa fa-tag"></i> CoRL2024</a>
+          </div>
 
         
 
@@ -355,7 +390,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">0k</span>
+    <span title="站点总字数">1k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
@@ -407,7 +442,13 @@
 
 
 
-<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"hexowaline-ten.vercel.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"(发表评论)","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":true,"comment_count":true,"requiredFields":[],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/posts/8ddf18fb/"}</script>
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"hexowaline-ten.vercel.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"(发表评论)","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":true,"comment_count":true,"requiredFields":[],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/posts/a5f5aaf2/"}</script>
 <link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
 <script>
 document.addEventListener('page:loaded', () => {

@@ -1,23 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hello World</title>
-    <url>/posts/8ddf18fb/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<span id="more"></span>
-
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+    <title>PoliFormer</title>
+    <url>/posts/a5f5aaf2/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> PoliFormer: Scaling On-Policy RL with Transformers Results in Masterful Navigators<br><strong>链接：</strong> <a href="https://arxiv.org/pdf/2406.20083">https://arxiv.org/pdf/2406.20083</a><br><strong>代码：</strong> <a href="https://github.com/allenai/poliformer">https://github.com/allenai/poliformer</a><br><strong>来源：</strong> CoRL 2024 (Outstanding Paper Award)<br><strong>单位：</strong> Allen Institute for AI</p>
+<hr>
+<h4 id="之前方法的缺陷"><a href="#之前方法的缺陷" class="headerlink" title="之前方法的缺陷"></a>之前方法的缺陷</h4><ul>
+<li>基于 GRU 的结构在简单的数据集上取得了很好的效果，但在较难的数据集上结果比较差；<font color="#a5a5a5">（However, this approach fails to result in the same breakthroughs for harder navigation problems like Object Goal Navigation (ObjectNav) where an agent must explore its environment to locate and navigate to an object of the requested type.）</font></li>
+<li>增大网络规模会导致模型训练不稳定且训练时间增加；<font color="#a5a5a5">（RL approaches for ObjectNav have generally not advanced beyond shallow GRU architectures due to challenges presented by training instability and unreasonably long training times with wider and deeper models, such as scaled-up transformers.）</font></li>
+<li>Imitation Learning 可能存在状态空间探索不足的问题。<font color="#a5a5a5">（we suspect this is a consequence of insufficient state-space exploration as expert trajectory datasets frequently contain few examples of error recovery, which can lead to sub-optimal performance due to compounding errors or non-trivial domain shifts during inference.）</font></li>
+</ul>
+<hr>
+<h4 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h4><p>从各个方面增大 RL 的 scale。</p>
+<hr>
+<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-14%2013.57.35.png" alt="截屏2024-11-14 13.57.35.png"></p>
+<ul>
+<li>Encoder 根据当前输入的 RGB 图像以及 goal 编码生成当前的状态 $s^t$，decoder 用于预测 action；</li>
+<li>Vision Transformer Model：DINOv2，训练时，该模块参数冻结，以保证模型在真实环境中的泛化性，否则视觉模块在模拟场景中的训练会影响到真实环境的性能；</li>
+<li>Goal Encoder：为了方便比较，在不同 benchmark 上用了不同的编码器；</li>
+<li>Causal Transformer Decoder：用 KV-cache 加速，使计算用时与时间成正比而非平方正比，加速计算。</li>
+</ul>
+<hr>
+<h4 id="个人总结"><a href="#个人总结" class="headerlink" title="个人总结"></a>个人总结</h4><p>这篇文章通过增大 scale 大幅提升了 embodied navigation 任务的准确性。增大 scale 既包括从模型上采用 transformer 结构增大了模型的 scale；也包括从数据层面上，采用了一系列方法加快了数据的模拟和读取；还包括直接增加训练节点数量，提升训练速度。</p>
 ]]></content>
+      <categories>
+        <category>technology</category>
+        <category>papers</category>
+      </categories>
+      <tags>
+        <tag>论文笔记</tag>
+        <tag>Reinforcement_Learning</tag>
+        <tag>Embodied_Navigation</tag>
+        <tag>CoRL2024</tag>
+      </tags>
   </entry>
 </search>
