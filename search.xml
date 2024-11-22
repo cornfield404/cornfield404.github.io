@@ -1,36 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>马拉车算法</title>
-    <url>/posts/c3cacb08/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h4><p>用于解决最长回文子串的问题，可以把算法复杂度降低到 O(N)。</p>
-<hr>
-<h4 id="算法原理"><a href="#算法原理" class="headerlink" title="算法原理"></a>算法原理</h4><ul>
-<li>在字符串的每个字符之间以及字符串首尾插入同一个字符串内不可能出现的字符，以保证所有字符串的长度都是奇数，这样可以不用对长度为奇数的字符串以及长度为偶数的字符串分类处理；</li>
-<li>在字符串开头和结尾分别加入不同的且不可能在字符串内出现的字符，这样保证回文子串搜索到该位置的时候自动退出，不需要处理边界情况；</li>
-<li>该算法在每个位置都希望计算以该位置为中心的最长回文子串的长度。同时会记录一个当前回文子串对应的最靠右的右边界位置 R，该位置对应的回文子串中心 c，该位置对应的回文子串 s。这样对于一个新的位置，可能出现几种情况：<ul>
-<li>该位置在 R 的右边，需要重新搜索该位置的回文子串；</li>
-<li>该位置在 R 的左边，此时可以看该位置以 c 为中心对称位置的回文子串情况，这也有两种情况：<ul>
-<li>对称位置的回文子串完全落在 s 内，则在当前位置的回文子串长度与对称位置相同（回文子串的性质）；</li>
-<li>对称位置的回文子串有一部分落在 s 外，则当前位置到 R 肯定可以构成回文子串，需要继续向外搜索。</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h4 id="算法分析"><a href="#算法分析" class="headerlink" title="算法分析"></a>算法分析</h4><p>在上述算法过程中 R 是不断向右的，也就是在算法过程中不会重复比较字符是否相等，因此可以大幅度降低时间复杂度。</p>
-<hr>
-<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">longestPalindrome</span>(<span class="params">self, s: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        new_s = <span class="string">&#x27;^#&#x27;</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> s:</span><br><span class="line">            new_s = new_s + i + <span class="string">&#x27;#&#x27;</span></span><br><span class="line">        new_s += <span class="string">&#x27;$&#x27;</span></span><br><span class="line">		</span><br><span class="line">        result = numpy.zeros(<span class="built_in">len</span>(new_s))</span><br><span class="line">        right = <span class="number">0</span></span><br><span class="line">        center = <span class="number">0</span></span><br><span class="line">		</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="built_in">len</span>(new_s) - <span class="number">1</span>):</span><br><span class="line">            <span class="keyword">if</span> i &gt; right:</span><br><span class="line">                r = <span class="number">0</span></span><br><span class="line">                <span class="keyword">while</span> new_s[i + r] == new_s[i - r]:</span><br><span class="line">                    r += <span class="number">1</span></span><br><span class="line">                r -= <span class="number">1</span></span><br><span class="line">                center = i</span><br><span class="line">                right = center + r</span><br><span class="line">                result[i] = r</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                other_i = <span class="number">2</span> * center - i</span><br><span class="line">                <span class="keyword">if</span> result[other_i] &lt; right - i:</span><br><span class="line">                    result[i] = result[other_i]</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    r = right - i</span><br><span class="line">                    <span class="keyword">while</span> new_s[i + r] == new_s[i - r]:</span><br><span class="line">                        r += <span class="number">1</span></span><br><span class="line">                    r -= <span class="number">1</span></span><br><span class="line">                    center = i</span><br><span class="line">                    right = center + r</span><br><span class="line">                    result[i] = r</span><br><span class="line">					</span><br><span class="line">        index = <span class="built_in">int</span>(numpy.argmax(result))</span><br><span class="line">        result_s = new_s[<span class="built_in">int</span>(index - result[index]):<span class="built_in">int</span>(index + result[index] + <span class="number">1</span>)]</span><br><span class="line">        result_s = result_s.replace(<span class="string">&#x27;#&#x27;</span>, <span class="string">&#x27;&#x27;</span>)</span><br><span class="line">        <span class="keyword">return</span> result_s</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>technology</category>
-        <category>code</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>PoliFormer</title>
     <url>/posts/a5f5aaf2/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> PoliFormer: Scaling On-Policy RL with Transformers Results in Masterful Navigators<br><strong>链接：</strong> <a href="https://arxiv.org/pdf/2406.20083">https://arxiv.org/pdf/2406.20083</a><br><strong>代码：</strong> <a href="https://github.com/allenai/poliformer">https://github.com/allenai/poliformer</a><br><strong>来源：</strong> CoRL 2024 (Outstanding Paper Award)<br><strong>单位：</strong> Allen Institute for AI</p>
@@ -62,6 +32,107 @@
         <tag>Reinforcement_Learning</tag>
         <tag>Embodied_Navigation</tag>
         <tag>CoRL2024</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>马拉车算法</title>
+    <url>/posts/c3cacb08/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h4><p>用于解决最长回文子串的问题，可以把算法复杂度降低到 O(N)。</p>
+<hr>
+<h4 id="算法原理"><a href="#算法原理" class="headerlink" title="算法原理"></a>算法原理</h4><ul>
+<li>在字符串的每个字符之间以及字符串首尾插入同一个字符串内不可能出现的字符，以保证所有字符串的长度都是奇数，这样可以不用对长度为奇数的字符串以及长度为偶数的字符串分类处理；</li>
+<li>在字符串开头和结尾分别加入不同的且不可能在字符串内出现的字符，这样保证回文子串搜索到该位置的时候自动退出，不需要处理边界情况；</li>
+<li>该算法在每个位置都希望计算以该位置为中心的最长回文子串的长度。同时会记录一个当前回文子串对应的最靠右的右边界位置 R，该位置对应的回文子串中心 c，该位置对应的回文子串 s。这样对于一个新的位置，可能出现几种情况：<ul>
+<li>该位置在 R 的右边，需要重新搜索该位置的回文子串；</li>
+<li>该位置在 R 的左边，此时可以看该位置以 c 为中心对称位置的回文子串情况，这也有两种情况：<ul>
+<li>对称位置的回文子串完全落在 s 内，则在当前位置的回文子串长度与对称位置相同（回文子串的性质）；</li>
+<li>对称位置的回文子串有一部分落在 s 外，则当前位置到 R 肯定可以构成回文子串，需要继续向外搜索。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="算法分析"><a href="#算法分析" class="headerlink" title="算法分析"></a>算法分析</h4><p>在上述算法过程中 R 是不断向右的，也就是在算法过程中不会重复比较字符是否相等，因此可以大幅度降低时间复杂度。</p>
+<hr>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">longestPalindrome</span>(<span class="params">self, s: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        new_s = <span class="string">&#x27;^#&#x27;</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> s:</span><br><span class="line">            new_s = new_s + i + <span class="string">&#x27;#&#x27;</span></span><br><span class="line">        new_s += <span class="string">&#x27;$&#x27;</span></span><br><span class="line">		</span><br><span class="line">        result = numpy.zeros(<span class="built_in">len</span>(new_s))</span><br><span class="line">        right = <span class="number">0</span></span><br><span class="line">        center = <span class="number">0</span></span><br><span class="line">		</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="built_in">len</span>(new_s) - <span class="number">1</span>):</span><br><span class="line">            <span class="keyword">if</span> i &gt; right:</span><br><span class="line">                r = <span class="number">0</span></span><br><span class="line">                <span class="keyword">while</span> new_s[i + r] == new_s[i - r]:</span><br><span class="line">                    r += <span class="number">1</span></span><br><span class="line">                r -= <span class="number">1</span></span><br><span class="line">                center = i</span><br><span class="line">                right = center + r</span><br><span class="line">                result[i] = r</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                other_i = <span class="number">2</span> * center - i</span><br><span class="line">                <span class="keyword">if</span> result[other_i] &lt; right - i:</span><br><span class="line">                    result[i] = result[other_i]</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    r = right - i</span><br><span class="line">                    <span class="keyword">while</span> new_s[i + r] == new_s[i - r]:</span><br><span class="line">                        r += <span class="number">1</span></span><br><span class="line">                    r -= <span class="number">1</span></span><br><span class="line">                    center = i</span><br><span class="line">                    right = center + r</span><br><span class="line">                    result[i] = r</span><br><span class="line">					</span><br><span class="line">        index = <span class="built_in">int</span>(numpy.argmax(result))</span><br><span class="line">        result_s = new_s[<span class="built_in">int</span>(index - result[index]):<span class="built_in">int</span>(index + result[index] + <span class="number">1</span>)]</span><br><span class="line">        result_s = result_s.replace(<span class="string">&#x27;#&#x27;</span>, <span class="string">&#x27;&#x27;</span>)</span><br><span class="line">        <span class="keyword">return</span> result_s</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>technology</category>
+        <category>code</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>P-Tuning v2</title>
+    <url>/posts/9feacd8a/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> P-Tuning v2: Prompt Tuning Can Be Comparable to Fine-tuning Universally Across Scales and Tasks<br><strong>链接：</strong> <a href="https://arxiv.org/pdf/2110.07602">https://arxiv.org/pdf/2110.07602</a><br><strong>代码：</strong> <a href="https://github.com/THUDM/P-tuning-v2">https://github.com/THUDM/P-tuning-v2</a><br><strong>来源：</strong> ACL 2022<br><strong>单位：</strong> Tsinghua University, KEG；Beijing Academy of Artificial Intelligence (BAAI)；Shanghai Qi Zhi Institute</p>
+<hr>
+<h4 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h4><p>对于大模型 finetune 所有参数很困难，类似 P-Tuning 的 prompt tuning 方法性能比 finetune 所有参数差，尤其在模型参数规模不足 100 亿时效果差的更明显。本文希望找到一种泛化性更强的 prompt tuning 方法。</p>
+<hr>
+<h4 id="P-Tuning-缺陷"><a href="#P-Tuning-缺陷" class="headerlink" title="P-Tuning 缺陷"></a>P-Tuning 缺陷</h4><ol>
+<li>在小模型上效果不好，当模型参数量大于 100 亿时，与 finetune 效果相近；但当模型参数量不足 100 亿时，效果会变差；</li>
+<li>在不同任务上通用性不足，在一些更难的任务上效果比较差。</li>
+</ol>
+<hr>
+<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-22%2019.10.51.png" alt="截屏2024-11-22 19.10.51.png"><br>与 P-Tuning 相比，v2 在每一层都加入了可学习的 prompt，增加了可学习的参数量，同时添加到深层的 prompt 可以更直接地影响模型预测结果。</p>
+]]></content>
+      <categories>
+        <category>technology</category>
+        <category>papers</category>
+      </categories>
+      <tags>
+        <tag>论文笔记</tag>
+        <tag>LLM</tag>
+        <tag>ACL2022</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>LoRA</title>
+    <url>/posts/3a5bfa54/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> LORA: LOW-RANK ADAPTATION OF LARGE LANGUAGE MODELS<br><strong>链接：</strong> <a href="https://arxiv.org/pdf/2106.09685">https://arxiv.org/pdf/2106.09685</a><br><strong>代码：</strong> <a href="https://github.com/microsoft/LoRA">https://github.com/microsoft/LoRA</a><br><strong>来源：</strong> ICLR 2022<br><strong>单位：</strong> Microsoft Corporation</p>
+<hr>
+<h4 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h4><p>随着模型规模越来越大，在所有参数上 finetune 越来越不现实。之前提出的解决方案都有一定缺陷：</p>
+<ul>
+<li>增加 adapter layer 会引入额外的延迟，且当 batch size 减小时这种延迟变得不可忽视；</li>
+<li>Optimizing prompt 难以训练，且保留一部分 prompt 会导致下游任务可用的 prompt 长度变小，从而影响模型整体性能。</li>
+</ul>
+<hr>
+<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p>假设在 finetune 过程中权重矩阵的变化量是低秩的，即：$W_0+\Delta W&#x3D;W_0+BA$，其中：$B\in \mathbb{R}^{d\times r}$，$A\in \mathbb{R}^{r\times k}$ 且 $r\ll \min(d, k)$。训练过程中 $W_0$ 保持不变，仅更新 $A$ 和 $B$。</p>
+<hr>
+<h4 id="LoRA-的优势"><a href="#LoRA-的优势" class="headerlink" title="LoRA 的优势"></a>LoRA 的优势</h4><ul>
+<li>方法灵活，可以根据需要调整 $r$，当逐渐增大 $r$ 时，LoRA 会逐渐接近 finetune 所有参数；</li>
+<li>当有多个下游子任务时，LoRA 可以通过更新 $BA$ 的方式在不同任务间切换，且 LoRA 相比于原始模型不会引入额外的计算延迟。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>technology</category>
+        <category>papers</category>
+      </categories>
+      <tags>
+        <tag>论文笔记</tag>
+        <tag>LLM</tag>
+        <tag>ICLR2022</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>P-Tuning</title>
+    <url>/posts/8c1493e0/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> GPT Understands, Too<br><strong>链接：</strong> <a href="https://arxiv.org/pdf/2103.10385">https://arxiv.org/pdf/2103.10385</a><br><strong>代码：</strong> <a href="https://github.com/THUDM/P-tuning">https://github.com/THUDM/P-tuning</a><br><strong>来源：</strong> AI Open 2024<br><strong>单位：</strong> Tsinghua University；Massachusetts Institute of Technology</p>
+<hr>
+<h4 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h4><p>Prompt 可以提升大语言模型性能，然而，人工提供的离散 prompt 会导致很大的不确定性，几个单词的变动就会导致结果发生大幅度变化。P-Tuning 希望在离散的 prompt 前加入一个可训练的连续 prompt，提升稳定性。</p>
+<hr>
+<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-22%2017.31.24.png" alt="截屏2024-11-22 17.31.24.png"></p>
+]]></content>
+      <categories>
+        <category>technology</category>
+        <category>papers</category>
+      </categories>
+      <tags>
+        <tag>论文笔记</tag>
+        <tag>LLM</tag>
+        <tag>AI_Open_2024</tag>
       </tags>
   </entry>
 </search>
