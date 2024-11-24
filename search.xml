@@ -1,27 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>PoliFormer</title>
-    <url>/posts/a5f5aaf2/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> PoliFormer: Scaling On-Policy RL with Transformers Results in Masterful Navigators<br><strong>链接：</strong> <a href="https://arxiv.org/pdf/2406.20083">https://arxiv.org/pdf/2406.20083</a><br><strong>代码：</strong> <a href="https://github.com/allenai/poliformer">https://github.com/allenai/poliformer</a><br><strong>来源：</strong> CoRL 2024 (Outstanding Paper Award)<br><strong>单位：</strong> Allen Institute for AI</p>
+    <title>那种可能性早已料及</title>
+    <url>/posts/8215b0f1/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="故事梗概"><a href="#故事梗概" class="headerlink" title="故事梗概"></a>故事梗概</h4><p>自称渡良濑莉世的委托人怀疑自己十年前杀过人，希望委托侦探上苙丞调查确认。十年前，莉世和堂仁被各自的母亲带到教团”血赎”的居住地，二人都希望从村里逃走。村里的出入口只有一个，除交易日外不常打开，悬崖的岩石很脆不能攀爬，村里材料不足无法制造梯子或高台等工具，但堂仁依旧在为逃走准备，并承诺带莉世一起。村里共三十三人，一名教祖，其余是信徒。</p>
+<p>村里的猪身上都带有号码牌，按照顺序决定下次吃那一头。某天堂仁发现莉世把 12 号的号码牌藏了起来，莉世回答自己喜欢 12 号，希望它能活久一点。同时，莉世偷偷藏了一头小猪崽，被堂仁发现后，二人把猪崽藏在祭坛下面。</p>
+<p>村里突发地震，地震后村里的瀑布断流，水车停止运作。教祖认为这是一种征兆，因此堵住了村里唯一的出入口，并举行了最后的晚餐。在莉世记忆中，最后的晚餐后，教祖在堂仁的服侍下举行了祓禊，祓禊结束后教祖用斧头砍杀了信徒。堂仁带着莉世从门口跑出去并反锁了门，村子着火且火势开始蔓延，等莉世再次有意识的时候，她发现自己身处祠堂，旁边是堂仁被砍下的头和尸体。</p>
+<p>莉世怀疑是自己杀了少年，因为除了莉世和堂仁其他人的遗体都在参拜堂内部，且门是从外部上锁的，因此里面的人无法在无人帮助的情况下出来或自己锁上门，同时门锁很重莉世也无法锁上。但是，矛盾点在于，堂仁的头是被村里处理家畜的断头台砍下的，断头台距离祠堂有一段距离，莉世当时腿部骨折，绑着石膏，无论是移动尸体还是移动断头台都不可能。</p>
+<p>调查后侦探认为这起事件是——奇迹。</p>
+<h5 id="大门的推理"><a href="#大门的推理" class="headerlink" title="大门的推理"></a>大门的推理</h5><p>大门认为当时村里的水车是可以靠人力转动的那种，将猪放入水车，用火加热铁质水车就可以用猪驱动水车移动断头台。动机是堂仁要杀死小猪崽，少女精神崩溃下杀了人，为了制造奇迹，少女伪造了现场。</p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        侦探的反驳
+    </div>
+    <div class='spoiler-content'>
+        <p>堂仁看到号码牌就知道编号是 12 而不是 21，说明猪的数量小于等于 20，同时 11 号及之前的都死掉了，说明最多有 9 只猪。33 名成员都吃到了猪脚，说明 9 只猪都被杀了，因此没有能用来驱动水车的猪了。</p>
+
+    </div>
+</div>
+
+<h5 id="宋俪西的推理"><a href="#宋俪西的推理" class="headerlink" title="宋俪西的推理"></a>宋俪西的推理</h5><p>堂仁为了从村里逃走利用村里的材料做了投石机，事情发生后，堂仁想出去求援并带人回来救莉世。莉世误以为自己要被抛弃，因此趁堂仁不注意杀了堂仁，并利用投石机将自己和堂仁的尸体抛出去，正巧落入祠堂。莉世腿上的石膏没有破损是因为祠堂里的祭坛是用泡沫做的，泡沫做了缓冲。</p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        侦探的反驳
+    </div>
+    <div class='spoiler-content'>
+        <p>莉世醒后先看到了太阳，然后看到了堂仁的头，背光情况下应该看不清脸。莉世能够立刻判断这是堂仁是因为最后的晚餐前莉世打扮自己的时候把镜子角度调向下了，阳光照到镜子上又被反射到堂仁的脸上，这说明祭坛没有被破坏。</p>
+
+    </div>
+</div>
+
+<h5 id="八星联的推理"><a href="#八星联的推理" class="headerlink" title="八星联的推理"></a>八星联的推理</h5><p>村子里的神是有对应实体的——一具木乃伊。教祖在祓禊前杀了堂仁，之后看到的堂仁都是教祖伪装，看到的教祖是木乃伊，堂仁的尸体用冰箱保存，冰箱所需的电力由重力带动水车发电。教祖完成轨迹后，从监控死角逃离村子，完成假死计划，设计复杂计划是需要莉世作为证人证明教祖的死亡。</p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        侦探的反驳
+    </div>
+    <div class='spoiler-content'>
+        <p>藏小猪的地方仅有莉世和堂仁知道，且在藏小猪的地方发现了搬运来的食物。祓禊前堂仁无法搬出食物，因为食材库被教祖严格管理，且只有祓禊时堂仁可以趁教祖沐浴拿到钥匙。因此如果堂仁在祓禊前被杀，藏小猪的位置不会出现食物。</p>
+
+    </div>
+</div>
+
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        矛盾
+    </div>
+    <div class='spoiler-content'>
+        <p>在第一段反驳里，侦探认为参加晚餐的有三十三人，也就是教祖参加了晚餐会，说明教祖还没有开始祓禊，即：祓禊在晚餐会后。<br>在第二段反驳里，侦探认为莉世进行打扮后，祭坛一直保留了打扮时的状态。这说明堂仁挪开祭坛藏食物在莉世进行打扮前。<br>也就是堂仁先放置了食物，然后莉世进行打扮参加晚餐，最后教祖进行祓禊。<br>然而根据第三段反驳，祓禊前堂仁无法拿到食物。侦探的三段反驳相互矛盾。</p>
+
+    </div>
+</div>
+
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        侦探的反驳
+    </div>
+    <div class='spoiler-content'>
+        <p>矛盾成立的前提是侦探的否定必须是正确的，如果侦探的否定是正确的，八星联的假说就是错误的。因此无法从八星联的假说中假定的教祖想杀堂仁为前提进行推导。如果教祖无意杀害堂仁，则可能在祓禊前将食物交给堂仁，这样就不存在矛盾了。</p>
+
+    </div>
+</div>
+
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        侦探提出的可能性
+    </div>
+    <div class='spoiler-content'>
+        <p>教祖支持堂仁逃走，因此在祓禊前给了堂仁食物，但两人的母亲不想让两人逃走。堂仁在离开参拜堂前被自己的母亲重伤，带伤抱着莉世到了祠堂，堂仁知道自己命不久矣，希望创造奇迹给莉世一个活下去的希望。因此，堂仁与教主合谋布置了现场，教主利用绳子使门闩从上方落下制造了密室。</p>
+
+    </div>
+</div>
+
 <hr>
-<h4 id="之前方法的缺陷"><a href="#之前方法的缺陷" class="headerlink" title="之前方法的缺陷"></a>之前方法的缺陷</h4><ul>
-<li>基于 GRU 的结构在简单的数据集上取得了很好的效果，但在较难的数据集上结果比较差；<font color="#a5a5a5">（However, this approach fails to result in the same breakthroughs for harder navigation problems like Object Goal Navigation (ObjectNav) where an agent must explore its environment to locate and navigate to an object of the requested type.）</font></li>
-<li>增大网络规模会导致模型训练不稳定且训练时间增加；<font color="#a5a5a5">（RL approaches for ObjectNav have generally not advanced beyond shallow GRU architectures due to challenges presented by training instability and unreasonably long training times with wider and deeper models, such as scaled-up transformers.）</font></li>
-<li>Imitation Learning 可能存在状态空间探索不足的问题。<font color="#a5a5a5">（we suspect this is a consequence of insufficient state-space exploration as expert trajectory datasets frequently contain few examples of error recovery, which can lead to sub-optimal performance due to compounding errors or non-trivial domain shifts during inference.）</font></li>
-</ul>
+<h4 id="个人评价"><a href="#个人评价" class="headerlink" title="个人评价"></a>个人评价</h4><p>很有趣的侦探形象，通常侦探是负责证明奇迹不存在的，然而这本书的侦探希望否定所有可能性以证明奇迹存在。故事的发展就是不断由其他人提出可能性，侦探对这些可能一一进行否定推动。在这样的设定里，提出可能性的人不需要证明这种可能性是真实存在的，只要有可能性就算成功，所以很多解答看起来非常牵强。个人最喜欢的环节是否定之否定那里，最初看到的时候非常震撼。</p>
+<p>比较明显的缺点应该是文风，文风和人物形象都过于轻小说化，个人不是很喜欢。</p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>entertainment</category>
+        <category>books</category>
+      </categories>
+      <tags>
+        <tag>推理小说</tag>
+        <tag>井上真伪</tag>
+        <tag>逻辑流</tag>
+        <tag>多重解答</tag>
+        <tag>轻小说风</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>P-Tuning v2</title>
+    <url>/posts/9feacd8a/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> P-Tuning v2: Prompt Tuning Can Be Comparable to Fine-tuning Universally Across Scales and Tasks<br><strong>链接：</strong> <a href="https://arxiv.org/pdf/2110.07602">https://arxiv.org/pdf/2110.07602</a><br><strong>代码：</strong> <a href="https://github.com/THUDM/P-tuning-v2">https://github.com/THUDM/P-tuning-v2</a><br><strong>来源：</strong> ACL 2022<br><strong>单位：</strong> Tsinghua University, KEG；Beijing Academy of Artificial Intelligence (BAAI)；Shanghai Qi Zhi Institute</p>
 <hr>
-<h4 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h4><p>从各个方面增大 RL 的 scale。</p>
+<h4 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h4><p>对于大模型 finetune 所有参数很困难，类似 P-Tuning 的 prompt tuning 方法性能比 finetune 所有参数差，尤其在模型参数规模不足 100 亿时效果差的更明显。本文希望找到一种泛化性更强的 prompt tuning 方法。</p>
 <hr>
-<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-14%2013.57.35.png" alt="截屏2024-11-14 13.57.35.png"></p>
-<ul>
-<li>Encoder 根据当前输入的 RGB 图像以及 goal 编码生成当前的状态 $s^t$，decoder 用于预测 action；</li>
-<li>Vision Transformer Model：DINOv2，训练时，该模块参数冻结，以保证模型在真实环境中的泛化性，否则视觉模块在模拟场景中的训练会影响到真实环境的性能；</li>
-<li>Goal Encoder：为了方便比较，在不同 benchmark 上用了不同的编码器；</li>
-<li>Causal Transformer Decoder：用 KV-cache 加速，使计算用时与时间成正比而非平方正比，加速计算。</li>
-</ul>
+<h4 id="P-Tuning-缺陷"><a href="#P-Tuning-缺陷" class="headerlink" title="P-Tuning 缺陷"></a>P-Tuning 缺陷</h4><ol>
+<li>在小模型上效果不好，当模型参数量大于 100 亿时，与 finetune 效果相近；但当模型参数量不足 100 亿时，效果会变差；</li>
+<li>在不同任务上通用性不足，在一些更难的任务上效果比较差。</li>
+</ol>
 <hr>
-<h4 id="个人总结"><a href="#个人总结" class="headerlink" title="个人总结"></a>个人总结</h4><p>这篇文章通过增大 scale 大幅提升了 embodied navigation 任务的准确性。增大 scale 既包括从模型上采用 transformer 结构增大了模型的 scale；也包括从数据层面上，采用了一系列方法加快了数据的模拟和读取；还包括直接增加训练节点数量，提升训练速度。</p>
+<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-22%2019.10.51.png" alt="截屏2024-11-22 19.10.51.png"><br>与 P-Tuning 相比，v2 在每一层都加入了可学习的 prompt，增加了可学习的参数量，同时添加到深层的 prompt 可以更直接地影响模型预测结果。</p>
 ]]></content>
       <categories>
         <category>technology</category>
@@ -29,9 +107,55 @@
       </categories>
       <tags>
         <tag>论文笔记</tag>
-        <tag>Reinforcement_Learning</tag>
-        <tag>Embodied_Navigation</tag>
-        <tag>CoRL2024</tag>
+        <tag>LLM</tag>
+        <tag>ACL2022</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>P-Tuning</title>
+    <url>/posts/8c1493e0/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> GPT Understands, Too<br><strong>链接：</strong> <a href="https://arxiv.org/pdf/2103.10385">https://arxiv.org/pdf/2103.10385</a><br><strong>代码：</strong> <a href="https://github.com/THUDM/P-tuning">https://github.com/THUDM/P-tuning</a><br><strong>来源：</strong> AI Open 2024<br><strong>单位：</strong> Tsinghua University；Massachusetts Institute of Technology</p>
+<hr>
+<h4 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h4><p>Prompt 可以提升大语言模型性能，然而，人工提供的离散 prompt 会导致很大的不确定性，几个单词的变动就会导致结果发生大幅度变化。P-Tuning 希望在离散的 prompt 前加入一个可训练的连续 prompt，提升稳定性。</p>
+<hr>
+<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-22%2017.31.24.png" alt="截屏2024-11-22 17.31.24.png"></p>
+]]></content>
+      <categories>
+        <category>technology</category>
+        <category>papers</category>
+      </categories>
+      <tags>
+        <tag>论文笔记</tag>
+        <tag>LLM</tag>
+        <tag>AI_Open_2024</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>LoRA</title>
+    <url>/posts/3a5bfa54/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> LORA: LOW-RANK ADAPTATION OF LARGE LANGUAGE MODELS<br><strong>链接：</strong> <a href="https://arxiv.org/pdf/2106.09685">https://arxiv.org/pdf/2106.09685</a><br><strong>代码：</strong> <a href="https://github.com/microsoft/LoRA">https://github.com/microsoft/LoRA</a><br><strong>来源：</strong> ICLR 2022<br><strong>单位：</strong> Microsoft Corporation</p>
+<hr>
+<h4 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h4><p>随着模型规模越来越大，在所有参数上 finetune 越来越不现实。之前提出的解决方案都有一定缺陷：</p>
+<ul>
+<li>增加 adapter layer 会引入额外的延迟，且当 batch size 减小时这种延迟变得不可忽视；</li>
+<li>Optimizing prompt 难以训练，且保留一部分 prompt 会导致下游任务可用的 prompt 长度变小，从而影响模型整体性能。</li>
+</ul>
+<hr>
+<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p>假设在 finetune 过程中权重矩阵的变化量是低秩的，即：$W_0+\Delta W&#x3D;W_0+BA$，其中：$B\in \mathbb{R}^{d\times r}$，$A\in \mathbb{R}^{r\times k}$ 且 $r\ll \min(d, k)$。训练过程中 $W_0$ 保持不变，仅更新 $A$ 和 $B$。</p>
+<hr>
+<h4 id="LoRA-的优势"><a href="#LoRA-的优势" class="headerlink" title="LoRA 的优势"></a>LoRA 的优势</h4><ul>
+<li>方法灵活，可以根据需要调整 $r$，当逐渐增大 $r$ 时，LoRA 会逐渐接近 finetune 所有参数；</li>
+<li>当有多个下游子任务时，LoRA 可以通过更新 $BA$ 的方式在不同任务间切换，且 LoRA 相比于原始模型不会引入额外的计算延迟。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>technology</category>
+        <category>papers</category>
+      </categories>
+      <tags>
+        <tag>论文笔记</tag>
+        <tag>LLM</tag>
+        <tag>ICLR2022</tag>
       </tags>
   </entry>
   <entry>
@@ -65,46 +189,27 @@
       </tags>
   </entry>
   <entry>
-    <title>P-Tuning v2</title>
-    <url>/posts/9feacd8a/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> P-Tuning v2: Prompt Tuning Can Be Comparable to Fine-tuning Universally Across Scales and Tasks<br><strong>链接：</strong> <a href="https://arxiv.org/pdf/2110.07602">https://arxiv.org/pdf/2110.07602</a><br><strong>代码：</strong> <a href="https://github.com/THUDM/P-tuning-v2">https://github.com/THUDM/P-tuning-v2</a><br><strong>来源：</strong> ACL 2022<br><strong>单位：</strong> Tsinghua University, KEG；Beijing Academy of Artificial Intelligence (BAAI)；Shanghai Qi Zhi Institute</p>
+    <title>PoliFormer</title>
+    <url>/posts/a5f5aaf2/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> PoliFormer: Scaling On-Policy RL with Transformers Results in Masterful Navigators<br><strong>链接：</strong> <a href="https://arxiv.org/pdf/2406.20083">https://arxiv.org/pdf/2406.20083</a><br><strong>代码：</strong> <a href="https://github.com/allenai/poliformer">https://github.com/allenai/poliformer</a><br><strong>来源：</strong> CoRL 2024 (Outstanding Paper Award)<br><strong>单位：</strong> Allen Institute for AI</p>
 <hr>
-<h4 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h4><p>对于大模型 finetune 所有参数很困难，类似 P-Tuning 的 prompt tuning 方法性能比 finetune 所有参数差，尤其在模型参数规模不足 100 亿时效果差的更明显。本文希望找到一种泛化性更强的 prompt tuning 方法。</p>
+<h4 id="之前方法的缺陷"><a href="#之前方法的缺陷" class="headerlink" title="之前方法的缺陷"></a>之前方法的缺陷</h4><ul>
+<li>基于 GRU 的结构在简单的数据集上取得了很好的效果，但在较难的数据集上结果比较差；<font color="#a5a5a5">（However, this approach fails to result in the same breakthroughs for harder navigation problems like Object Goal Navigation (ObjectNav) where an agent must explore its environment to locate and navigate to an object of the requested type.）</font></li>
+<li>增大网络规模会导致模型训练不稳定且训练时间增加；<font color="#a5a5a5">（RL approaches for ObjectNav have generally not advanced beyond shallow GRU architectures due to challenges presented by training instability and unreasonably long training times with wider and deeper models, such as scaled-up transformers.）</font></li>
+<li>Imitation Learning 可能存在状态空间探索不足的问题。<font color="#a5a5a5">（we suspect this is a consequence of insufficient state-space exploration as expert trajectory datasets frequently contain few examples of error recovery, which can lead to sub-optimal performance due to compounding errors or non-trivial domain shifts during inference.）</font></li>
+</ul>
 <hr>
-<h4 id="P-Tuning-缺陷"><a href="#P-Tuning-缺陷" class="headerlink" title="P-Tuning 缺陷"></a>P-Tuning 缺陷</h4><ol>
-<li>在小模型上效果不好，当模型参数量大于 100 亿时，与 finetune 效果相近；但当模型参数量不足 100 亿时，效果会变差；</li>
-<li>在不同任务上通用性不足，在一些更难的任务上效果比较差。</li>
-</ol>
+<h4 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h4><p>从各个方面增大 RL 的 scale。</p>
 <hr>
-<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-22%2019.10.51.png" alt="截屏2024-11-22 19.10.51.png"><br>与 P-Tuning 相比，v2 在每一层都加入了可学习的 prompt，增加了可学习的参数量，同时添加到深层的 prompt 可以更直接地影响模型预测结果。</p>
-]]></content>
-      <categories>
-        <category>technology</category>
-        <category>papers</category>
-      </categories>
-      <tags>
-        <tag>论文笔记</tag>
-        <tag>LLM</tag>
-        <tag>ACL2022</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>LoRA</title>
-    <url>/posts/3a5bfa54/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> LORA: LOW-RANK ADAPTATION OF LARGE LANGUAGE MODELS<br><strong>链接：</strong> <a href="https://arxiv.org/pdf/2106.09685">https://arxiv.org/pdf/2106.09685</a><br><strong>代码：</strong> <a href="https://github.com/microsoft/LoRA">https://github.com/microsoft/LoRA</a><br><strong>来源：</strong> ICLR 2022<br><strong>单位：</strong> Microsoft Corporation</p>
-<hr>
-<h4 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h4><p>随着模型规模越来越大，在所有参数上 finetune 越来越不现实。之前提出的解决方案都有一定缺陷：</p>
+<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-14%2013.57.35.png" alt="截屏2024-11-14 13.57.35.png"></p>
 <ul>
-<li>增加 adapter layer 会引入额外的延迟，且当 batch size 减小时这种延迟变得不可忽视；</li>
-<li>Optimizing prompt 难以训练，且保留一部分 prompt 会导致下游任务可用的 prompt 长度变小，从而影响模型整体性能。</li>
+<li>Encoder 根据当前输入的 RGB 图像以及 goal 编码生成当前的状态 $s^t$，decoder 用于预测 action；</li>
+<li>Vision Transformer Model：DINOv2，训练时，该模块参数冻结，以保证模型在真实环境中的泛化性，否则视觉模块在模拟场景中的训练会影响到真实环境的性能；</li>
+<li>Goal Encoder：为了方便比较，在不同 benchmark 上用了不同的编码器；</li>
+<li>Causal Transformer Decoder：用 KV-cache 加速，使计算用时与时间成正比而非平方正比，加速计算。</li>
 </ul>
 <hr>
-<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p>假设在 finetune 过程中权重矩阵的变化量是低秩的，即：$W_0+\Delta W&#x3D;W_0+BA$，其中：$B\in \mathbb{R}^{d\times r}$，$A\in \mathbb{R}^{r\times k}$ 且 $r\ll \min(d, k)$。训练过程中 $W_0$ 保持不变，仅更新 $A$ 和 $B$。</p>
-<hr>
-<h4 id="LoRA-的优势"><a href="#LoRA-的优势" class="headerlink" title="LoRA 的优势"></a>LoRA 的优势</h4><ul>
-<li>方法灵活，可以根据需要调整 $r$，当逐渐增大 $r$ 时，LoRA 会逐渐接近 finetune 所有参数；</li>
-<li>当有多个下游子任务时，LoRA 可以通过更新 $BA$ 的方式在不同任务间切换，且 LoRA 相比于原始模型不会引入额外的计算延迟。</li>
-</ul>
+<h4 id="个人总结"><a href="#个人总结" class="headerlink" title="个人总结"></a>个人总结</h4><p>这篇文章通过增大 scale 大幅提升了 embodied navigation 任务的准确性。增大 scale 既包括从模型上采用 transformer 结构增大了模型的 scale；也包括从数据层面上，采用了一系列方法加快了数据的模拟和读取；还包括直接增加训练节点数量，提升训练速度。</p>
 ]]></content>
       <categories>
         <category>technology</category>
@@ -112,27 +217,9 @@
       </categories>
       <tags>
         <tag>论文笔记</tag>
-        <tag>LLM</tag>
-        <tag>ICLR2022</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>P-Tuning</title>
-    <url>/posts/8c1493e0/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> GPT Understands, Too<br><strong>链接：</strong> <a href="https://arxiv.org/pdf/2103.10385">https://arxiv.org/pdf/2103.10385</a><br><strong>代码：</strong> <a href="https://github.com/THUDM/P-tuning">https://github.com/THUDM/P-tuning</a><br><strong>来源：</strong> AI Open 2024<br><strong>单位：</strong> Tsinghua University；Massachusetts Institute of Technology</p>
-<hr>
-<h4 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h4><p>Prompt 可以提升大语言模型性能，然而，人工提供的离散 prompt 会导致很大的不确定性，几个单词的变动就会导致结果发生大幅度变化。P-Tuning 希望在离散的 prompt 前加入一个可训练的连续 prompt，提升稳定性。</p>
-<hr>
-<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-22%2017.31.24.png" alt="截屏2024-11-22 17.31.24.png"></p>
-]]></content>
-      <categories>
-        <category>technology</category>
-        <category>papers</category>
-      </categories>
-      <tags>
-        <tag>论文笔记</tag>
-        <tag>LLM</tag>
-        <tag>AI_Open_2024</tag>
+        <tag>Reinforcement_Learning</tag>
+        <tag>Embodied_Navigation</tag>
+        <tag>CoRL2024</tag>
       </tags>
   </entry>
 </search>
