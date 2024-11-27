@@ -197,7 +197,7 @@
     </div>
     <ul class="links-of-recent-posts-list">
         <li class="links-of-recent-posts-item">
-          <a href="/posts/881244c3/" title="posts&#x2F;881244c3&#x2F;">LLM_From_Scratch</a>
+          <a href="/posts/881244c3/" title="posts&#x2F;881244c3&#x2F;">Build a LLM From Scratch</a>
         </li>
         <li class="links-of-recent-posts-item">
           <a href="/posts/8215b0f1/" title="posts&#x2F;8215b0f1&#x2F;">那种可能性早已料及</a>
@@ -251,7 +251,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/881244c3/" class="post-title-link" itemprop="url">LLM_From_Scratch</a>
+          <a href="/posts/881244c3/" class="post-title-link" itemprop="url">Build a LLM From Scratch</a>
         </h2>
 
         <div class="post-meta-container">
@@ -263,9 +263,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-11-26 13:55:59 / 修改时间：19:17:46" itemprop="dateCreated datePublished" datetime="2024-11-26T13:55:59+08:00">2024-11-26</time>
+      <time title="创建时间：2024-11-26 13:55:59" itemprop="dateCreated datePublished" datetime="2024-11-26T13:55:59+08:00">2024-11-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-11-27 19:17:14" itemprop="dateModified" datetime="2024-11-27T19:17:14+08:00">2024-11-27</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -302,14 +308,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>1.4k</span>
+      <span>3.2k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
+      <span>3 分钟</span>
     </span>
 </div>
 
@@ -321,28 +327,15 @@
     
     <div class="post-body" itemprop="articleBody">
           <h4 id="Understanding-LLM"><a href="#Understanding-LLM" class="headerlink" title="Understanding LLM"></a>Understanding LLM</h4><h5 id="LLM-与传统方法相比的优势"><a href="#LLM-与传统方法相比的优势" class="headerlink" title="LLM 与传统方法相比的优势"></a>LLM 与传统方法相比的优势</h5><p>之前的方法在比较复杂的理解和生成任务中表现不佳，例如：上下文分析、生成连贯文本，同时只适用于一些特定的任务。而 LLM 可以在一系列任务上表现出较好的性能。LLM 成功的原因包括 transformer 结构以及大量的训练数据。</p>
-<h5 id="Stages-of-building-and-using-LLMS"><a href="#Stages-of-building-and-using-LLMS" class="headerlink" title="Stages of building and using LLMS"></a>Stages of building and using LLMS</h5><p>目前的研究表明，模型在特定任务或特定领域上训练后可以表现出超过通用 LLM 的性能。因此 LLM 训练通常包括两步：</p>
-<ul>
-<li>Pretrain 指模型在大规模数据库上训练，使模型具有语言理解能力，这一阶段的数据是不需要标注的；</li>
-<li>Finetune 指模型在细分领域&#x2F;细分任务的数据上训练，目前比较常用的 finetune 方式包括两类：<ul>
-<li>Instruction finetuning：标注数据由 instruction 和 answer 组成，例如：要求模型翻译某段话的 query 以及正确的翻译后的文本；</li>
-<li>Classification finetuning：标注数据由文本以及对应的类别组成，例如：邮件内容以及该邮件是否是垃圾邮件的标注。<br><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-26%2014.09.22.png" alt="截屏2024-11-26 14.09.22.png"></li>
-</ul>
-</li>
-</ul>
-<hr>
-<h4 id="Working-with-text-data"><a href="#Working-with-text-data" class="headerlink" title="Working with text data"></a>Working with text data</h4><h5 id="Understanding-word-embeddings"><a href="#Understanding-word-embeddings" class="headerlink" title="Understanding word embeddings"></a>Understanding word embeddings</h5><p>Text 需要被转换成 vector 才能被模型处理，这个过程被称为 embedding。Embedding 有很多方法：</p>
-<ul>
-<li>Word2vec：核心思路是在相近的上下文中出现的词应该具有相似的含义；</li>
-<li>作为模型的一部分在训练期间不断更新：这种方法的优势是训练出的 embedding 与自己的任务和数据更适配。</li>
-</ul>
-<h5 id="Tokenizing-text"><a href="#Tokenizing-text" class="headerlink" title="Tokenizing text"></a>Tokenizing text</h5><p>每个单词，每个标点符号都作为一个单独的 token。空格是否保留可以根据需要，如果是对格式非常严格的任务，例如代码生成，那么缩进和空格就有保留的必要，对于对格式要求不严格的任务，也可以删掉以节省存储空间。<br><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-26%2015.49.54.png" alt="截屏2024-11-26 15.49.54.png"></p>
-<h5 id="Converting-tokens-into-token-IDs"><a href="#Converting-tokens-into-token-IDs" class="headerlink" title="Converting tokens into token IDs"></a>Converting tokens into token IDs</h5><p>给文本里所有出现过的 token 一个编码，这样每次读到一段 text，就可以通过转换把 text 转换成编码。LLM 的输出结果可以通过反向转换，转换到 text。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SimpleTokenizerV1</span>: </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, vocab</span>): </span><br><span class="line">        <span class="variable language_">self</span>.str_to_int = vocab </span><br><span class="line">        <span class="variable language_">self</span>.int_to_str = &#123;i:s <span class="keyword">for</span> s,i <span class="keyword">in</span> vocab.items()&#125; </span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">encode</span>(<span class="params">self, text</span>): </span><br><span class="line">        preprocessed = re.split(<span class="string">r&#x27;([,.?_!&quot;()\&#x27;]|--|\s)&#x27;</span>, text)</span><br><span class="line">        preprocessed = [ </span><br><span class="line">            item.strip() <span class="keyword">for</span> item <span class="keyword">in</span> preprocessed <span class="keyword">if</span> item.strip() </span><br><span class="line">        ] </span><br><span class="line">        ids = [<span class="variable language_">self</span>.str_to_int[s] <span class="keyword">for</span> s <span class="keyword">in</span> preprocessed] </span><br><span class="line">        <span class="keyword">return</span> ids </span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">decode</span>(<span class="params">self, ids</span>): </span><br><span class="line">        text = <span class="string">&quot; &quot;</span>.join([<span class="variable language_">self</span>.int_to_str[i] <span class="keyword">for</span> i <span class="keyword">in</span> ids])</span><br><span class="line">        <span class="comment"># 处理标点符号前的空格 </span></span><br><span class="line">        text = re.sub(<span class="string">r&#x27;\s+([,.?!&quot;()\&#x27;])&#x27;</span>, <span class="string">r&#x27;\1&#x27;</span>, text) </span><br><span class="line">        <span class="keyword">return</span> text</span><br></pre></td></tr></table></figure>
-
-<hr>
-<p>未完待读</p>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+<h5 id="Stages-of-building-and-using-LLMS"><a href="#Stages-of-building-and-using-LLMS" class="headerlink" title="Stages of building and using LLMS"></a>Stages of building and using LLMS</h5>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/posts/881244c3/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -464,75 +457,14 @@
           <h4 id="故事梗概"><a href="#故事梗概" class="headerlink" title="故事梗概"></a>故事梗概</h4><p>自称渡良濑莉世的委托人怀疑自己十年前杀过人，希望委托侦探上苙丞调查确认。十年前，莉世和堂仁被各自的母亲带到教团”血赎”的居住地，二人都希望从村里逃走。村里的出入口只有一个，除交易日外不常打开，悬崖的岩石很脆不能攀爬，村里材料不足无法制造梯子或高台等工具，但堂仁依旧在为逃走准备，并承诺带莉世一起。村里共三十三人，一名教祖，其余是信徒。</p>
 <p>村里的猪身上都带有号码牌，按照顺序决定下次吃那一头。某天堂仁发现莉世把 12 号的号码牌藏了起来，莉世回答自己喜欢 12 号，希望它能活久一点。同时，莉世偷偷藏了一头小猪崽，被堂仁发现后，二人把猪崽藏在祭坛下面。</p>
 <p>村里突发地震，地震后村里的瀑布断流，水车停止运作。教祖认为这是一种征兆，因此堵住了村里唯一的出入口，并举行了最后的晚餐。在莉世记忆中，最后的晚餐后，教祖在堂仁的服侍下举行了祓禊，祓禊结束后教祖用斧头砍杀了信徒。堂仁带着莉世从门口跑出去并反锁了门，村子着火且火势开始蔓延，等莉世再次有意识的时候，她发现自己身处祠堂，旁边是堂仁被砍下的头和尸体。</p>
-<p>莉世怀疑是自己杀了少年，因为除了莉世和堂仁其他人的遗体都在参拜堂内部，且门是从外部上锁的，因此里面的人无法在无人帮助的情况下出来或自己锁上门，同时门锁很重莉世也无法锁上。但是，矛盾点在于，堂仁的头是被村里处理家畜的断头台砍下的，断头台距离祠堂有一段距离，莉世当时腿部骨折，绑着石膏，无论是移动尸体还是移动断头台都不可能。</p>
-<p>调查后侦探认为这起事件是——奇迹。</p>
-<h5 id="大门的推理"><a href="#大门的推理" class="headerlink" title="大门的推理"></a>大门的推理</h5><p>大门认为当时村里的水车是可以靠人力转动的那种，将猪放入水车，用火加热铁质水车就可以用猪驱动水车移动断头台。动机是堂仁要杀死小猪崽，少女精神崩溃下杀了人，为了制造奇迹，少女伪造了现场。</p>
-<div class='spoiler collapsed'>
-    <div class='spoiler-title'>
-        侦探的反驳
-    </div>
-    <div class='spoiler-content'>
-        <p>堂仁看到号码牌就知道编号是 12 而不是 21，说明猪的数量小于等于 20，同时 11 号及之前的都死掉了，说明最多有 9 只猪。33 名成员都吃到了猪脚，说明 9 只猪都被杀了，因此没有能用来驱动水车的猪了。</p>
-
-    </div>
-</div>
-
-<h5 id="宋俪西的推理"><a href="#宋俪西的推理" class="headerlink" title="宋俪西的推理"></a>宋俪西的推理</h5><p>堂仁为了从村里逃走利用村里的材料做了投石机，事情发生后，堂仁想出去求援并带人回来救莉世。莉世误以为自己要被抛弃，因此趁堂仁不注意杀了堂仁，并利用投石机将自己和堂仁的尸体抛出去，正巧落入祠堂。莉世腿上的石膏没有破损是因为祠堂里的祭坛是用泡沫做的，泡沫做了缓冲。</p>
-<div class='spoiler collapsed'>
-    <div class='spoiler-title'>
-        侦探的反驳
-    </div>
-    <div class='spoiler-content'>
-        <p>莉世醒后先看到了太阳，然后看到了堂仁的头，背光情况下应该看不清脸。莉世能够立刻判断这是堂仁是因为最后的晚餐前莉世打扮自己的时候把镜子角度调向下了，阳光照到镜子上又被反射到堂仁的脸上，这说明祭坛没有被破坏。</p>
-
-    </div>
-</div>
-
-<h5 id="八星联的推理"><a href="#八星联的推理" class="headerlink" title="八星联的推理"></a>八星联的推理</h5><p>村子里的神是有对应实体的——一具木乃伊。教祖在祓禊前杀了堂仁，之后看到的堂仁都是教祖伪装，看到的教祖是木乃伊，堂仁的尸体用冰箱保存，冰箱所需的电力由重力带动水车发电。教祖完成诡计后，从监控死角逃离村子，完成假死计划，设计复杂计划是需要莉世作为证人证明教祖的死亡。</p>
-<div class='spoiler collapsed'>
-    <div class='spoiler-title'>
-        侦探的反驳
-    </div>
-    <div class='spoiler-content'>
-        <p>藏小猪的地方仅有莉世和堂仁知道，且在藏小猪的地方发现了搬运来的食物。祓禊前堂仁无法搬出食物，因为食材库被教祖严格管理，且只有祓禊时堂仁可以趁教祖沐浴拿到钥匙。因此如果堂仁在祓禊前被杀，藏小猪的位置不会出现食物。</p>
-
-    </div>
-</div>
-
-<div class='spoiler collapsed'>
-    <div class='spoiler-title'>
-        矛盾
-    </div>
-    <div class='spoiler-content'>
-        <p>在第一段反驳里，侦探认为参加晚餐的有三十三人，也就是教祖参加了晚餐会，说明教祖还没有开始祓禊，即：祓禊在晚餐会后。<br>在第二段反驳里，侦探认为莉世进行打扮后，祭坛一直保留了打扮时的状态。这说明堂仁挪开祭坛藏食物在莉世进行打扮前。<br>也就是堂仁先放置了食物，然后莉世进行打扮参加晚餐，最后教祖进行祓禊。<br>然而根据第三段反驳，祓禊前堂仁无法拿到食物。侦探的三段反驳相互矛盾。</p>
-
-    </div>
-</div>
-
-<div class='spoiler collapsed'>
-    <div class='spoiler-title'>
-        侦探的反驳
-    </div>
-    <div class='spoiler-content'>
-        <p>矛盾成立的前提是侦探的否定必须是正确的，如果侦探的否定是正确的，八星联的假说就是错误的。因此无法从八星联的假说中假定的教祖想杀堂仁为前提进行推导。如果教祖无意杀害堂仁，则可能在祓禊前将食物交给堂仁，这样就不存在矛盾了。</p>
-
-    </div>
-</div>
-
-<div class='spoiler collapsed'>
-    <div class='spoiler-title'>
-        侦探提出的可能性
-    </div>
-    <div class='spoiler-content'>
-        <p>教祖支持堂仁逃走，因此在祓禊前给了堂仁食物，但两人的母亲不想让两人逃走。堂仁在离开参拜堂前被自己的母亲重伤，带伤抱着莉世到了祠堂，堂仁知道自己命不久矣，希望创造奇迹给莉世一个活下去的希望。因此，堂仁与教主合谋布置了现场，教主利用绳子使门闩从上方落下制造了密室。</p>
-
-    </div>
-</div>
-
-<hr>
-<h4 id="个人评价"><a href="#个人评价" class="headerlink" title="个人评价"></a>个人评价</h4><p>很有趣的侦探形象，通常侦探是负责证明奇迹不存在的，然而这本书的侦探希望否定所有可能性以证明奇迹存在。故事的发展就是不断由其他人提出可能性，侦探对这些可能一一进行否定推动。在这样的设定里，提出可能性的人不需要证明这种可能性是真实存在的，只要有可能性就算成功，所以很多解答看起来非常牵强。个人最喜欢的环节是否定之否定那里，最初看到的时候非常震撼。</p>
-<p>比较明显的缺点应该是文风，文风和人物形象都过于轻小说化，个人不是很喜欢。</p>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/posts/8215b0f1/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -654,14 +586,14 @@
           <p><strong>题目：</strong> P-Tuning v2: Prompt Tuning Can Be Comparable to Fine-tuning Universally Across Scales and Tasks<br><strong>链接：</strong> <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2110.07602">https://arxiv.org/pdf/2110.07602</a><br><strong>代码：</strong> <a target="_blank" rel="noopener" href="https://github.com/THUDM/P-tuning-v2">https://github.com/THUDM/P-tuning-v2</a><br><strong>来源：</strong> ACL 2022<br><strong>单位：</strong> Tsinghua University, KEG；Beijing Academy of Artificial Intelligence (BAAI)；Shanghai Qi Zhi Institute</p>
 <hr>
 <h4 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h4><p>对于大模型 finetune 所有参数很困难，类似 P-Tuning 的 prompt tuning 方法性能比 finetune 所有参数差，尤其在模型参数规模不足 100 亿时效果差的更明显。本文希望找到一种泛化性更强的 prompt tuning 方法。</p>
-<hr>
-<h4 id="P-Tuning-缺陷"><a href="#P-Tuning-缺陷" class="headerlink" title="P-Tuning 缺陷"></a>P-Tuning 缺陷</h4><ol>
-<li>在小模型上效果不好，当模型参数量大于 100 亿时，与 finetune 效果相近；但当模型参数量不足 100 亿时，效果会变差；</li>
-<li>在不同任务上通用性不足，在一些更难的任务上效果比较差。</li>
-</ol>
-<hr>
-<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-22%2019.10.51.png" alt="截屏2024-11-22 19.10.51.png"><br>与 P-Tuning 相比，v2 在每一层都加入了可学习的 prompt，增加了可学习的参数量，同时添加到深层的 prompt 可以更直接地影响模型预测结果。</p>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/posts/9feacd8a/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -783,9 +715,14 @@
           <p><strong>题目：</strong> GPT Understands, Too<br><strong>链接：</strong> <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2103.10385">https://arxiv.org/pdf/2103.10385</a><br><strong>代码：</strong> <a target="_blank" rel="noopener" href="https://github.com/THUDM/P-tuning">https://github.com/THUDM/P-tuning</a><br><strong>来源：</strong> AI Open 2024<br><strong>单位：</strong> Tsinghua University；Massachusetts Institute of Technology</p>
 <hr>
 <h4 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h4><p>Prompt 可以提升大语言模型性能，然而，人工提供的离散 prompt 会导致很大的不确定性，几个单词的变动就会导致结果发生大幅度变化。P-Tuning 希望在离散的 prompt 前加入一个可训练的连续 prompt，提升稳定性。</p>
-<hr>
-<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-22%2017.31.24.png" alt="截屏2024-11-22 17.31.24.png"></p>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/posts/8c1493e0/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -907,18 +844,14 @@
           <p><strong>题目：</strong> LORA: LOW-RANK ADAPTATION OF LARGE LANGUAGE MODELS<br><strong>链接：</strong> <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2106.09685">https://arxiv.org/pdf/2106.09685</a><br><strong>代码：</strong> <a target="_blank" rel="noopener" href="https://github.com/microsoft/LoRA">https://github.com/microsoft/LoRA</a><br><strong>来源：</strong> ICLR 2022<br><strong>单位：</strong> Microsoft Corporation</p>
 <hr>
 <h4 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h4><p>随着模型规模越来越大，在所有参数上 finetune 越来越不现实。之前提出的解决方案都有一定缺陷：</p>
-<ul>
-<li>增加 adapter layer 会引入额外的延迟，且当 batch size 减小时这种延迟变得不可忽视；</li>
-<li>Optimizing prompt 难以训练，且保留一部分 prompt 会导致下游任务可用的 prompt 长度变小，从而影响模型整体性能。</li>
-</ul>
-<hr>
-<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p>假设在 finetune 过程中权重矩阵的变化量是低秩的，即：$W_0+\Delta W&#x3D;W_0+BA$，其中：$B\in \mathbb{R}^{d\times r}$，$A\in \mathbb{R}^{r\times k}$ 且 $r\ll \min(d, k)$。训练过程中 $W_0$ 保持不变，仅更新 $A$ 和 $B$。</p>
-<hr>
-<h4 id="LoRA-的优势"><a href="#LoRA-的优势" class="headerlink" title="LoRA 的优势"></a>LoRA 的优势</h4><ul>
-<li>方法灵活，可以根据需要调整 $r$，当逐渐增大 $r$ 时，LoRA 会逐渐接近 finetune 所有参数；</li>
-<li>当有多个下游子任务时，LoRA 可以通过更新 $BA$ 的方式在不同任务间切换，且 LoRA 相比于原始模型不会引入额外的计算延迟。</li>
-</ul>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/posts/3a5bfa54/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1039,23 +972,15 @@
     <div class="post-body" itemprop="articleBody">
           <h4 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h4><p>用于解决最长回文子串的问题，可以把算法复杂度降低到 O(N)。</p>
 <hr>
-<h4 id="算法原理"><a href="#算法原理" class="headerlink" title="算法原理"></a>算法原理</h4><ul>
-<li>在字符串的每个字符之间以及字符串首尾插入同一个字符串内不可能出现的字符，以保证所有字符串的长度都是奇数，这样可以不用对长度为奇数的字符串以及长度为偶数的字符串分类处理；</li>
-<li>在字符串开头和结尾分别加入不同的且不可能在字符串内出现的字符，这样保证回文子串搜索到该位置的时候自动退出，不需要处理边界情况；</li>
-<li>该算法在每个位置都希望计算以该位置为中心的最长回文子串的长度。同时会记录一个当前回文子串对应的最靠右的右边界位置 R，该位置对应的回文子串中心 c，该位置对应的回文子串 s。这样对于一个新的位置，可能出现几种情况：<ul>
-<li>该位置在 R 的右边，需要重新搜索该位置的回文子串；</li>
-<li>该位置在 R 的左边，此时可以看该位置以 c 为中心对称位置的回文子串情况，这也有两种情况：<ul>
-<li>对称位置的回文子串完全落在 s 内，则在当前位置的回文子串长度与对称位置相同（回文子串的性质）；</li>
-<li>对称位置的回文子串有一部分落在 s 外，则当前位置到 R 肯定可以构成回文子串，需要继续向外搜索。</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h4 id="算法分析"><a href="#算法分析" class="headerlink" title="算法分析"></a>算法分析</h4><p>在上述算法过程中 R 是不断向右的，也就是在算法过程中不会重复比较字符是否相等，因此可以大幅度降低时间复杂度。</p>
-<hr>
-<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">longestPalindrome</span>(<span class="params">self, s: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        new_s = <span class="string">&#x27;^#&#x27;</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> s:</span><br><span class="line">            new_s = new_s + i + <span class="string">&#x27;#&#x27;</span></span><br><span class="line">        new_s += <span class="string">&#x27;$&#x27;</span></span><br><span class="line">		</span><br><span class="line">        result = numpy.zeros(<span class="built_in">len</span>(new_s))</span><br><span class="line">        right = <span class="number">0</span></span><br><span class="line">        center = <span class="number">0</span></span><br><span class="line">		</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="built_in">len</span>(new_s) - <span class="number">1</span>):</span><br><span class="line">            <span class="keyword">if</span> i &gt; right:</span><br><span class="line">                r = <span class="number">0</span></span><br><span class="line">                <span class="keyword">while</span> new_s[i + r] == new_s[i - r]:</span><br><span class="line">                    r += <span class="number">1</span></span><br><span class="line">                r -= <span class="number">1</span></span><br><span class="line">                center = i</span><br><span class="line">                right = center + r</span><br><span class="line">                result[i] = r</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                other_i = <span class="number">2</span> * center - i</span><br><span class="line">                <span class="keyword">if</span> result[other_i] &lt; right - i:</span><br><span class="line">                    result[i] = result[other_i]</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    r = right - i</span><br><span class="line">                    <span class="keyword">while</span> new_s[i + r] == new_s[i - r]:</span><br><span class="line">                        r += <span class="number">1</span></span><br><span class="line">                    r -= <span class="number">1</span></span><br><span class="line">                    center = i</span><br><span class="line">                    right = center + r</span><br><span class="line">                    result[i] = r</span><br><span class="line">					</span><br><span class="line">        index = <span class="built_in">int</span>(numpy.argmax(result))</span><br><span class="line">        result_s = new_s[<span class="built_in">int</span>(index - result[index]):<span class="built_in">int</span>(index + result[index] + <span class="number">1</span>)]</span><br><span class="line">        result_s = result_s.replace(<span class="string">&#x27;#&#x27;</span>, <span class="string">&#x27;&#x27;</span>)</span><br><span class="line">        <span class="keyword">return</span> result_s</span><br></pre></td></tr></table></figure><link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+<h4 id="算法原理"><a href="#算法原理" class="headerlink" title="算法原理"></a>算法原理</h4>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/posts/c3cacb08/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1181,19 +1106,14 @@
 <li>增大网络规模会导致模型训练不稳定且训练时间增加；<font color="#a5a5a5">（RL approaches for ObjectNav have generally not advanced beyond shallow GRU architectures due to challenges presented by training instability and unreasonably long training times with wider and deeper models, such as scaled-up transformers.）</font></li>
 <li>Imitation Learning 可能存在状态空间探索不足的问题。<font color="#a5a5a5">（we suspect this is a consequence of insufficient state-space exploration as expert trajectory datasets frequently contain few examples of error recovery, which can lead to sub-optimal performance due to compounding errors or non-trivial domain shifts during inference.）</font></li>
 </ul>
-<hr>
-<h4 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h4><p>从各个方面增大 RL 的 scale。</p>
-<hr>
-<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-14%2013.57.35.png" alt="截屏2024-11-14 13.57.35.png"></p>
-<ul>
-<li>Encoder 根据当前输入的 RGB 图像以及 goal 编码生成当前的状态 $s^t$，decoder 用于预测 action；</li>
-<li>Vision Transformer Model：DINOv2，训练时，该模块参数冻结，以保证模型在真实环境中的泛化性，否则视觉模块在模拟场景中的训练会影响到真实环境的性能；</li>
-<li>Goal Encoder：为了方便比较，在不同 benchmark 上用了不同的编码器；</li>
-<li>Causal Transformer Decoder：用 KV-cache 加速，使计算用时与时间成正比而非平方正比，加速计算。</li>
-</ul>
-<hr>
-<h4 id="个人总结"><a href="#个人总结" class="headerlink" title="个人总结"></a>个人总结</h4><p>这篇文章通过增大 scale 大幅提升了 embodied navigation 任务的准确性。增大 scale 既包括从模型上采用 transformer 结构增大了模型的 scale；也包括从数据层面上，采用了一系列方法加快了数据的模拟和读取；还包括直接增加训练节点数量，提升训练速度。</p>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/posts/a5f5aaf2/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1231,13 +1151,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">7k</span>
+    <span title="站点总字数">9k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">7 分钟</span>
+    <span title="站点阅读时长">8 分钟</span>
   </span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
