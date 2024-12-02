@@ -1,13 +1,315 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>解数独</title>
-    <url>/posts/de1f6638/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>编写一个程序，通过填充空格来解决数独问题。</p>
+    <title>LoRA</title>
+    <url>/posts/3a5bfa54/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> LORA: LOW-RANK ADAPTATION OF LARGE LANGUAGE MODELS<br><strong>链接：</strong> <a href="https://arxiv.org/pdf/2106.09685">https://arxiv.org/pdf/2106.09685</a><br><strong>代码：</strong> <a href="https://github.com/microsoft/LoRA">https://github.com/microsoft/LoRA</a><br><strong>来源：</strong> ICLR 2022<br><strong>单位：</strong> Microsoft Corporation</p>
 <hr>
-<h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>简单的深搜会超时，为了防止超时，需要尽可能优先搜索可能性较少的位置。</p>
+<h4 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h4><p>随着模型规模越来越大，在所有参数上 finetune 越来越不现实。之前提出的解决方案都有一定缺陷：</p>
+<ul>
+<li>增加 adapter layer 会引入额外的延迟，且当 batch size 减小时这种延迟变得不可忽视；</li>
+<li>Optimizing prompt 难以训练，且保留一部分 prompt 会导致下游任务可用的 prompt 长度变小，从而影响模型整体性能。</li>
+</ul>
 <hr>
-<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">solveSudoku</span>(<span class="params">self, board: <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">str</span>]]</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        U = <span class="built_in">set</span>([<span class="built_in">str</span>(i) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">10</span>)])</span><br><span class="line">        row,col,cell = defaultdict(<span class="built_in">set</span>),defaultdict(<span class="built_in">set</span>),defaultdict(<span class="built_in">set</span>)</span><br><span class="line"></span><br><span class="line">		<span class="comment"># 计算每个位置的可能性</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">get</span>(<span class="params">i, j</span>):</span><br><span class="line">            <span class="keyword">return</span> (U - row[i]) &amp; (U - col[j]) &amp; (U - cell[i//<span class="number">3</span>, j//<span class="number">3</span>])</span><br><span class="line"></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">dfs</span>(<span class="params">cur</span>):</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> cur:</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">            </span><br><span class="line">            minv, x, y = <span class="number">10</span>, <span class="number">0</span>, <span class="number">0</span></span><br><span class="line">            <span class="comment"># 找到可能数值最少的位置</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">9</span>): </span><br><span class="line">                <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">9</span>):</span><br><span class="line">                    <span class="keyword">if</span> board[i][j] == <span class="string">&#x27;.&#x27;</span>:</span><br><span class="line">                        tc = <span class="built_in">len</span>(get(i, j))</span><br><span class="line">                        <span class="keyword">if</span> <span class="built_in">len</span>(get(i, j)) &lt; minv:</span><br><span class="line">                            minv, x, y = tc, i, j</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> get(x, y):</span><br><span class="line">                row[x].add(i)</span><br><span class="line">                col[y].add(i)</span><br><span class="line">                cell[x // <span class="number">3</span>, y // <span class="number">3</span>].add(i)</span><br><span class="line">                board[x][y] = i</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">if</span> dfs(cur - <span class="number">1</span>):</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">                </span><br><span class="line">                row[x].remove(i)</span><br><span class="line">                col[y].remove(i)</span><br><span class="line">                cell[x // <span class="number">3</span>, y // <span class="number">3</span>].remove(i)</span><br><span class="line">                board[x][y] = <span class="string">&#x27;.&#x27;</span></span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">            </span><br><span class="line">        <span class="comment"># 初始化</span></span><br><span class="line">        res = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">9</span>):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">9</span>):</span><br><span class="line">                <span class="keyword">if</span> board[i][j] != <span class="string">&#x27;.&#x27;</span>:</span><br><span class="line">                    row[i].add(board[i][j])</span><br><span class="line">                    col[j].add(board[i][j])</span><br><span class="line">                    cell[i // <span class="number">3</span>, j // <span class="number">3</span>].add(board[i][j])</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    res += <span class="number">1</span></span><br><span class="line">        </span><br><span class="line">        dfs(res)</span><br></pre></td></tr></table></figure><link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p>假设在 finetune 过程中权重矩阵的变化量是低秩的，即：$W_0+\Delta W&#x3D;W_0+BA$，其中：$B\in \mathbb{R}^{d\times r}$，$A\in \mathbb{R}^{r\times k}$ 且 $r\ll \min(d, k)$。训练过程中 $W_0$ 保持不变，仅更新 $A$ 和 $B$。</p>
+<hr>
+<h4 id="LoRA-的优势"><a href="#LoRA-的优势" class="headerlink" title="LoRA 的优势"></a>LoRA 的优势</h4><ul>
+<li>方法灵活，可以根据需要调整 $r$，当逐渐增大 $r$ 时，LoRA 会逐渐接近 finetune 所有参数；</li>
+<li>当有多个下游子任务时，LoRA 可以通过更新 $BA$ 的方式在不同任务间切换，且 LoRA 相比于原始模型不会引入额外的计算延迟。</li>
+</ul>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>技术积累</category>
+        <category>论文笔记</category>
+      </categories>
+      <tags>
+        <tag>论文笔记</tag>
+        <tag>LLM</tag>
+        <tag>ICLR2022</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>P-Tuning v2</title>
+    <url>/posts/9feacd8a/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> P-Tuning v2: Prompt Tuning Can Be Comparable to Fine-tuning Universally Across Scales and Tasks<br><strong>链接：</strong> <a href="https://arxiv.org/pdf/2110.07602">https://arxiv.org/pdf/2110.07602</a><br><strong>代码：</strong> <a href="https://github.com/THUDM/P-tuning-v2">https://github.com/THUDM/P-tuning-v2</a><br><strong>来源：</strong> ACL 2022<br><strong>单位：</strong> Tsinghua University, KEG；Beijing Academy of Artificial Intelligence (BAAI)；Shanghai Qi Zhi Institute</p>
+<hr>
+<h4 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h4><p>对于大模型 finetune 所有参数很困难，类似 P-Tuning 的 prompt tuning 方法性能比 finetune 所有参数差，尤其在模型参数规模不足 100 亿时效果差的更明显。本文希望找到一种泛化性更强的 prompt tuning 方法。</p>
+<hr>
+<h4 id="P-Tuning-缺陷"><a href="#P-Tuning-缺陷" class="headerlink" title="P-Tuning 缺陷"></a>P-Tuning 缺陷</h4><ol>
+<li>在小模型上效果不好，当模型参数量大于 100 亿时，与 finetune 效果相近；但当模型参数量不足 100 亿时，效果会变差；</li>
+<li>在不同任务上通用性不足，在一些更难的任务上效果比较差。</li>
+</ol>
+<hr>
+<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-22%2019.10.51.png" alt="截屏2024-11-22 19.10.51.png"><br>与 P-Tuning 相比，v2 在每一层都加入了可学习的 prompt，增加了可学习的参数量，同时添加到深层的 prompt 可以更直接地影响模型预测结果。</p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>技术积累</category>
+        <category>论文笔记</category>
+      </categories>
+      <tags>
+        <tag>论文笔记</tag>
+        <tag>LLM</tag>
+        <tag>ACL2022</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>那种可能性早已料及</title>
+    <url>/posts/8215b0f1/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="故事梗概"><a href="#故事梗概" class="headerlink" title="故事梗概"></a>故事梗概</h4><p>自称渡良濑莉世的委托人怀疑自己十年前杀过人，希望委托侦探上苙丞调查确认。十年前，莉世和堂仁被各自的母亲带到教团”血赎”的居住地，二人都希望从村里逃走。村里的出入口只有一个，除交易日外不常打开，悬崖的岩石很脆不能攀爬，村里材料不足无法制造梯子或高台等工具，但堂仁依旧在为逃走准备，并承诺带莉世一起。村里共三十三人，一名教祖，其余是信徒。</p>
+<p>村里的猪身上都带有号码牌，按照顺序决定下次吃那一头。某天堂仁发现莉世把 12 号的号码牌藏了起来，莉世回答自己喜欢 12 号，希望它能活久一点。同时，莉世偷偷藏了一头小猪崽，被堂仁发现后，二人把猪崽藏在祭坛下面。</p>
+<p>村里突发地震，地震后村里的瀑布断流，水车停止运作。教祖认为这是一种征兆，因此堵住了村里唯一的出入口，并举行了最后的晚餐。在莉世记忆中，最后的晚餐后，教祖在堂仁的服侍下举行了祓禊，祓禊结束后教祖用斧头砍杀了信徒。堂仁带着莉世从门口跑出去并反锁了门，村子着火且火势开始蔓延，等莉世再次有意识的时候，她发现自己身处祠堂，旁边是堂仁被砍下的头和尸体。</p>
+<p>莉世怀疑是自己杀了少年，因为除了莉世和堂仁其他人的遗体都在参拜堂内部，且门是从外部上锁的，因此里面的人无法在无人帮助的情况下出来或自己锁上门，同时门锁很重莉世也无法锁上。但是，矛盾点在于，堂仁的头是被村里处理家畜的断头台砍下的，断头台距离祠堂有一段距离，莉世当时腿部骨折，绑着石膏，无论是移动尸体还是移动断头台都不可能。</p>
+<p>调查后侦探认为这起事件是——奇迹。</p>
+<h5 id="大门的推理"><a href="#大门的推理" class="headerlink" title="大门的推理"></a>大门的推理</h5><p>大门认为当时村里的水车是可以靠人力转动的那种，将猪放入水车，用火加热铁质水车就可以用猪驱动水车移动断头台。动机是堂仁要杀死小猪崽，少女精神崩溃下杀了人，为了制造奇迹，少女伪造了现场。</p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        侦探的反驳
+    </div>
+    <div class='spoiler-content'>
+        <p>堂仁看到号码牌就知道编号是 12 而不是 21，说明猪的数量小于等于 20，同时 11 号及之前的都死掉了，说明最多有 9 只猪。33 名成员都吃到了猪脚，说明 9 只猪都被杀了，因此没有能用来驱动水车的猪了。</p>
+
+    </div>
+</div>
+
+<h5 id="宋俪西的推理"><a href="#宋俪西的推理" class="headerlink" title="宋俪西的推理"></a>宋俪西的推理</h5><p>堂仁为了从村里逃走利用村里的材料做了投石机，事情发生后，堂仁想出去求援并带人回来救莉世。莉世误以为自己要被抛弃，因此趁堂仁不注意杀了堂仁，并利用投石机将自己和堂仁的尸体抛出去，正巧落入祠堂。莉世腿上的石膏没有破损是因为祠堂里的祭坛是用泡沫做的，泡沫做了缓冲。</p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        侦探的反驳
+    </div>
+    <div class='spoiler-content'>
+        <p>莉世醒后先看到了太阳，然后看到了堂仁的头，背光情况下应该看不清脸。莉世能够立刻判断这是堂仁是因为最后的晚餐前莉世打扮自己的时候把镜子角度调向下了，阳光照到镜子上又被反射到堂仁的脸上，这说明祭坛没有被破坏。</p>
+
+    </div>
+</div>
+
+<h5 id="八星联的推理"><a href="#八星联的推理" class="headerlink" title="八星联的推理"></a>八星联的推理</h5><p>村子里的神是有对应实体的——一具木乃伊。教祖在祓禊前杀了堂仁，之后看到的堂仁都是教祖伪装，看到的教祖是木乃伊，堂仁的尸体用冰箱保存，冰箱所需的电力由重力带动水车发电。教祖完成诡计后，从监控死角逃离村子，完成假死计划，设计复杂计划是需要莉世作为证人证明教祖的死亡。</p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        侦探的反驳
+    </div>
+    <div class='spoiler-content'>
+        <p>藏小猪的地方仅有莉世和堂仁知道，且在藏小猪的地方发现了搬运来的食物。祓禊前堂仁无法搬出食物，因为食材库被教祖严格管理，且只有祓禊时堂仁可以趁教祖沐浴拿到钥匙。因此如果堂仁在祓禊前被杀，藏小猪的位置不会出现食物。</p>
+
+    </div>
+</div>
+
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        矛盾
+    </div>
+    <div class='spoiler-content'>
+        <p>在第一段反驳里，侦探认为参加晚餐的有三十三人，也就是教祖参加了晚餐会，说明教祖还没有开始祓禊，即：祓禊在晚餐会后。<br>在第二段反驳里，侦探认为莉世进行打扮后，祭坛一直保留了打扮时的状态。这说明堂仁挪开祭坛藏食物在莉世进行打扮前。<br>也就是堂仁先放置了食物，然后莉世进行打扮参加晚餐，最后教祖进行祓禊。<br>然而根据第三段反驳，祓禊前堂仁无法拿到食物。侦探的三段反驳相互矛盾。</p>
+
+    </div>
+</div>
+
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        侦探的反驳
+    </div>
+    <div class='spoiler-content'>
+        <p>矛盾成立的前提是侦探的否定必须是正确的，如果侦探的否定是正确的，八星联的假说就是错误的。因此无法从八星联的假说中假定的教祖想杀堂仁为前提进行推导。如果教祖无意杀害堂仁，则可能在祓禊前将食物交给堂仁，这样就不存在矛盾了。</p>
+
+    </div>
+</div>
+
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        侦探提出的可能性
+    </div>
+    <div class='spoiler-content'>
+        <p>教祖支持堂仁逃走，因此在祓禊前给了堂仁食物，但两人的母亲不想让两人逃走。堂仁在离开参拜堂前被自己的母亲重伤，带伤抱着莉世到了祠堂，堂仁知道自己命不久矣，希望创造奇迹给莉世一个活下去的希望。因此，堂仁与教主合谋布置了现场，教主利用绳子使门闩从上方落下制造了密室。</p>
+
+    </div>
+</div>
+
+<hr>
+<h4 id="个人评价"><a href="#个人评价" class="headerlink" title="个人评价"></a>个人评价</h4><p>很有趣的侦探形象，通常侦探是负责证明奇迹不存在的，然而这本书的侦探希望否定所有可能性以证明奇迹存在。故事的发展就是不断由其他人提出可能性，侦探对这些可能一一进行否定推动。在这样的设定里，提出可能性的人不需要证明这种可能性是真实存在的，只要有可能性就算成功，所以很多解答看起来非常牵强。个人最喜欢的环节是否定之否定那里，最初看到的时候非常震撼。</p>
+<p>比较明显的缺点应该是文风，文风和人物形象都过于轻小说化，个人不是很喜欢。</p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>休闲娱乐</category>
+        <category>书籍阅读</category>
+      </categories>
+      <tags>
+        <tag>推理小说</tag>
+        <tag>井上真伪</tag>
+        <tag>逻辑流</tag>
+        <tag>多重解答</tag>
+        <tag>轻小说风</tag>
+        <tag>推荐书单</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>P-Tuning</title>
+    <url>/posts/8c1493e0/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> GPT Understands, Too<br><strong>链接：</strong> <a href="https://arxiv.org/pdf/2103.10385">https://arxiv.org/pdf/2103.10385</a><br><strong>代码：</strong> <a href="https://github.com/THUDM/P-tuning">https://github.com/THUDM/P-tuning</a><br><strong>来源：</strong> AI Open 2024<br><strong>单位：</strong> Tsinghua University；Massachusetts Institute of Technology</p>
+<hr>
+<h4 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h4><p>Prompt 可以提升大语言模型性能，然而，人工提供的离散 prompt 会导致很大的不确定性，几个单词的变动就会导致结果发生大幅度变化。P-Tuning 希望在离散的 prompt 前加入一个可训练的连续 prompt，提升稳定性。</p>
+<hr>
+<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-22%2017.31.24.png" alt="截屏2024-11-22 17.31.24.png"></p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>技术积累</category>
+        <category>论文笔记</category>
+      </categories>
+      <tags>
+        <tag>论文笔记</tag>
+        <tag>LLM</tag>
+        <tag>AI_Open_2024</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PoliFormer</title>
+    <url>/posts/a5f5aaf2/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> PoliFormer: Scaling On-Policy RL with Transformers Results in Masterful Navigators<br><strong>链接：</strong> <a href="https://arxiv.org/pdf/2406.20083">https://arxiv.org/pdf/2406.20083</a><br><strong>代码：</strong> <a href="https://github.com/allenai/poliformer">https://github.com/allenai/poliformer</a><br><strong>来源：</strong> CoRL 2024 (Outstanding Paper Award)<br><strong>单位：</strong> Allen Institute for AI</p>
+<hr>
+<h4 id="之前方法的缺陷"><a href="#之前方法的缺陷" class="headerlink" title="之前方法的缺陷"></a>之前方法的缺陷</h4><ul>
+<li>基于 GRU 的结构在简单的数据集上取得了很好的效果，但在较难的数据集上结果比较差；<font color="#a5a5a5">（However, this approach fails to result in the same breakthroughs for harder navigation problems like Object Goal Navigation (ObjectNav) where an agent must explore its environment to locate and navigate to an object of the requested type.）</font></li>
+<li>增大网络规模会导致模型训练不稳定且训练时间增加；<font color="#a5a5a5">（RL approaches for ObjectNav have generally not advanced beyond shallow GRU architectures due to challenges presented by training instability and unreasonably long training times with wider and deeper models, such as scaled-up transformers.）</font></li>
+<li>Imitation Learning 可能存在状态空间探索不足的问题。<font color="#a5a5a5">（we suspect this is a consequence of insufficient state-space exploration as expert trajectory datasets frequently contain few examples of error recovery, which can lead to sub-optimal performance due to compounding errors or non-trivial domain shifts during inference.）</font></li>
+</ul>
+<hr>
+<h4 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h4><p>从各个方面增大 RL 的 scale。</p>
+<hr>
+<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-14%2013.57.35.png" alt="截屏2024-11-14 13.57.35.png"></p>
+<ul>
+<li>Encoder 根据当前输入的 RGB 图像以及 goal 编码生成当前的状态 $s^t$，decoder 用于预测 action；</li>
+<li>Vision Transformer Model：DINOv2，训练时，该模块参数冻结，以保证模型在真实环境中的泛化性，否则视觉模块在模拟场景中的训练会影响到真实环境的性能；</li>
+<li>Goal Encoder：为了方便比较，在不同 benchmark 上用了不同的编码器；</li>
+<li>Causal Transformer Decoder：用 KV-cache 加速，使计算用时与时间成正比而非平方正比，加速计算。</li>
+</ul>
+<hr>
+<h4 id="个人总结"><a href="#个人总结" class="headerlink" title="个人总结"></a>个人总结</h4><p>这篇文章通过增大 scale 大幅提升了 embodied navigation 任务的准确性。增大 scale 既包括从模型上采用 transformer 结构增大了模型的 scale；也包括从数据层面上，采用了一系列方法加快了数据的模拟和读取；还包括直接增加训练节点数量，提升训练速度。</p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>技术积累</category>
+        <category>论文笔记</category>
+      </categories>
+      <tags>
+        <tag>论文笔记</tag>
+        <tag>Reinforcement_Learning</tag>
+        <tag>Embodied_Navigation</tag>
+        <tag>CoRL2024</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>马拉车算法</title>
+    <url>/posts/c3cacb08/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h4><p>用于解决最长回文子串的问题，可以把算法复杂度降低到 O(N)。</p>
+<hr>
+<h4 id="算法原理"><a href="#算法原理" class="headerlink" title="算法原理"></a>算法原理</h4><ul>
+<li>在字符串的每个字符之间以及字符串首尾插入同一个字符串内不可能出现的字符，以保证所有字符串的长度都是奇数，这样可以不用对长度为奇数的字符串以及长度为偶数的字符串分类处理；</li>
+<li>在字符串开头和结尾分别加入不同的且不可能在字符串内出现的字符，这样保证回文子串搜索到该位置的时候自动退出，不需要处理边界情况；</li>
+<li>该算法在每个位置都希望计算以该位置为中心的最长回文子串的长度。同时会记录一个当前回文子串对应的最靠右的右边界位置 R，该位置对应的回文子串中心 c，该位置对应的回文子串 s。这样对于一个新的位置，可能出现几种情况：<ul>
+<li>该位置在 R 的右边，需要重新搜索该位置的回文子串；</li>
+<li>该位置在 R 的左边，此时可以看该位置以 c 为中心对称位置的回文子串情况，这也有两种情况：<ul>
+<li>对称位置的回文子串完全落在 s 内，则在当前位置的回文子串长度与对称位置相同（回文子串的性质）；</li>
+<li>对称位置的回文子串有一部分落在 s 外，则当前位置到 R 肯定可以构成回文子串，需要继续向外搜索。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="算法分析"><a href="#算法分析" class="headerlink" title="算法分析"></a>算法分析</h4><p>在上述算法过程中 R 是不断向右的，也就是在算法过程中不会重复比较字符是否相等，因此可以大幅度降低时间复杂度。</p>
+<hr>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">longestPalindrome</span>(<span class="params">self, s: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        new_s = <span class="string">&#x27;^#&#x27;</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> s:</span><br><span class="line">            new_s = new_s + i + <span class="string">&#x27;#&#x27;</span></span><br><span class="line">        new_s += <span class="string">&#x27;$&#x27;</span></span><br><span class="line">		</span><br><span class="line">        result = numpy.zeros(<span class="built_in">len</span>(new_s))</span><br><span class="line">        right = <span class="number">0</span></span><br><span class="line">        center = <span class="number">0</span></span><br><span class="line">		</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="built_in">len</span>(new_s) - <span class="number">1</span>):</span><br><span class="line">            <span class="keyword">if</span> i &gt; right:</span><br><span class="line">                r = <span class="number">0</span></span><br><span class="line">                <span class="keyword">while</span> new_s[i + r] == new_s[i - r]:</span><br><span class="line">                    r += <span class="number">1</span></span><br><span class="line">                r -= <span class="number">1</span></span><br><span class="line">                center = i</span><br><span class="line">                right = center + r</span><br><span class="line">                result[i] = r</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                other_i = <span class="number">2</span> * center - i</span><br><span class="line">                <span class="keyword">if</span> result[other_i] &lt; right - i:</span><br><span class="line">                    result[i] = result[other_i]</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    r = right - i</span><br><span class="line">                    <span class="keyword">while</span> new_s[i + r] == new_s[i - r]:</span><br><span class="line">                        r += <span class="number">1</span></span><br><span class="line">                    r -= <span class="number">1</span></span><br><span class="line">                    center = i</span><br><span class="line">                    right = center + r</span><br><span class="line">                    result[i] = r</span><br><span class="line">					</span><br><span class="line">        index = <span class="built_in">int</span>(numpy.argmax(result))</span><br><span class="line">        result_s = new_s[<span class="built_in">int</span>(index - result[index]):<span class="built_in">int</span>(index + result[index] + <span class="number">1</span>)]</span><br><span class="line">        result_s = result_s.replace(<span class="string">&#x27;#&#x27;</span>, <span class="string">&#x27;&#x27;</span>)</span><br><span class="line">        <span class="keyword">return</span> result_s</span><br></pre></td></tr></table></figure><link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>技术积累</category>
+        <category>编程技巧</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Build a LLM From Scratch</title>
+    <url>/posts/881244c3/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="Understanding-LLM"><a href="#Understanding-LLM" class="headerlink" title="Understanding LLM"></a>Understanding LLM</h4><h5 id="LLM-与传统方法相比的优势"><a href="#LLM-与传统方法相比的优势" class="headerlink" title="LLM 与传统方法相比的优势"></a>LLM 与传统方法相比的优势</h5><p>之前的方法在比较复杂的理解和生成任务中表现不佳，例如：上下文分析、生成连贯文本，同时只适用于一些特定的任务。而 LLM 可以在一系列任务上表现出较好的性能。LLM 成功的原因包括 transformer 结构以及大量的训练数据。</p>
+<h5 id="Stages-of-building-and-using-LLMS"><a href="#Stages-of-building-and-using-LLMS" class="headerlink" title="Stages of building and using LLMS"></a>Stages of building and using LLMS</h5><p>目前的研究表明，模型在特定任务或特定领域上训练后可以表现出超过通用 LLM 的性能。因此 LLM 训练通常包括两步：</p>
+<ul>
+<li>Pretrain 指模型在大规模数据库上训练，使模型具有语言理解能力，这一阶段的数据是不需要标注的；</li>
+<li>Finetune 指模型在细分领域&#x2F;细分任务的数据上训练，目前比较常用的 finetune 方式包括两类：<ul>
+<li>Instruction finetuning：标注数据由 instruction 和 answer 组成，例如：要求模型翻译某段话的 query 以及正确的翻译后的文本；</li>
+<li>Classification finetuning：标注数据由文本以及对应的类别组成，例如：邮件内容以及该邮件是否是垃圾邮件的标注。<br><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-26%2014.09.22.png" alt="截屏2024-11-26 14.09.22.png"></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="Working-with-text-data"><a href="#Working-with-text-data" class="headerlink" title="Working with text data"></a>Working with text data</h4><h5 id="Understanding-word-embeddings"><a href="#Understanding-word-embeddings" class="headerlink" title="Understanding word embeddings"></a>Understanding word embeddings</h5><p>Text 需要被转换成 vector 才能被模型处理，这个过程被称为 embedding。Embedding 有很多方法：</p>
+<ul>
+<li>Word2vec：核心思路是在相近的上下文中出现的词应该具有相似的含义；</li>
+<li>作为模型的一部分在训练期间不断更新：这种方法的优势是训练出的 embedding 与自己的任务和数据更适配。</li>
+</ul>
+<h5 id="Tokenizing-text"><a href="#Tokenizing-text" class="headerlink" title="Tokenizing text"></a>Tokenizing text</h5><p>每个单词，每个标点符号都作为一个单独的 token。空格是否保留可以根据需要，如果是对格式非常严格的任务，例如代码生成，那么缩进和空格就有保留的必要，对于对格式要求不严格的任务，也可以删掉以节省存储空间。<br><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-26%2015.49.54.png" alt="截屏2024-11-26 15.49.54.png"></p>
+<h5 id="Converting-tokens-into-token-IDs"><a href="#Converting-tokens-into-token-IDs" class="headerlink" title="Converting tokens into token IDs"></a>Converting tokens into token IDs</h5><p>给文本里所有出现过的 token 一个编码，这样每次读到一段 text，就可以通过转换把 text 转换成编码。LLM 的输出结果可以通过反向转换，转换到 text。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SimpleTokenizerV1</span>: </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, vocab</span>): </span><br><span class="line">        <span class="variable language_">self</span>.str_to_int = vocab </span><br><span class="line">        <span class="variable language_">self</span>.int_to_str = &#123;i:s <span class="keyword">for</span> s,i <span class="keyword">in</span> vocab.items()&#125; </span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">encode</span>(<span class="params">self, text</span>): </span><br><span class="line">        preprocessed = re.split(<span class="string">r&#x27;([,.?_!&quot;()\&#x27;]|--|\s)&#x27;</span>, text)</span><br><span class="line">        preprocessed = [ </span><br><span class="line">            item.strip() <span class="keyword">for</span> item <span class="keyword">in</span> preprocessed <span class="keyword">if</span> item.strip() </span><br><span class="line">        ] </span><br><span class="line">        ids = [<span class="variable language_">self</span>.str_to_int[s] <span class="keyword">for</span> s <span class="keyword">in</span> preprocessed] </span><br><span class="line">        <span class="keyword">return</span> ids </span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">decode</span>(<span class="params">self, ids</span>): </span><br><span class="line">        text = <span class="string">&quot; &quot;</span>.join([<span class="variable language_">self</span>.int_to_str[i] <span class="keyword">for</span> i <span class="keyword">in</span> ids])</span><br><span class="line">        <span class="comment"># 处理标点符号前的空格 </span></span><br><span class="line">        text = re.sub(<span class="string">r&#x27;\s+([,.?!&quot;()\&#x27;])&#x27;</span>, <span class="string">r&#x27;\1&#x27;</span>, text) </span><br><span class="line">        <span class="keyword">return</span> text</span><br></pre></td></tr></table></figure>
+
+<h5 id="Adding-special-context-tokens"><a href="#Adding-special-context-tokens" class="headerlink" title="Adding special context tokens"></a>Adding special context tokens</h5><p>为了应对 text 里可能包含的没见过的词，需要增加 $&lt;|unk|&gt;$ token。同时也可以增加一些用于帮助文本理解的 token，例如用 $&lt;|endoftext|&gt;$ 表明文档的末尾，这样在用大量文本训练时，可以使模型更好地判断哪些文本是有关联的。</p>
+<h5 id="Byte-pair-encoding"><a href="#Byte-pair-encoding" class="headerlink" title="Byte pair encoding"></a>Byte pair encoding</h5><p>在 tiktoken 库（ <a href="https://github.com/openai/tiktoken">https://github.com/openai/tiktoken</a> ）里有实现，可用 pip 安装。BPE 遇到没见过的单词会把这些词拆解成 subword 后再进行 encode，这样就不需要 $&lt;|unk|&gt;$ token 进行处理。BPE 的基本原理是首先把每个字母加入 vocabulary，然后把同时出现的概率较高的字母组合为 subword，逐步生成 word。<br><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-27%2010.51.33.png" alt="截屏2024-11-27 10.51.33.png"></p>
+<h5 id="Data-sampling-with-a-sliding-window"><a href="#Data-sampling-with-a-sliding-window" class="headerlink" title="Data sampling with a sliding window"></a>Data sampling with a sliding window</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch </span><br><span class="line"><span class="keyword">from</span> torch.utils.data <span class="keyword">import</span> Dataset, DataLoader </span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GPTDatasetV1</span>(<span class="title class_ inherited__">Dataset</span>): </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, txt, tokenizer, max_length, stride</span>):</span><br><span class="line">        <span class="variable language_">self</span>.input_ids = [] </span><br><span class="line">        <span class="variable language_">self</span>.target_ids = [] </span><br><span class="line">        </span><br><span class="line">        token_ids = tokenizer.encode(txt)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="built_in">len</span>(token_ids) - max_length, stride):</span><br><span class="line">            input_chunk = token_ids[i:i + max_length] </span><br><span class="line">            target_chunk = token_ids[i + <span class="number">1</span>: i + max_length + <span class="number">1</span>]</span><br><span class="line">            <span class="variable language_">self</span>.input_ids.append(torch.tensor(input_chunk))</span><br><span class="line">            <span class="variable language_">self</span>.target_ids.append(torch.tensor(target_chunk))</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__len__</span>(<span class="params">self</span>): </span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">len</span>(<span class="variable language_">self</span>.input_ids) </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__getitem__</span>(<span class="params">self, idx</span>): </span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>.input_ids[idx], <span class="variable language_">self</span>.target_ids[idx]</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">create_dataloader_v1</span>(<span class="params">txt, batch_size=<span class="number">4</span>, max_length=<span class="number">256</span>, </span></span><br><span class="line"><span class="params">                         stride=<span class="number">128</span>, shuffle=<span class="literal">True</span>, drop_last=<span class="literal">True</span>,</span></span><br><span class="line"><span class="params">                         num_workers=<span class="number">0</span></span>): </span><br><span class="line">    tokenizer = tiktoken.get_encoding(<span class="string">&quot;gpt2&quot;</span>) </span><br><span class="line">    dataset = GPTDatasetV1(txt, tokenizer, max_length, stride)</span><br><span class="line">    dataloader = DataLoader( </span><br><span class="line">        dataset, </span><br><span class="line">        batch_size=batch_size, </span><br><span class="line">        shuffle=shuffle, </span><br><span class="line">        drop_last=drop_last, </span><br><span class="line">        num_workers=num_workers </span><br><span class="line">    ) </span><br><span class="line">    <span class="keyword">return</span> dataloader</span><br></pre></td></tr></table></figure>
+
+<h5 id="Creating-token-embeddings"><a href="#Creating-token-embeddings" class="headerlink" title="Creating token embeddings"></a>Creating token embeddings</h5><p>用 $torch.nn.Embedding$ 将 index 映射为可训练的 embedding。</p>
+<h5 id="Embedding-word-positions"><a href="#Embedding-word-positions" class="headerlink" title="Embedding word positions"></a>Embedding word positions</h5><p>Position embedding 主要分为两类：</p>
+<ul>
+<li>Absolute position embedding：根据 token 在 sequence 里的绝对位置 embedding；</li>
+<li>Relative position embedding：学习 tokens 之间的相对距离，可以使模型在不同长度的 sequence 上泛化地更好。</li>
+</ul>
+<hr>
+<h4 id="Coding-attention-mechanisms"><a href="#Coding-attention-mechanisms" class="headerlink" title="Coding attention mechanisms"></a>Coding attention mechanisms</h4><h5 id="The-problem-with-modeling-long-sequences"><a href="#The-problem-with-modeling-long-sequences" class="headerlink" title="The problem with modeling long sequences"></a>The problem with modeling long sequences</h5><p>在采用 attention 结构前，比较常用的语言处理模型是 RNN 结构。在 RNN 结构中，encoder 把输入文本的全部内容保存在一个 hidden state 内部，然后 decoder 用这个 hidden state 生成输出。<br><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-27%2015.26.48.png" alt="截屏2024-11-27 15.26.48.png"><br>这种结构的问题是在 decoder 过程中，encoder 早期的 hidden state 被全部丢弃了，仅采用了最后一个 hidden state，这会导致信息丢失。</p>
+<h5 id="Implementing-self-attention-with-trainable-weights"><a href="#Implementing-self-attention-with-trainable-weights" class="headerlink" title="Implementing self-attention with trainable weights"></a>Implementing self-attention with trainable weights</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SelfAttention_v2</span>(nn.Module): </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, d_in, d_out, qkv_bias=<span class="literal">False</span></span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__() </span><br><span class="line">        <span class="variable language_">self</span>.W_query = nn.Linear(d_in, d_out, bias=qkv_bias) </span><br><span class="line">        <span class="variable language_">self</span>.W_key = nn.Linear(d_in, d_out, bias=qkv_bias) </span><br><span class="line">        <span class="variable language_">self</span>.W_value = nn.Linear(d_in, d_out, bias=qkv_bias) </span><br><span class="line">        </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>): </span><br><span class="line">        keys = <span class="variable language_">self</span>.W_key(x) </span><br><span class="line">        queries = <span class="variable language_">self</span>.W_query(x) </span><br><span class="line">        values = <span class="variable language_">self</span>.W_value(x) </span><br><span class="line">        attn_scores = queries @ keys.T </span><br><span class="line">        attn_weights = torch.softmax( </span><br><span class="line">            attn_scores / keys.shape[-<span class="number">1</span>]**<span class="number">0.5</span>, dim=-<span class="number">1</span> </span><br><span class="line">        ) </span><br><span class="line">        context_vec = attn_weights @ values </span><br><span class="line">        <span class="keyword">return</span> context_vec</span><br></pre></td></tr></table></figure>
+
+<p>Normalize 是为了防止点积结果过大，从而落在梯度较低的区域，影响训练速度。</p>
+<h5 id="Hiding-future-words-with-causal-attention"><a href="#Hiding-future-words-with-causal-attention" class="headerlink" title="Hiding future words with causal attention"></a>Hiding future words with causal attention</h5><p>自然语言任务里，经常需要仅与前面的输入做 attention。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">CausalAttention</span>(nn.Module): </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, d_in, d_out, context_length, </span></span><br><span class="line"><span class="params">                dropout, qkv_bias=<span class="literal">False</span></span>): </span><br><span class="line">        <span class="built_in">super</span>().__init__() </span><br><span class="line">        <span class="variable language_">self</span>.d_out = d_out </span><br><span class="line">        <span class="variable language_">self</span>.W_query = nn.Linear(d_in, d_out, bias=qkv_bias) </span><br><span class="line">        <span class="variable language_">self</span>.W_key = nn.Linear(d_in, d_out, bias=qkv_bias) </span><br><span class="line">        <span class="variable language_">self</span>.W_value = nn.Linear(d_in, d_out, bias=qkv_bias)</span><br><span class="line">        <span class="variable language_">self</span>.dropout = nn.Dropout(dropout) </span><br><span class="line">        </span><br><span class="line">        <span class="comment"># register_buffer可以使变量随着模型在不同device上移动，不需要手动处理</span></span><br><span class="line">        <span class="variable language_">self</span>.register_buffer( </span><br><span class="line">            <span class="string">&#x27;mask&#x27;</span>, </span><br><span class="line">            torch.triu(torch.ones(context_length, context_length),</span><br><span class="line">            diagonal=<span class="number">1</span>) </span><br><span class="line">        ) </span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>): </span><br><span class="line">        b, num_tokens, d_in = x.shape </span><br><span class="line">        keys = <span class="variable language_">self</span>.W_key(x) </span><br><span class="line">        queries = <span class="variable language_">self</span>.W_query(x) </span><br><span class="line">        values = <span class="variable language_">self</span>.W_value(x) </span><br><span class="line">        </span><br><span class="line">        attn_scores = queries @ keys.transpose(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 加入mask防止与后面的token计算attention</span></span><br><span class="line">        attn_scores.masked_fill_( </span><br><span class="line">            <span class="variable language_">self</span>.mask.<span class="built_in">bool</span>()[:num_tokens, :num_tokens], -torch.inf</span><br><span class="line">        ) </span><br><span class="line">        attn_weights = torch.softmax( </span><br><span class="line">            attn_scores / keys.shape[-<span class="number">1</span>]**<span class="number">0.5</span>, dim=-<span class="number">1</span> </span><br><span class="line">        ) </span><br><span class="line">        <span class="comment"># 加入dropout防止过拟合</span></span><br><span class="line">        attn_weights = <span class="variable language_">self</span>.dropout(attn_weights)</span><br><span class="line">        </span><br><span class="line">        context_vec = attn_weights @ values </span><br><span class="line">        <span class="keyword">return</span> context_vec</span><br></pre></td></tr></table></figure>
+
+<h5 id="Extending-single-head-attention-to-multi-head-attention"><a href="#Extending-single-head-attention-to-multi-head-attention" class="headerlink" title="Extending single-head attention to multi-head attention"></a>Extending single-head attention to multi-head attention</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MultiHeadAttention</span>(nn.Module): </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, d_in, d_out, </span></span><br><span class="line"><span class="params">                 context_length, dropout, num_heads, qkv_bias=<span class="literal">False</span></span>): </span><br><span class="line">        <span class="built_in">super</span>().__init__() </span><br><span class="line">        <span class="keyword">assert</span> (d_out % num_heads == <span class="number">0</span>), \ </span><br><span class="line">            <span class="string">&quot;d_out must be divisible by num_heads&quot;</span> </span><br><span class="line">        </span><br><span class="line">        <span class="variable language_">self</span>.d_out = d_out </span><br><span class="line">        <span class="variable language_">self</span>.num_heads = num_heads </span><br><span class="line">        <span class="variable language_">self</span>.head_dim = d_out // num_heads </span><br><span class="line">        <span class="variable language_">self</span>.W_query = nn.Linear(d_in, d_out, bias=qkv_bias) </span><br><span class="line">        <span class="variable language_">self</span>.W_key = nn.Linear(d_in, d_out, bias=qkv_bias) </span><br><span class="line">        <span class="variable language_">self</span>.W_value = nn.Linear(d_in, d_out, bias=qkv_bias)</span><br><span class="line">        <span class="variable language_">self</span>.out_proj = nn.Linear(d_out, d_out) </span><br><span class="line">        <span class="variable language_">self</span>.dropout = nn.Dropout(dropout) </span><br><span class="line">        <span class="variable language_">self</span>.register_buffer( </span><br><span class="line">            <span class="string">&quot;mask&quot;</span>, </span><br><span class="line">            torch.triu(torch.ones(context_length, context_length),</span><br><span class="line">                       diagonal=<span class="number">1</span>) </span><br><span class="line">        ) </span><br><span class="line">        </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>): </span><br><span class="line">        b, num_tokens, d_in = x.shape </span><br><span class="line">        keys = <span class="variable language_">self</span>.W_key(x) </span><br><span class="line">        queries = <span class="variable language_">self</span>.W_query(x) </span><br><span class="line">        values = <span class="variable language_">self</span>.W_value(x)</span><br><span class="line">        keys = keys.view(b, num_tokens, <span class="variable language_">self</span>.num_heads, <span class="variable language_">self</span>.head_dim)</span><br><span class="line">        values = values.view(</span><br><span class="line">            b, num_tokens, <span class="variable language_">self</span>.num_heads, <span class="variable language_">self</span>.head_dim</span><br><span class="line">        ) </span><br><span class="line">        queries = queries.view( </span><br><span class="line">            b, num_tokens, <span class="variable language_">self</span>.num_heads, <span class="variable language_">self</span>.head_dim </span><br><span class="line">        )</span><br><span class="line">        </span><br><span class="line">        keys = keys.transpose(<span class="number">1</span>, <span class="number">2</span>) </span><br><span class="line">        queries = queries.transpose(<span class="number">1</span>, <span class="number">2</span>) </span><br><span class="line">        values = values.transpose(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">        </span><br><span class="line">        attn_scores = queries @ keys.transpose(<span class="number">2</span>, <span class="number">3</span>) </span><br><span class="line">        mask_bool = <span class="variable language_">self</span>.mask.<span class="built_in">bool</span>()[:num_tokens, :num_tokens]</span><br><span class="line">        </span><br><span class="line">        attn_scores.masked_fill_(mask_bool, -torch.inf)</span><br><span class="line">        </span><br><span class="line">        attn_weights = torch.softmax( </span><br><span class="line">            attn_scores / keys.shape[-<span class="number">1</span>]**<span class="number">0.5</span>, dim=-<span class="number">1</span>) </span><br><span class="line">        attn_weights = <span class="variable language_">self</span>.dropout(attn_weights)</span><br><span class="line">        </span><br><span class="line">        context_vec = (attn_weights @ values).transpose(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">        </span><br><span class="line">        context_vec = context_vec.contiguous().view( </span><br><span class="line">            b, num_tokens, <span class="variable language_">self</span>.d_out </span><br><span class="line">        ) </span><br><span class="line">        context_vec = <span class="variable language_">self</span>.out_proj(context_vec) </span><br><span class="line">        <span class="keyword">return</span> context_vec</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h4 id="Implementing-a-GPT-model-from-scratch-to-generate-text"><a href="#Implementing-a-GPT-model-from-scratch-to-generate-text" class="headerlink" title="Implementing a GPT model from scratch to generate text"></a>Implementing a GPT model from scratch to generate text</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">TransformerBlock</span>(nn.Module): </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, cfg</span>): </span><br><span class="line">        <span class="built_in">super</span>().__init__() </span><br><span class="line">        <span class="variable language_">self</span>.att = MultiHeadAttention( </span><br><span class="line">            d_in=cfg[<span class="string">&quot;emb_dim&quot;</span>], </span><br><span class="line">            d_out=cfg[<span class="string">&quot;emb_dim&quot;</span>], </span><br><span class="line">            context_length=cfg[<span class="string">&quot;context_length&quot;</span>],</span><br><span class="line">            num_heads=cfg[<span class="string">&quot;n_heads&quot;</span>], </span><br><span class="line">            dropout=cfg[<span class="string">&quot;drop_rate&quot;</span>], </span><br><span class="line">            qkv_bias=cfg[<span class="string">&quot;qkv_bias&quot;</span>]) </span><br><span class="line">        <span class="variable language_">self</span>.ff = FeedForward(cfg) </span><br><span class="line">        <span class="variable language_">self</span>.norm1 = LayerNorm(cfg[<span class="string">&quot;emb_dim&quot;</span>]) </span><br><span class="line">        <span class="variable language_">self</span>.norm2 = LayerNorm(cfg[<span class="string">&quot;emb_dim&quot;</span>]) </span><br><span class="line">        <span class="variable language_">self</span>.drop_shortcut = nn.Dropout(cfg[<span class="string">&quot;drop_rate&quot;</span>]) </span><br><span class="line">        </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>): </span><br><span class="line">        shortcut = x </span><br><span class="line">        x = <span class="variable language_">self</span>.norm1(x) </span><br><span class="line">        x = <span class="variable language_">self</span>.att(x) </span><br><span class="line">        x = <span class="variable language_">self</span>.drop_shortcut(x) </span><br><span class="line">        x = x + shortcut </span><br><span class="line">        </span><br><span class="line">        shortcut = x </span><br><span class="line">        x = <span class="variable language_">self</span>.norm2(x) </span><br><span class="line">        x = <span class="variable language_">self</span>.ff(x) </span><br><span class="line">        x = <span class="variable language_">self</span>.drop_shortcut(x) </span><br><span class="line">        x = x + shortcut </span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GPTModel</span>(nn.Module): </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, cfg</span>): </span><br><span class="line">        <span class="built_in">super</span>().__init__() </span><br><span class="line">        <span class="variable language_">self</span>.tok_emb = nn.Embedding(cfg[<span class="string">&quot;vocab_size&quot;</span>], cfg[<span class="string">&quot;emb_dim&quot;</span>])</span><br><span class="line">        <span class="variable language_">self</span>.pos_emb = nn.Embedding(</span><br><span class="line">            cfg[<span class="string">&quot;context_length&quot;</span>], cfg[<span class="string">&quot;emb_dim&quot;</span>]</span><br><span class="line">        ) </span><br><span class="line">        <span class="variable language_">self</span>.drop_emb = nn.Dropout(cfg[<span class="string">&quot;drop_rate&quot;</span>]) </span><br><span class="line">        </span><br><span class="line">        <span class="variable language_">self</span>.trf_blocks = nn.Sequential( </span><br><span class="line">            *[TransformerBlock(cfg) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(cfg[<span class="string">&quot;n_layers&quot;</span>])])</span><br><span class="line">            </span><br><span class="line">        <span class="variable language_">self</span>.final_norm = LayerNorm(cfg[<span class="string">&quot;emb_dim&quot;</span>]) </span><br><span class="line">        <span class="variable language_">self</span>.out_head = nn.Linear( </span><br><span class="line">            cfg[<span class="string">&quot;emb_dim&quot;</span>], cfg[<span class="string">&quot;vocab_size&quot;</span>], bias=<span class="literal">False</span> </span><br><span class="line">        ) </span><br><span class="line">        </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, in_idx</span>): </span><br><span class="line">        batch_size, seq_len = in_idx.shape </span><br><span class="line">        tok_embeds = <span class="variable language_">self</span>.tok_emb(in_idx) </span><br><span class="line">        </span><br><span class="line">        pos_embeds = <span class="variable language_">self</span>.pos_emb( </span><br><span class="line">            torch.arange(seq_len, device=in_idx.device) </span><br><span class="line">        ) </span><br><span class="line">        x = tok_embeds + pos_embeds </span><br><span class="line">        x = <span class="variable language_">self</span>.drop_emb(x) </span><br><span class="line">        x = <span class="variable language_">self</span>.trf_blocks(x) </span><br><span class="line">        x = <span class="variable language_">self</span>.final_norm(x) </span><br><span class="line">        logits = <span class="variable language_">self</span>.out_head(x) </span><br><span class="line">        <span class="keyword">return</span> logits</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">generate_text_simple</span>(<span class="params">model, idx, max_new_tokens, context_size</span>): </span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(max_new_tokens): </span><br><span class="line">        idx_cond = idx[:, -context_size:] </span><br><span class="line">        <span class="keyword">with</span> torch.no_grad(): </span><br><span class="line">            logits = model(idx_cond) </span><br><span class="line">        </span><br><span class="line">        logits = logits[:, -<span class="number">1</span>, :] </span><br><span class="line">        probas = torch.softmax(logits, dim=-<span class="number">1</span>) </span><br><span class="line">        idx_next = torch.argmax(probas, dim=-<span class="number">1</span>, keepdim=<span class="literal">True</span>) </span><br><span class="line">        idx = torch.cat((idx, idx_next), dim=<span class="number">1</span>) </span><br><span class="line">    <span class="keyword">return</span> idx</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>未完待读</p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>技术积累</category>
+        <category>读书笔记</category>
+      </categories>
+      <tags>
+        <tag>LLM</tag>
+        <tag>读书笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>串联所有单词的子串</title>
+    <url>/posts/44658eea/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>给定一个字符串 s 和一个字符串数组 words。words 中所有字符串长度相同。<br>s 中的串联子串是指一个包含 words 中所有字符串以任意顺序排列连接起来的子串。<br>返回所有串联子串在 s 中的开始索引。你可以以任意顺序返回答案。</p>
+<hr>
+<h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>利用所有字符串等长的特点，逐位置搜索。</p>
+<hr>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">findSubstring</span>(<span class="params">self, s: <span class="built_in">str</span>, words: <span class="type">List</span>[<span class="built_in">str</span>]</span>) -&gt; <span class="type">List</span>[<span class="built_in">int</span>]:</span><br><span class="line">        <span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> s <span class="keyword">or</span> <span class="keyword">not</span> words:</span><br><span class="line">            <span class="keyword">return</span> []</span><br><span class="line">        </span><br><span class="line">        one_word = <span class="built_in">len</span>(words[<span class="number">0</span>])</span><br><span class="line">        all_len = <span class="built_in">len</span>(words) * one_word</span><br><span class="line">        n = <span class="built_in">len</span>(s)</span><br><span class="line">        </span><br><span class="line">        words = Counter(words)</span><br><span class="line">        res = []</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, n - all_len + <span class="number">1</span>):</span><br><span class="line">            tmp = s[i:i+all_len]</span><br><span class="line">            c_tmp = []</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, all_len, one_word):</span><br><span class="line">                c_tmp.append(tmp[j:j+one_word])</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> Counter(c_tmp) == words:</span><br><span class="line">                res.append(i)</span><br><span class="line"><span class="keyword">return</span> res</span><br></pre></td></tr></table></figure><link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>技术积累</category>
+        <category>编程技巧</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>搜索旋转排序数组</title>
+    <url>/posts/32377bdc/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>整数数组 nums 按升序排列，数组中的值互不相同。<br>在传递给函数之前，nums 在预先未知的某个下标 k（0 &lt;&#x3D; k &lt; nums.length）上进行了旋转，使数组变为 [nums[k], nums[k+1], …, nums[n-1], nums[0], nums[1], …, nums[k-1]]（下标从 0 开始计数）。例如，[0,1,2,4,5,6,7] 在下标 3 处经旋转后可能变为 [4,5,6,7,0,1,2]。<br>给你旋转后的数组 nums 和一个整数 target，如果 nums 中存在这个目标值 target，则返回它的下标，否则返回 -1。<br>你必须设计一个时间复杂度为 O(log n) 的算法解决此问题。</p>
+<hr>
+<h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>二分法的变形，与普通二分法的区别是需要加入更复杂的判断条件。对于旋转数组，从中间分开后，有两种可能：</p>
+<ul>
+<li>旋转点在前半段，这种情况后半段数组是递增的，只要判断 target 不在后半段就可以到前半段搜索；</li>
+<li>旋转点在后半段，则与上述情况相反。</li>
+</ul>
+<p>判断旋转点只需要判断左侧元素是否小于右侧即可。</p>
+<hr>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">search</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>], target: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        length = <span class="built_in">len</span>(nums)</span><br><span class="line">        <span class="keyword">if</span> length == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span></span><br><span class="line">            </span><br><span class="line">        mid = <span class="built_in">int</span>((length - <span class="number">1</span>) / <span class="number">2</span>)</span><br><span class="line">        <span class="keyword">if</span> target == nums[mid]:</span><br><span class="line">            <span class="keyword">return</span> mid</span><br><span class="line">        <span class="keyword">if</span> target == nums[-<span class="number">1</span>]:</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">len</span>(nums) - <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> target == nums[<span class="number">0</span>]:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (</span><br><span class="line">            nums[<span class="number">0</span>] &lt; nums[mid] <span class="keyword">and</span> \</span><br><span class="line">            (target &gt; nums[mid] <span class="keyword">or</span> target &lt; nums[<span class="number">0</span>])) <span class="keyword">or</span> \</span><br><span class="line">            (nums[<span class="number">0</span>] &gt; nums[mid]) <span class="keyword">and</span> \</span><br><span class="line">            (target &gt; nums[mid] <span class="keyword">and</span> target &lt; nums[-<span class="number">1</span>]):</span><br><span class="line">            </span><br><span class="line">            result = <span class="variable language_">self</span>.search(nums[mid+<span class="number">1</span>:], target)</span><br><span class="line">            <span class="keyword">if</span> result == -<span class="number">1</span>:</span><br><span class="line">                <span class="keyword">return</span> result</span><br><span class="line">            <span class="keyword">return</span> result + mid + <span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="variable language_">self</span>.search(nums[:mid], target)</span><br></pre></td></tr></table></figure><link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
         <category>技术积累</category>
         <category>编程技巧</category>
@@ -108,321 +410,19 @@
       </tags>
   </entry>
   <entry>
-    <title>搜索旋转排序数组</title>
-    <url>/posts/32377bdc/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>整数数组 nums 按升序排列，数组中的值互不相同。<br>在传递给函数之前，nums 在预先未知的某个下标 k（0 &lt;&#x3D; k &lt; nums.length）上进行了旋转，使数组变为 [nums[k], nums[k+1], …, nums[n-1], nums[0], nums[1], …, nums[k-1]]（下标从 0 开始计数）。例如，[0,1,2,4,5,6,7] 在下标 3 处经旋转后可能变为 [4,5,6,7,0,1,2]。<br>给你旋转后的数组 nums 和一个整数 target，如果 nums 中存在这个目标值 target，则返回它的下标，否则返回 -1。<br>你必须设计一个时间复杂度为 O(log n) 的算法解决此问题。</p>
+    <title>解数独</title>
+    <url>/posts/de1f6638/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>编写一个程序，通过填充空格来解决数独问题。</p>
 <hr>
-<h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>二分法的变形，与普通二分法的区别是需要加入更复杂的判断条件。对于旋转数组，从中间分开后，有两种可能：</p>
-<ul>
-<li>旋转点在前半段，这种情况后半段数组是递增的，只要判断 target 不在后半段就可以到前半段搜索；</li>
-<li>旋转点在后半段，则与上述情况相反。</li>
-</ul>
-<p>判断旋转点只需要判断左侧元素是否小于右侧即可。</p>
+<h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>简单的深搜会超时，为了防止超时，需要尽可能优先搜索可能性较少的位置。</p>
 <hr>
-<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">search</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>], target: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        length = <span class="built_in">len</span>(nums)</span><br><span class="line">        <span class="keyword">if</span> length == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span></span><br><span class="line">            </span><br><span class="line">        mid = <span class="built_in">int</span>((length - <span class="number">1</span>) / <span class="number">2</span>)</span><br><span class="line">        <span class="keyword">if</span> target == nums[mid]:</span><br><span class="line">            <span class="keyword">return</span> mid</span><br><span class="line">        <span class="keyword">if</span> target == nums[-<span class="number">1</span>]:</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">len</span>(nums) - <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> target == nums[<span class="number">0</span>]:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (</span><br><span class="line">            nums[<span class="number">0</span>] &lt; nums[mid] <span class="keyword">and</span> \</span><br><span class="line">            (target &gt; nums[mid] <span class="keyword">or</span> target &lt; nums[<span class="number">0</span>])) <span class="keyword">or</span> \</span><br><span class="line">            (nums[<span class="number">0</span>] &gt; nums[mid]) <span class="keyword">and</span> \</span><br><span class="line">            (target &gt; nums[mid] <span class="keyword">and</span> target &lt; nums[-<span class="number">1</span>]):</span><br><span class="line">            </span><br><span class="line">            result = <span class="variable language_">self</span>.search(nums[mid+<span class="number">1</span>:], target)</span><br><span class="line">            <span class="keyword">if</span> result == -<span class="number">1</span>:</span><br><span class="line">                <span class="keyword">return</span> result</span><br><span class="line">            <span class="keyword">return</span> result + mid + <span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="variable language_">self</span>.search(nums[:mid], target)</span><br></pre></td></tr></table></figure><link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">solveSudoku</span>(<span class="params">self, board: <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">str</span>]]</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        U = <span class="built_in">set</span>([<span class="built_in">str</span>(i) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">10</span>)])</span><br><span class="line">        row,col,cell = defaultdict(<span class="built_in">set</span>),defaultdict(<span class="built_in">set</span>),defaultdict(<span class="built_in">set</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 计算每个位置的可能性</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">get</span>(<span class="params">i, j</span>):</span><br><span class="line">            <span class="keyword">return</span> (U - row[i]) &amp; (U - col[j]) &amp; (U - cell[i//<span class="number">3</span>, j//<span class="number">3</span>])</span><br><span class="line"></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">dfs</span>(<span class="params">cur</span>):</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> cur:</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">            </span><br><span class="line">            minv, x, y = <span class="number">10</span>, <span class="number">0</span>, <span class="number">0</span></span><br><span class="line">            <span class="comment"># 找到可能数值最少的位置</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">9</span>): </span><br><span class="line">                <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">9</span>):</span><br><span class="line">                    <span class="keyword">if</span> board[i][j] == <span class="string">&#x27;.&#x27;</span>:</span><br><span class="line">                        tc = <span class="built_in">len</span>(get(i, j))</span><br><span class="line">                        <span class="keyword">if</span> <span class="built_in">len</span>(get(i, j)) &lt; minv:</span><br><span class="line">                            minv, x, y = tc, i, j</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> get(x, y):</span><br><span class="line">                row[x].add(i)</span><br><span class="line">                col[y].add(i)</span><br><span class="line">                cell[x // <span class="number">3</span>, y // <span class="number">3</span>].add(i)</span><br><span class="line">                board[x][y] = i</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">if</span> dfs(cur - <span class="number">1</span>):</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">                </span><br><span class="line">                row[x].remove(i)</span><br><span class="line">                col[y].remove(i)</span><br><span class="line">                cell[x // <span class="number">3</span>, y // <span class="number">3</span>].remove(i)</span><br><span class="line">                board[x][y] = <span class="string">&#x27;.&#x27;</span></span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">            </span><br><span class="line">        <span class="comment"># 初始化</span></span><br><span class="line">        res = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">9</span>):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">9</span>):</span><br><span class="line">                <span class="keyword">if</span> board[i][j] != <span class="string">&#x27;.&#x27;</span>:</span><br><span class="line">                    row[i].add(board[i][j])</span><br><span class="line">                    col[j].add(board[i][j])</span><br><span class="line">                    cell[i // <span class="number">3</span>, j // <span class="number">3</span>].add(board[i][j])</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    res += <span class="number">1</span></span><br><span class="line">        </span><br><span class="line">        dfs(res)</span><br></pre></td></tr></table></figure><link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
         <category>技术积累</category>
         <category>编程技巧</category>
       </categories>
       <tags>
         <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>串联所有单词的子串</title>
-    <url>/posts/44658eea/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>给定一个字符串 s 和一个字符串数组 words。words 中所有字符串长度相同。<br>s 中的串联子串是指一个包含 words 中所有字符串以任意顺序排列连接起来的子串。<br>返回所有串联子串在 s 中的开始索引。你可以以任意顺序返回答案。</p>
-<hr>
-<h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>利用所有字符串等长的特点，逐位置搜索。</p>
-<hr>
-<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">findSubstring</span>(<span class="params">self, s: <span class="built_in">str</span>, words: <span class="type">List</span>[<span class="built_in">str</span>]</span>) -&gt; <span class="type">List</span>[<span class="built_in">int</span>]:</span><br><span class="line">        <span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> s <span class="keyword">or</span> <span class="keyword">not</span> words:</span><br><span class="line">            <span class="keyword">return</span> []</span><br><span class="line">        </span><br><span class="line">        one_word = <span class="built_in">len</span>(words[<span class="number">0</span>])</span><br><span class="line">        all_len = <span class="built_in">len</span>(words) * one_word</span><br><span class="line">        n = <span class="built_in">len</span>(s)</span><br><span class="line">        </span><br><span class="line">        words = Counter(words)</span><br><span class="line">        res = []</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, n - all_len + <span class="number">1</span>):</span><br><span class="line">            tmp = s[i:i+all_len]</span><br><span class="line">            c_tmp = []</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, all_len, one_word):</span><br><span class="line">                c_tmp.append(tmp[j:j+one_word])</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> Counter(c_tmp) == words:</span><br><span class="line">                res.append(i)</span><br><span class="line"><span class="keyword">return</span> res</span><br></pre></td></tr></table></figure><link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>技术积累</category>
-        <category>编程技巧</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Build a LLM From Scratch</title>
-    <url>/posts/881244c3/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="Understanding-LLM"><a href="#Understanding-LLM" class="headerlink" title="Understanding LLM"></a>Understanding LLM</h4><h5 id="LLM-与传统方法相比的优势"><a href="#LLM-与传统方法相比的优势" class="headerlink" title="LLM 与传统方法相比的优势"></a>LLM 与传统方法相比的优势</h5><p>之前的方法在比较复杂的理解和生成任务中表现不佳，例如：上下文分析、生成连贯文本，同时只适用于一些特定的任务。而 LLM 可以在一系列任务上表现出较好的性能。LLM 成功的原因包括 transformer 结构以及大量的训练数据。</p>
-<h5 id="Stages-of-building-and-using-LLMS"><a href="#Stages-of-building-and-using-LLMS" class="headerlink" title="Stages of building and using LLMS"></a>Stages of building and using LLMS</h5><p>目前的研究表明，模型在特定任务或特定领域上训练后可以表现出超过通用 LLM 的性能。因此 LLM 训练通常包括两步：</p>
-<ul>
-<li>Pretrain 指模型在大规模数据库上训练，使模型具有语言理解能力，这一阶段的数据是不需要标注的；</li>
-<li>Finetune 指模型在细分领域&#x2F;细分任务的数据上训练，目前比较常用的 finetune 方式包括两类：<ul>
-<li>Instruction finetuning：标注数据由 instruction 和 answer 组成，例如：要求模型翻译某段话的 query 以及正确的翻译后的文本；</li>
-<li>Classification finetuning：标注数据由文本以及对应的类别组成，例如：邮件内容以及该邮件是否是垃圾邮件的标注。<br><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-26%2014.09.22.png" alt="截屏2024-11-26 14.09.22.png"></li>
-</ul>
-</li>
-</ul>
-<hr>
-<h4 id="Working-with-text-data"><a href="#Working-with-text-data" class="headerlink" title="Working with text data"></a>Working with text data</h4><h5 id="Understanding-word-embeddings"><a href="#Understanding-word-embeddings" class="headerlink" title="Understanding word embeddings"></a>Understanding word embeddings</h5><p>Text 需要被转换成 vector 才能被模型处理，这个过程被称为 embedding。Embedding 有很多方法：</p>
-<ul>
-<li>Word2vec：核心思路是在相近的上下文中出现的词应该具有相似的含义；</li>
-<li>作为模型的一部分在训练期间不断更新：这种方法的优势是训练出的 embedding 与自己的任务和数据更适配。</li>
-</ul>
-<h5 id="Tokenizing-text"><a href="#Tokenizing-text" class="headerlink" title="Tokenizing text"></a>Tokenizing text</h5><p>每个单词，每个标点符号都作为一个单独的 token。空格是否保留可以根据需要，如果是对格式非常严格的任务，例如代码生成，那么缩进和空格就有保留的必要，对于对格式要求不严格的任务，也可以删掉以节省存储空间。<br><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-26%2015.49.54.png" alt="截屏2024-11-26 15.49.54.png"></p>
-<h5 id="Converting-tokens-into-token-IDs"><a href="#Converting-tokens-into-token-IDs" class="headerlink" title="Converting tokens into token IDs"></a>Converting tokens into token IDs</h5><p>给文本里所有出现过的 token 一个编码，这样每次读到一段 text，就可以通过转换把 text 转换成编码。LLM 的输出结果可以通过反向转换，转换到 text。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SimpleTokenizerV1</span>: </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, vocab</span>): </span><br><span class="line">        <span class="variable language_">self</span>.str_to_int = vocab </span><br><span class="line">        <span class="variable language_">self</span>.int_to_str = &#123;i:s <span class="keyword">for</span> s,i <span class="keyword">in</span> vocab.items()&#125; </span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">encode</span>(<span class="params">self, text</span>): </span><br><span class="line">        preprocessed = re.split(<span class="string">r&#x27;([,.?_!&quot;()\&#x27;]|--|\s)&#x27;</span>, text)</span><br><span class="line">        preprocessed = [ </span><br><span class="line">            item.strip() <span class="keyword">for</span> item <span class="keyword">in</span> preprocessed <span class="keyword">if</span> item.strip() </span><br><span class="line">        ] </span><br><span class="line">        ids = [<span class="variable language_">self</span>.str_to_int[s] <span class="keyword">for</span> s <span class="keyword">in</span> preprocessed] </span><br><span class="line">        <span class="keyword">return</span> ids </span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">decode</span>(<span class="params">self, ids</span>): </span><br><span class="line">        text = <span class="string">&quot; &quot;</span>.join([<span class="variable language_">self</span>.int_to_str[i] <span class="keyword">for</span> i <span class="keyword">in</span> ids])</span><br><span class="line">        <span class="comment"># 处理标点符号前的空格 </span></span><br><span class="line">        text = re.sub(<span class="string">r&#x27;\s+([,.?!&quot;()\&#x27;])&#x27;</span>, <span class="string">r&#x27;\1&#x27;</span>, text) </span><br><span class="line">        <span class="keyword">return</span> text</span><br></pre></td></tr></table></figure>
-
-<h5 id="Adding-special-context-tokens"><a href="#Adding-special-context-tokens" class="headerlink" title="Adding special context tokens"></a>Adding special context tokens</h5><p>为了应对 text 里可能包含的没见过的词，需要增加 $&lt;|unk|&gt;$ token。同时也可以增加一些用于帮助文本理解的 token，例如用 $&lt;|endoftext|&gt;$ 表明文档的末尾，这样在用大量文本训练时，可以使模型更好地判断哪些文本是有关联的。</p>
-<h5 id="Byte-pair-encoding"><a href="#Byte-pair-encoding" class="headerlink" title="Byte pair encoding"></a>Byte pair encoding</h5><p>在 tiktoken 库（ <a href="https://github.com/openai/tiktoken">https://github.com/openai/tiktoken</a> ）里有实现，可用 pip 安装。BPE 遇到没见过的单词会把这些词拆解成 subword 后再进行 encode，这样就不需要 $&lt;|unk|&gt;$ token 进行处理。BPE 的基本原理是首先把每个字母加入 vocabulary，然后把同时出现的概率较高的字母组合为 subword，逐步生成 word。<br><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-27%2010.51.33.png" alt="截屏2024-11-27 10.51.33.png"></p>
-<h5 id="Data-sampling-with-a-sliding-window"><a href="#Data-sampling-with-a-sliding-window" class="headerlink" title="Data sampling with a sliding window"></a>Data sampling with a sliding window</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch </span><br><span class="line"><span class="keyword">from</span> torch.utils.data <span class="keyword">import</span> Dataset, DataLoader </span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GPTDatasetV1</span>(<span class="title class_ inherited__">Dataset</span>): </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, txt, tokenizer, max_length, stride</span>):</span><br><span class="line">        <span class="variable language_">self</span>.input_ids = [] </span><br><span class="line">        <span class="variable language_">self</span>.target_ids = [] </span><br><span class="line">        </span><br><span class="line">        token_ids = tokenizer.encode(txt)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="built_in">len</span>(token_ids) - max_length, stride):</span><br><span class="line">            input_chunk = token_ids[i:i + max_length] </span><br><span class="line">            target_chunk = token_ids[i + <span class="number">1</span>: i + max_length + <span class="number">1</span>]</span><br><span class="line">            <span class="variable language_">self</span>.input_ids.append(torch.tensor(input_chunk))</span><br><span class="line">            <span class="variable language_">self</span>.target_ids.append(torch.tensor(target_chunk))</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__len__</span>(<span class="params">self</span>): </span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">len</span>(<span class="variable language_">self</span>.input_ids) </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__getitem__</span>(<span class="params">self, idx</span>): </span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>.input_ids[idx], <span class="variable language_">self</span>.target_ids[idx]</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">create_dataloader_v1</span>(<span class="params">txt, batch_size=<span class="number">4</span>, max_length=<span class="number">256</span>, </span></span><br><span class="line"><span class="params">                         stride=<span class="number">128</span>, shuffle=<span class="literal">True</span>, drop_last=<span class="literal">True</span>,</span></span><br><span class="line"><span class="params">                         num_workers=<span class="number">0</span></span>): </span><br><span class="line">    tokenizer = tiktoken.get_encoding(<span class="string">&quot;gpt2&quot;</span>) </span><br><span class="line">    dataset = GPTDatasetV1(txt, tokenizer, max_length, stride)</span><br><span class="line">    dataloader = DataLoader( </span><br><span class="line">        dataset, </span><br><span class="line">        batch_size=batch_size, </span><br><span class="line">        shuffle=shuffle, </span><br><span class="line">        drop_last=drop_last, </span><br><span class="line">        num_workers=num_workers </span><br><span class="line">    ) </span><br><span class="line">    <span class="keyword">return</span> dataloader</span><br></pre></td></tr></table></figure>
-
-<h5 id="Creating-token-embeddings"><a href="#Creating-token-embeddings" class="headerlink" title="Creating token embeddings"></a>Creating token embeddings</h5><p>用 $torch.nn.Embedding$ 将 index 映射为可训练的 embedding。</p>
-<h5 id="Embedding-word-positions"><a href="#Embedding-word-positions" class="headerlink" title="Embedding word positions"></a>Embedding word positions</h5><p>Position embedding 主要分为两类：</p>
-<ul>
-<li>Absolute position embedding：根据 token 在 sequence 里的绝对位置 embedding；</li>
-<li>Relative position embedding：学习 tokens 之间的相对距离，可以使模型在不同长度的 sequence 上泛化地更好。</li>
-</ul>
-<hr>
-<h4 id="Coding-attention-mechanisms"><a href="#Coding-attention-mechanisms" class="headerlink" title="Coding attention mechanisms"></a>Coding attention mechanisms</h4><h5 id="The-problem-with-modeling-long-sequences"><a href="#The-problem-with-modeling-long-sequences" class="headerlink" title="The problem with modeling long sequences"></a>The problem with modeling long sequences</h5><p>在采用 attention 结构前，比较常用的语言处理模型是 RNN 结构。在 RNN 结构中，encoder 把输入文本的全部内容保存在一个 hidden state 内部，然后 decoder 用这个 hidden state 生成输出。<br><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-27%2015.26.48.png" alt="截屏2024-11-27 15.26.48.png"><br>这种结构的问题是在 decoder 过程中，encoder 早期的 hidden state 被全部丢弃了，仅采用了最后一个 hidden state，这会导致信息丢失。</p>
-<h5 id="Implementing-self-attention-with-trainable-weights"><a href="#Implementing-self-attention-with-trainable-weights" class="headerlink" title="Implementing self-attention with trainable weights"></a>Implementing self-attention with trainable weights</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SelfAttention_v2</span>(nn.Module): </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, d_in, d_out, qkv_bias=<span class="literal">False</span></span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__() </span><br><span class="line">        <span class="variable language_">self</span>.W_query = nn.Linear(d_in, d_out, bias=qkv_bias) </span><br><span class="line">        <span class="variable language_">self</span>.W_key = nn.Linear(d_in, d_out, bias=qkv_bias) </span><br><span class="line">        <span class="variable language_">self</span>.W_value = nn.Linear(d_in, d_out, bias=qkv_bias) </span><br><span class="line">        </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>): </span><br><span class="line">        keys = <span class="variable language_">self</span>.W_key(x) </span><br><span class="line">        queries = <span class="variable language_">self</span>.W_query(x) </span><br><span class="line">        values = <span class="variable language_">self</span>.W_value(x) </span><br><span class="line">        attn_scores = queries @ keys.T </span><br><span class="line">        attn_weights = torch.softmax( </span><br><span class="line">            attn_scores / keys.shape[-<span class="number">1</span>]**<span class="number">0.5</span>, dim=-<span class="number">1</span> </span><br><span class="line">        ) </span><br><span class="line">        context_vec = attn_weights @ values </span><br><span class="line">        <span class="keyword">return</span> context_vec</span><br></pre></td></tr></table></figure>
-
-<p>Normalize 是为了防止点积结果过大，从而落在梯度较低的区域，影响训练速度。</p>
-<h5 id="Hiding-future-words-with-causal-attention"><a href="#Hiding-future-words-with-causal-attention" class="headerlink" title="Hiding future words with causal attention"></a>Hiding future words with causal attention</h5><p>自然语言任务里，经常需要仅与前面的输入做 attention。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">CausalAttention</span>(nn.Module): </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, d_in, d_out, context_length, </span></span><br><span class="line"><span class="params">                dropout, qkv_bias=<span class="literal">False</span></span>): </span><br><span class="line">        <span class="built_in">super</span>().__init__() </span><br><span class="line">        <span class="variable language_">self</span>.d_out = d_out </span><br><span class="line">        <span class="variable language_">self</span>.W_query = nn.Linear(d_in, d_out, bias=qkv_bias) </span><br><span class="line">        <span class="variable language_">self</span>.W_key = nn.Linear(d_in, d_out, bias=qkv_bias) </span><br><span class="line">        <span class="variable language_">self</span>.W_value = nn.Linear(d_in, d_out, bias=qkv_bias)</span><br><span class="line">        <span class="variable language_">self</span>.dropout = nn.Dropout(dropout) </span><br><span class="line">        </span><br><span class="line">        <span class="comment"># register_buffer可以使变量随着模型在不同device上移动，不需要手动处理</span></span><br><span class="line">        <span class="variable language_">self</span>.register_buffer( </span><br><span class="line">            <span class="string">&#x27;mask&#x27;</span>, </span><br><span class="line">            torch.triu(torch.ones(context_length, context_length),</span><br><span class="line">            diagonal=<span class="number">1</span>) </span><br><span class="line">        ) </span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>): </span><br><span class="line">        b, num_tokens, d_in = x.shape </span><br><span class="line">        keys = <span class="variable language_">self</span>.W_key(x) </span><br><span class="line">        queries = <span class="variable language_">self</span>.W_query(x) </span><br><span class="line">        values = <span class="variable language_">self</span>.W_value(x) </span><br><span class="line">        </span><br><span class="line">        attn_scores = queries @ keys.transpose(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 加入mask防止与后面的token计算attention</span></span><br><span class="line">        attn_scores.masked_fill_( </span><br><span class="line">            <span class="variable language_">self</span>.mask.<span class="built_in">bool</span>()[:num_tokens, :num_tokens], -torch.inf</span><br><span class="line">        ) </span><br><span class="line">        attn_weights = torch.softmax( </span><br><span class="line">            attn_scores / keys.shape[-<span class="number">1</span>]**<span class="number">0.5</span>, dim=-<span class="number">1</span> </span><br><span class="line">        ) </span><br><span class="line">        <span class="comment"># 加入dropout防止过拟合</span></span><br><span class="line">        attn_weights = <span class="variable language_">self</span>.dropout(attn_weights)</span><br><span class="line">        </span><br><span class="line">        context_vec = attn_weights @ values </span><br><span class="line">        <span class="keyword">return</span> context_vec</span><br></pre></td></tr></table></figure>
-
-<h5 id="Extending-single-head-attention-to-multi-head-attention"><a href="#Extending-single-head-attention-to-multi-head-attention" class="headerlink" title="Extending single-head attention to multi-head attention"></a>Extending single-head attention to multi-head attention</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MultiHeadAttention</span>(nn.Module): </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, d_in, d_out, </span></span><br><span class="line"><span class="params">                 context_length, dropout, num_heads, qkv_bias=<span class="literal">False</span></span>): </span><br><span class="line">        <span class="built_in">super</span>().__init__() </span><br><span class="line">        <span class="keyword">assert</span> (d_out % num_heads == <span class="number">0</span>), \ </span><br><span class="line">            <span class="string">&quot;d_out must be divisible by num_heads&quot;</span> </span><br><span class="line">        </span><br><span class="line">        <span class="variable language_">self</span>.d_out = d_out </span><br><span class="line">        <span class="variable language_">self</span>.num_heads = num_heads </span><br><span class="line">        <span class="variable language_">self</span>.head_dim = d_out // num_heads </span><br><span class="line">        <span class="variable language_">self</span>.W_query = nn.Linear(d_in, d_out, bias=qkv_bias) </span><br><span class="line">        <span class="variable language_">self</span>.W_key = nn.Linear(d_in, d_out, bias=qkv_bias) </span><br><span class="line">        <span class="variable language_">self</span>.W_value = nn.Linear(d_in, d_out, bias=qkv_bias)</span><br><span class="line">        <span class="variable language_">self</span>.out_proj = nn.Linear(d_out, d_out) </span><br><span class="line">        <span class="variable language_">self</span>.dropout = nn.Dropout(dropout) </span><br><span class="line">        <span class="variable language_">self</span>.register_buffer( </span><br><span class="line">            <span class="string">&quot;mask&quot;</span>, </span><br><span class="line">            torch.triu(torch.ones(context_length, context_length),</span><br><span class="line">                       diagonal=<span class="number">1</span>) </span><br><span class="line">        ) </span><br><span class="line">        </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>): </span><br><span class="line">        b, num_tokens, d_in = x.shape </span><br><span class="line">        keys = <span class="variable language_">self</span>.W_key(x) </span><br><span class="line">        queries = <span class="variable language_">self</span>.W_query(x) </span><br><span class="line">        values = <span class="variable language_">self</span>.W_value(x)</span><br><span class="line">        keys = keys.view(b, num_tokens, <span class="variable language_">self</span>.num_heads, <span class="variable language_">self</span>.head_dim)</span><br><span class="line">        values = values.view(</span><br><span class="line">            b, num_tokens, <span class="variable language_">self</span>.num_heads, <span class="variable language_">self</span>.head_dim</span><br><span class="line">        ) </span><br><span class="line">        queries = queries.view( </span><br><span class="line">            b, num_tokens, <span class="variable language_">self</span>.num_heads, <span class="variable language_">self</span>.head_dim </span><br><span class="line">        )</span><br><span class="line">        </span><br><span class="line">        keys = keys.transpose(<span class="number">1</span>, <span class="number">2</span>) </span><br><span class="line">        queries = queries.transpose(<span class="number">1</span>, <span class="number">2</span>) </span><br><span class="line">        values = values.transpose(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">        </span><br><span class="line">        attn_scores = queries @ keys.transpose(<span class="number">2</span>, <span class="number">3</span>) </span><br><span class="line">        mask_bool = <span class="variable language_">self</span>.mask.<span class="built_in">bool</span>()[:num_tokens, :num_tokens]</span><br><span class="line">        </span><br><span class="line">        attn_scores.masked_fill_(mask_bool, -torch.inf)</span><br><span class="line">        </span><br><span class="line">        attn_weights = torch.softmax( </span><br><span class="line">            attn_scores / keys.shape[-<span class="number">1</span>]**<span class="number">0.5</span>, dim=-<span class="number">1</span>) </span><br><span class="line">        attn_weights = <span class="variable language_">self</span>.dropout(attn_weights)</span><br><span class="line">        </span><br><span class="line">        context_vec = (attn_weights @ values).transpose(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">        </span><br><span class="line">        context_vec = context_vec.contiguous().view( </span><br><span class="line">            b, num_tokens, <span class="variable language_">self</span>.d_out </span><br><span class="line">        ) </span><br><span class="line">        context_vec = <span class="variable language_">self</span>.out_proj(context_vec) </span><br><span class="line">        <span class="keyword">return</span> context_vec</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h4 id="Implementing-a-GPT-model-from-scratch-to-generate-text"><a href="#Implementing-a-GPT-model-from-scratch-to-generate-text" class="headerlink" title="Implementing a GPT model from scratch to generate text"></a>Implementing a GPT model from scratch to generate text</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">TransformerBlock</span>(nn.Module): </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, cfg</span>): </span><br><span class="line">        <span class="built_in">super</span>().__init__() </span><br><span class="line">        <span class="variable language_">self</span>.att = MultiHeadAttention( </span><br><span class="line">            d_in=cfg[<span class="string">&quot;emb_dim&quot;</span>], </span><br><span class="line">            d_out=cfg[<span class="string">&quot;emb_dim&quot;</span>], </span><br><span class="line">            context_length=cfg[<span class="string">&quot;context_length&quot;</span>],</span><br><span class="line">            num_heads=cfg[<span class="string">&quot;n_heads&quot;</span>], </span><br><span class="line">            dropout=cfg[<span class="string">&quot;drop_rate&quot;</span>], </span><br><span class="line">            qkv_bias=cfg[<span class="string">&quot;qkv_bias&quot;</span>]) </span><br><span class="line">        <span class="variable language_">self</span>.ff = FeedForward(cfg) </span><br><span class="line">        <span class="variable language_">self</span>.norm1 = LayerNorm(cfg[<span class="string">&quot;emb_dim&quot;</span>]) </span><br><span class="line">        <span class="variable language_">self</span>.norm2 = LayerNorm(cfg[<span class="string">&quot;emb_dim&quot;</span>]) </span><br><span class="line">        <span class="variable language_">self</span>.drop_shortcut = nn.Dropout(cfg[<span class="string">&quot;drop_rate&quot;</span>]) </span><br><span class="line">        </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>): </span><br><span class="line">        shortcut = x </span><br><span class="line">        x = <span class="variable language_">self</span>.norm1(x) </span><br><span class="line">        x = <span class="variable language_">self</span>.att(x) </span><br><span class="line">        x = <span class="variable language_">self</span>.drop_shortcut(x) </span><br><span class="line">        x = x + shortcut </span><br><span class="line">        </span><br><span class="line">        shortcut = x </span><br><span class="line">        x = <span class="variable language_">self</span>.norm2(x) </span><br><span class="line">        x = <span class="variable language_">self</span>.ff(x) </span><br><span class="line">        x = <span class="variable language_">self</span>.drop_shortcut(x) </span><br><span class="line">        x = x + shortcut </span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GPTModel</span>(nn.Module): </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, cfg</span>): </span><br><span class="line">        <span class="built_in">super</span>().__init__() </span><br><span class="line">        <span class="variable language_">self</span>.tok_emb = nn.Embedding(cfg[<span class="string">&quot;vocab_size&quot;</span>], cfg[<span class="string">&quot;emb_dim&quot;</span>])</span><br><span class="line">        <span class="variable language_">self</span>.pos_emb = nn.Embedding(</span><br><span class="line">            cfg[<span class="string">&quot;context_length&quot;</span>], cfg[<span class="string">&quot;emb_dim&quot;</span>]</span><br><span class="line">        ) </span><br><span class="line">        <span class="variable language_">self</span>.drop_emb = nn.Dropout(cfg[<span class="string">&quot;drop_rate&quot;</span>]) </span><br><span class="line">        </span><br><span class="line">        <span class="variable language_">self</span>.trf_blocks = nn.Sequential( </span><br><span class="line">            *[TransformerBlock(cfg) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(cfg[<span class="string">&quot;n_layers&quot;</span>])])</span><br><span class="line">            </span><br><span class="line">        <span class="variable language_">self</span>.final_norm = LayerNorm(cfg[<span class="string">&quot;emb_dim&quot;</span>]) </span><br><span class="line">        <span class="variable language_">self</span>.out_head = nn.Linear( </span><br><span class="line">            cfg[<span class="string">&quot;emb_dim&quot;</span>], cfg[<span class="string">&quot;vocab_size&quot;</span>], bias=<span class="literal">False</span> </span><br><span class="line">        ) </span><br><span class="line">        </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, in_idx</span>): </span><br><span class="line">        batch_size, seq_len = in_idx.shape </span><br><span class="line">        tok_embeds = <span class="variable language_">self</span>.tok_emb(in_idx) </span><br><span class="line">        </span><br><span class="line">        pos_embeds = <span class="variable language_">self</span>.pos_emb( </span><br><span class="line">            torch.arange(seq_len, device=in_idx.device) </span><br><span class="line">        ) </span><br><span class="line">        x = tok_embeds + pos_embeds </span><br><span class="line">        x = <span class="variable language_">self</span>.drop_emb(x) </span><br><span class="line">        x = <span class="variable language_">self</span>.trf_blocks(x) </span><br><span class="line">        x = <span class="variable language_">self</span>.final_norm(x) </span><br><span class="line">        logits = <span class="variable language_">self</span>.out_head(x) </span><br><span class="line">        <span class="keyword">return</span> logits</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">generate_text_simple</span>(<span class="params">model, idx, max_new_tokens, context_size</span>): </span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(max_new_tokens): </span><br><span class="line">        idx_cond = idx[:, -context_size:] </span><br><span class="line">        <span class="keyword">with</span> torch.no_grad(): </span><br><span class="line">            logits = model(idx_cond) </span><br><span class="line">        </span><br><span class="line">        logits = logits[:, -<span class="number">1</span>, :] </span><br><span class="line">        probas = torch.softmax(logits, dim=-<span class="number">1</span>) </span><br><span class="line">        idx_next = torch.argmax(probas, dim=-<span class="number">1</span>, keepdim=<span class="literal">True</span>) </span><br><span class="line">        idx = torch.cat((idx, idx_next), dim=<span class="number">1</span>) </span><br><span class="line">    <span class="keyword">return</span> idx</span><br></pre></td></tr></table></figure>
-
-<hr>
-<p>未完待读</p>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>技术积累</category>
-        <category>读书笔记</category>
-      </categories>
-      <tags>
-        <tag>LLM</tag>
-        <tag>读书笔记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>那种可能性早已料及</title>
-    <url>/posts/8215b0f1/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="故事梗概"><a href="#故事梗概" class="headerlink" title="故事梗概"></a>故事梗概</h4><p>自称渡良濑莉世的委托人怀疑自己十年前杀过人，希望委托侦探上苙丞调查确认。十年前，莉世和堂仁被各自的母亲带到教团”血赎”的居住地，二人都希望从村里逃走。村里的出入口只有一个，除交易日外不常打开，悬崖的岩石很脆不能攀爬，村里材料不足无法制造梯子或高台等工具，但堂仁依旧在为逃走准备，并承诺带莉世一起。村里共三十三人，一名教祖，其余是信徒。</p>
-<p>村里的猪身上都带有号码牌，按照顺序决定下次吃那一头。某天堂仁发现莉世把 12 号的号码牌藏了起来，莉世回答自己喜欢 12 号，希望它能活久一点。同时，莉世偷偷藏了一头小猪崽，被堂仁发现后，二人把猪崽藏在祭坛下面。</p>
-<p>村里突发地震，地震后村里的瀑布断流，水车停止运作。教祖认为这是一种征兆，因此堵住了村里唯一的出入口，并举行了最后的晚餐。在莉世记忆中，最后的晚餐后，教祖在堂仁的服侍下举行了祓禊，祓禊结束后教祖用斧头砍杀了信徒。堂仁带着莉世从门口跑出去并反锁了门，村子着火且火势开始蔓延，等莉世再次有意识的时候，她发现自己身处祠堂，旁边是堂仁被砍下的头和尸体。</p>
-<p>莉世怀疑是自己杀了少年，因为除了莉世和堂仁其他人的遗体都在参拜堂内部，且门是从外部上锁的，因此里面的人无法在无人帮助的情况下出来或自己锁上门，同时门锁很重莉世也无法锁上。但是，矛盾点在于，堂仁的头是被村里处理家畜的断头台砍下的，断头台距离祠堂有一段距离，莉世当时腿部骨折，绑着石膏，无论是移动尸体还是移动断头台都不可能。</p>
-<p>调查后侦探认为这起事件是——奇迹。</p>
-<h5 id="大门的推理"><a href="#大门的推理" class="headerlink" title="大门的推理"></a>大门的推理</h5><p>大门认为当时村里的水车是可以靠人力转动的那种，将猪放入水车，用火加热铁质水车就可以用猪驱动水车移动断头台。动机是堂仁要杀死小猪崽，少女精神崩溃下杀了人，为了制造奇迹，少女伪造了现场。</p>
-<div class='spoiler collapsed'>
-    <div class='spoiler-title'>
-        侦探的反驳
-    </div>
-    <div class='spoiler-content'>
-        <p>堂仁看到号码牌就知道编号是 12 而不是 21，说明猪的数量小于等于 20，同时 11 号及之前的都死掉了，说明最多有 9 只猪。33 名成员都吃到了猪脚，说明 9 只猪都被杀了，因此没有能用来驱动水车的猪了。</p>
-
-    </div>
-</div>
-
-<h5 id="宋俪西的推理"><a href="#宋俪西的推理" class="headerlink" title="宋俪西的推理"></a>宋俪西的推理</h5><p>堂仁为了从村里逃走利用村里的材料做了投石机，事情发生后，堂仁想出去求援并带人回来救莉世。莉世误以为自己要被抛弃，因此趁堂仁不注意杀了堂仁，并利用投石机将自己和堂仁的尸体抛出去，正巧落入祠堂。莉世腿上的石膏没有破损是因为祠堂里的祭坛是用泡沫做的，泡沫做了缓冲。</p>
-<div class='spoiler collapsed'>
-    <div class='spoiler-title'>
-        侦探的反驳
-    </div>
-    <div class='spoiler-content'>
-        <p>莉世醒后先看到了太阳，然后看到了堂仁的头，背光情况下应该看不清脸。莉世能够立刻判断这是堂仁是因为最后的晚餐前莉世打扮自己的时候把镜子角度调向下了，阳光照到镜子上又被反射到堂仁的脸上，这说明祭坛没有被破坏。</p>
-
-    </div>
-</div>
-
-<h5 id="八星联的推理"><a href="#八星联的推理" class="headerlink" title="八星联的推理"></a>八星联的推理</h5><p>村子里的神是有对应实体的——一具木乃伊。教祖在祓禊前杀了堂仁，之后看到的堂仁都是教祖伪装，看到的教祖是木乃伊，堂仁的尸体用冰箱保存，冰箱所需的电力由重力带动水车发电。教祖完成诡计后，从监控死角逃离村子，完成假死计划，设计复杂计划是需要莉世作为证人证明教祖的死亡。</p>
-<div class='spoiler collapsed'>
-    <div class='spoiler-title'>
-        侦探的反驳
-    </div>
-    <div class='spoiler-content'>
-        <p>藏小猪的地方仅有莉世和堂仁知道，且在藏小猪的地方发现了搬运来的食物。祓禊前堂仁无法搬出食物，因为食材库被教祖严格管理，且只有祓禊时堂仁可以趁教祖沐浴拿到钥匙。因此如果堂仁在祓禊前被杀，藏小猪的位置不会出现食物。</p>
-
-    </div>
-</div>
-
-<div class='spoiler collapsed'>
-    <div class='spoiler-title'>
-        矛盾
-    </div>
-    <div class='spoiler-content'>
-        <p>在第一段反驳里，侦探认为参加晚餐的有三十三人，也就是教祖参加了晚餐会，说明教祖还没有开始祓禊，即：祓禊在晚餐会后。<br>在第二段反驳里，侦探认为莉世进行打扮后，祭坛一直保留了打扮时的状态。这说明堂仁挪开祭坛藏食物在莉世进行打扮前。<br>也就是堂仁先放置了食物，然后莉世进行打扮参加晚餐，最后教祖进行祓禊。<br>然而根据第三段反驳，祓禊前堂仁无法拿到食物。侦探的三段反驳相互矛盾。</p>
-
-    </div>
-</div>
-
-<div class='spoiler collapsed'>
-    <div class='spoiler-title'>
-        侦探的反驳
-    </div>
-    <div class='spoiler-content'>
-        <p>矛盾成立的前提是侦探的否定必须是正确的，如果侦探的否定是正确的，八星联的假说就是错误的。因此无法从八星联的假说中假定的教祖想杀堂仁为前提进行推导。如果教祖无意杀害堂仁，则可能在祓禊前将食物交给堂仁，这样就不存在矛盾了。</p>
-
-    </div>
-</div>
-
-<div class='spoiler collapsed'>
-    <div class='spoiler-title'>
-        侦探提出的可能性
-    </div>
-    <div class='spoiler-content'>
-        <p>教祖支持堂仁逃走，因此在祓禊前给了堂仁食物，但两人的母亲不想让两人逃走。堂仁在离开参拜堂前被自己的母亲重伤，带伤抱着莉世到了祠堂，堂仁知道自己命不久矣，希望创造奇迹给莉世一个活下去的希望。因此，堂仁与教主合谋布置了现场，教主利用绳子使门闩从上方落下制造了密室。</p>
-
-    </div>
-</div>
-
-<hr>
-<h4 id="个人评价"><a href="#个人评价" class="headerlink" title="个人评价"></a>个人评价</h4><p>很有趣的侦探形象，通常侦探是负责证明奇迹不存在的，然而这本书的侦探希望否定所有可能性以证明奇迹存在。故事的发展就是不断由其他人提出可能性，侦探对这些可能一一进行否定推动。在这样的设定里，提出可能性的人不需要证明这种可能性是真实存在的，只要有可能性就算成功，所以很多解答看起来非常牵强。个人最喜欢的环节是否定之否定那里，最初看到的时候非常震撼。</p>
-<p>比较明显的缺点应该是文风，文风和人物形象都过于轻小说化，个人不是很喜欢。</p>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>休闲娱乐</category>
-        <category>书籍阅读</category>
-      </categories>
-      <tags>
-        <tag>推理小说</tag>
-        <tag>井上真伪</tag>
-        <tag>逻辑流</tag>
-        <tag>多重解答</tag>
-        <tag>轻小说风</tag>
-        <tag>推荐书单</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>P-Tuning v2</title>
-    <url>/posts/9feacd8a/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> P-Tuning v2: Prompt Tuning Can Be Comparable to Fine-tuning Universally Across Scales and Tasks<br><strong>链接：</strong> <a href="https://arxiv.org/pdf/2110.07602">https://arxiv.org/pdf/2110.07602</a><br><strong>代码：</strong> <a href="https://github.com/THUDM/P-tuning-v2">https://github.com/THUDM/P-tuning-v2</a><br><strong>来源：</strong> ACL 2022<br><strong>单位：</strong> Tsinghua University, KEG；Beijing Academy of Artificial Intelligence (BAAI)；Shanghai Qi Zhi Institute</p>
-<hr>
-<h4 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h4><p>对于大模型 finetune 所有参数很困难，类似 P-Tuning 的 prompt tuning 方法性能比 finetune 所有参数差，尤其在模型参数规模不足 100 亿时效果差的更明显。本文希望找到一种泛化性更强的 prompt tuning 方法。</p>
-<hr>
-<h4 id="P-Tuning-缺陷"><a href="#P-Tuning-缺陷" class="headerlink" title="P-Tuning 缺陷"></a>P-Tuning 缺陷</h4><ol>
-<li>在小模型上效果不好，当模型参数量大于 100 亿时，与 finetune 效果相近；但当模型参数量不足 100 亿时，效果会变差；</li>
-<li>在不同任务上通用性不足，在一些更难的任务上效果比较差。</li>
-</ol>
-<hr>
-<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-22%2019.10.51.png" alt="截屏2024-11-22 19.10.51.png"><br>与 P-Tuning 相比，v2 在每一层都加入了可学习的 prompt，增加了可学习的参数量，同时添加到深层的 prompt 可以更直接地影响模型预测结果。</p>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>技术积累</category>
-        <category>论文笔记</category>
-      </categories>
-      <tags>
-        <tag>论文笔记</tag>
-        <tag>LLM</tag>
-        <tag>ACL2022</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>P-Tuning</title>
-    <url>/posts/8c1493e0/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> GPT Understands, Too<br><strong>链接：</strong> <a href="https://arxiv.org/pdf/2103.10385">https://arxiv.org/pdf/2103.10385</a><br><strong>代码：</strong> <a href="https://github.com/THUDM/P-tuning">https://github.com/THUDM/P-tuning</a><br><strong>来源：</strong> AI Open 2024<br><strong>单位：</strong> Tsinghua University；Massachusetts Institute of Technology</p>
-<hr>
-<h4 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h4><p>Prompt 可以提升大语言模型性能，然而，人工提供的离散 prompt 会导致很大的不确定性，几个单词的变动就会导致结果发生大幅度变化。P-Tuning 希望在离散的 prompt 前加入一个可训练的连续 prompt，提升稳定性。</p>
-<hr>
-<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-22%2017.31.24.png" alt="截屏2024-11-22 17.31.24.png"></p>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>技术积累</category>
-        <category>论文笔记</category>
-      </categories>
-      <tags>
-        <tag>论文笔记</tag>
-        <tag>LLM</tag>
-        <tag>AI_Open_2024</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>LoRA</title>
-    <url>/posts/3a5bfa54/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> LORA: LOW-RANK ADAPTATION OF LARGE LANGUAGE MODELS<br><strong>链接：</strong> <a href="https://arxiv.org/pdf/2106.09685">https://arxiv.org/pdf/2106.09685</a><br><strong>代码：</strong> <a href="https://github.com/microsoft/LoRA">https://github.com/microsoft/LoRA</a><br><strong>来源：</strong> ICLR 2022<br><strong>单位：</strong> Microsoft Corporation</p>
-<hr>
-<h4 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h4><p>随着模型规模越来越大，在所有参数上 finetune 越来越不现实。之前提出的解决方案都有一定缺陷：</p>
-<ul>
-<li>增加 adapter layer 会引入额外的延迟，且当 batch size 减小时这种延迟变得不可忽视；</li>
-<li>Optimizing prompt 难以训练，且保留一部分 prompt 会导致下游任务可用的 prompt 长度变小，从而影响模型整体性能。</li>
-</ul>
-<hr>
-<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p>假设在 finetune 过程中权重矩阵的变化量是低秩的，即：$W_0+\Delta W&#x3D;W_0+BA$，其中：$B\in \mathbb{R}^{d\times r}$，$A\in \mathbb{R}^{r\times k}$ 且 $r\ll \min(d, k)$。训练过程中 $W_0$ 保持不变，仅更新 $A$ 和 $B$。</p>
-<hr>
-<h4 id="LoRA-的优势"><a href="#LoRA-的优势" class="headerlink" title="LoRA 的优势"></a>LoRA 的优势</h4><ul>
-<li>方法灵活，可以根据需要调整 $r$，当逐渐增大 $r$ 时，LoRA 会逐渐接近 finetune 所有参数；</li>
-<li>当有多个下游子任务时，LoRA 可以通过更新 $BA$ 的方式在不同任务间切换，且 LoRA 相比于原始模型不会引入额外的计算延迟。</li>
-</ul>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>技术积累</category>
-        <category>论文笔记</category>
-      </categories>
-      <tags>
-        <tag>论文笔记</tag>
-        <tag>LLM</tag>
-        <tag>ICLR2022</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>马拉车算法</title>
-    <url>/posts/c3cacb08/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h4><p>用于解决最长回文子串的问题，可以把算法复杂度降低到 O(N)。</p>
-<hr>
-<h4 id="算法原理"><a href="#算法原理" class="headerlink" title="算法原理"></a>算法原理</h4><ul>
-<li>在字符串的每个字符之间以及字符串首尾插入同一个字符串内不可能出现的字符，以保证所有字符串的长度都是奇数，这样可以不用对长度为奇数的字符串以及长度为偶数的字符串分类处理；</li>
-<li>在字符串开头和结尾分别加入不同的且不可能在字符串内出现的字符，这样保证回文子串搜索到该位置的时候自动退出，不需要处理边界情况；</li>
-<li>该算法在每个位置都希望计算以该位置为中心的最长回文子串的长度。同时会记录一个当前回文子串对应的最靠右的右边界位置 R，该位置对应的回文子串中心 c，该位置对应的回文子串 s。这样对于一个新的位置，可能出现几种情况：<ul>
-<li>该位置在 R 的右边，需要重新搜索该位置的回文子串；</li>
-<li>该位置在 R 的左边，此时可以看该位置以 c 为中心对称位置的回文子串情况，这也有两种情况：<ul>
-<li>对称位置的回文子串完全落在 s 内，则在当前位置的回文子串长度与对称位置相同（回文子串的性质）；</li>
-<li>对称位置的回文子串有一部分落在 s 外，则当前位置到 R 肯定可以构成回文子串，需要继续向外搜索。</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h4 id="算法分析"><a href="#算法分析" class="headerlink" title="算法分析"></a>算法分析</h4><p>在上述算法过程中 R 是不断向右的，也就是在算法过程中不会重复比较字符是否相等，因此可以大幅度降低时间复杂度。</p>
-<hr>
-<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">longestPalindrome</span>(<span class="params">self, s: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        new_s = <span class="string">&#x27;^#&#x27;</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> s:</span><br><span class="line">            new_s = new_s + i + <span class="string">&#x27;#&#x27;</span></span><br><span class="line">        new_s += <span class="string">&#x27;$&#x27;</span></span><br><span class="line">		</span><br><span class="line">        result = numpy.zeros(<span class="built_in">len</span>(new_s))</span><br><span class="line">        right = <span class="number">0</span></span><br><span class="line">        center = <span class="number">0</span></span><br><span class="line">		</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="built_in">len</span>(new_s) - <span class="number">1</span>):</span><br><span class="line">            <span class="keyword">if</span> i &gt; right:</span><br><span class="line">                r = <span class="number">0</span></span><br><span class="line">                <span class="keyword">while</span> new_s[i + r] == new_s[i - r]:</span><br><span class="line">                    r += <span class="number">1</span></span><br><span class="line">                r -= <span class="number">1</span></span><br><span class="line">                center = i</span><br><span class="line">                right = center + r</span><br><span class="line">                result[i] = r</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                other_i = <span class="number">2</span> * center - i</span><br><span class="line">                <span class="keyword">if</span> result[other_i] &lt; right - i:</span><br><span class="line">                    result[i] = result[other_i]</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    r = right - i</span><br><span class="line">                    <span class="keyword">while</span> new_s[i + r] == new_s[i - r]:</span><br><span class="line">                        r += <span class="number">1</span></span><br><span class="line">                    r -= <span class="number">1</span></span><br><span class="line">                    center = i</span><br><span class="line">                    right = center + r</span><br><span class="line">                    result[i] = r</span><br><span class="line">					</span><br><span class="line">        index = <span class="built_in">int</span>(numpy.argmax(result))</span><br><span class="line">        result_s = new_s[<span class="built_in">int</span>(index - result[index]):<span class="built_in">int</span>(index + result[index] + <span class="number">1</span>)]</span><br><span class="line">        result_s = result_s.replace(<span class="string">&#x27;#&#x27;</span>, <span class="string">&#x27;&#x27;</span>)</span><br><span class="line">        <span class="keyword">return</span> result_s</span><br></pre></td></tr></table></figure><link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>技术积累</category>
-        <category>编程技巧</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>PoliFormer</title>
-    <url>/posts/a5f5aaf2/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> PoliFormer: Scaling On-Policy RL with Transformers Results in Masterful Navigators<br><strong>链接：</strong> <a href="https://arxiv.org/pdf/2406.20083">https://arxiv.org/pdf/2406.20083</a><br><strong>代码：</strong> <a href="https://github.com/allenai/poliformer">https://github.com/allenai/poliformer</a><br><strong>来源：</strong> CoRL 2024 (Outstanding Paper Award)<br><strong>单位：</strong> Allen Institute for AI</p>
-<hr>
-<h4 id="之前方法的缺陷"><a href="#之前方法的缺陷" class="headerlink" title="之前方法的缺陷"></a>之前方法的缺陷</h4><ul>
-<li>基于 GRU 的结构在简单的数据集上取得了很好的效果，但在较难的数据集上结果比较差；<font color="#a5a5a5">（However, this approach fails to result in the same breakthroughs for harder navigation problems like Object Goal Navigation (ObjectNav) where an agent must explore its environment to locate and navigate to an object of the requested type.）</font></li>
-<li>增大网络规模会导致模型训练不稳定且训练时间增加；<font color="#a5a5a5">（RL approaches for ObjectNav have generally not advanced beyond shallow GRU architectures due to challenges presented by training instability and unreasonably long training times with wider and deeper models, such as scaled-up transformers.）</font></li>
-<li>Imitation Learning 可能存在状态空间探索不足的问题。<font color="#a5a5a5">（we suspect this is a consequence of insufficient state-space exploration as expert trajectory datasets frequently contain few examples of error recovery, which can lead to sub-optimal performance due to compounding errors or non-trivial domain shifts during inference.）</font></li>
-</ul>
-<hr>
-<h4 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h4><p>从各个方面增大 RL 的 scale。</p>
-<hr>
-<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-14%2013.57.35.png" alt="截屏2024-11-14 13.57.35.png"></p>
-<ul>
-<li>Encoder 根据当前输入的 RGB 图像以及 goal 编码生成当前的状态 $s^t$，decoder 用于预测 action；</li>
-<li>Vision Transformer Model：DINOv2，训练时，该模块参数冻结，以保证模型在真实环境中的泛化性，否则视觉模块在模拟场景中的训练会影响到真实环境的性能；</li>
-<li>Goal Encoder：为了方便比较，在不同 benchmark 上用了不同的编码器；</li>
-<li>Causal Transformer Decoder：用 KV-cache 加速，使计算用时与时间成正比而非平方正比，加速计算。</li>
-</ul>
-<hr>
-<h4 id="个人总结"><a href="#个人总结" class="headerlink" title="个人总结"></a>个人总结</h4><p>这篇文章通过增大 scale 大幅提升了 embodied navigation 任务的准确性。增大 scale 既包括从模型上采用 transformer 结构增大了模型的 scale；也包括从数据层面上，采用了一系列方法加快了数据的模拟和读取；还包括直接增加训练节点数量，提升训练速度。</p>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>技术积累</category>
-        <category>论文笔记</category>
-      </categories>
-      <tags>
-        <tag>论文笔记</tag>
-        <tag>Reinforcement_Learning</tag>
-        <tag>Embodied_Navigation</tag>
-        <tag>CoRL2024</tag>
       </tags>
   </entry>
 </search>
