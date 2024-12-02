@@ -23,32 +23,28 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"cornfield404.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.21.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="题目： GPT Understands, Too链接： https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;2103.10385代码： https:&#x2F;&#x2F;github.com&#x2F;THUDM&#x2F;P-tuning来源： AI Open 2024单位： Tsinghua University；Massachusetts Institute of Technology  MotivationPrompt 可以提升大语言">
+    <meta name="description" content="题目编写一个程序，通过填充空格来解决数独问题。  思路">
 <meta property="og:type" content="article">
-<meta property="og:title" content="P-Tuning">
-<meta property="og:url" content="https://cornfield404.github.io/posts/8c1493e0/index.html">
+<meta property="og:title" content="解数独">
+<meta property="og:url" content="https://cornfield404.github.io/posts/de1f6638/index.html">
 <meta property="og:site_name" content="Corn Field">
-<meta property="og:description" content="题目： GPT Understands, Too链接： https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;2103.10385代码： https:&#x2F;&#x2F;github.com&#x2F;THUDM&#x2F;P-tuning来源： AI Open 2024单位： Tsinghua University；Massachusetts Institute of Technology  MotivationPrompt 可以提升大语言">
+<meta property="og:description" content="题目编写一个程序，通过填充空格来解决数独问题。  思路">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-22%2017.31.24.png">
-<meta property="article:published_time" content="2024-11-22T08:37:20.000Z">
-<meta property="article:modified_time" content="2024-11-26T11:19:03.809Z">
+<meta property="article:published_time" content="2024-12-02T05:42:02.000Z">
+<meta property="article:modified_time" content="2024-12-02T05:50:48.439Z">
 <meta property="article:author" content="Corn">
-<meta property="article:tag" content="论文笔记">
-<meta property="article:tag" content="LLM">
-<meta property="article:tag" content="AI_Open_2024">
+<meta property="article:tag" content="算法">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-22%2017.31.24.png">
 
 
-<link rel="canonical" href="https://cornfield404.github.io/posts/8c1493e0/">
+<link rel="canonical" href="https://cornfield404.github.io/posts/de1f6638/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://cornfield404.github.io/posts/8c1493e0/","path":"posts/8c1493e0/","title":"P-Tuning"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://cornfield404.github.io/posts/de1f6638/","path":"posts/de1f6638/","title":"解数独"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>P-Tuning | Corn Field</title>
+<title>解数独 | Corn Field</title>
   
 
 
@@ -170,7 +166,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Motivation"><span class="nav-number">1.</span> <span class="nav-text">Motivation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Method"><span class="nav-number">2.</span> <span class="nav-text">Method</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE"><span class="nav-number">1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF"><span class="nav-number">2.</span> <span class="nav-text">思路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-number">3.</span> <span class="nav-text">代码</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -244,7 +240,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://cornfield404.github.io/posts/8c1493e0/">
+    <link itemprop="mainEntityOfPage" href="https://cornfield404.github.io/posts/de1f6638/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -257,12 +253,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="P-Tuning | Corn Field">
+      <meta itemprop="name" content="解数独 | Corn Field">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          P-Tuning
+          解数独
         </h1>
 
         <div class="post-meta-container">
@@ -274,15 +270,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2024-11-22 16:37:20" itemprop="dateCreated datePublished" datetime="2024-11-22T16:37:20+08:00">2024-11-22</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-11-26 19:19:03" itemprop="dateModified" datetime="2024-11-26T19:19:03+08:00">2024-11-26</time>
+      <time title="创建时间：2024-12-02 13:42:02 / 修改时间：13:50:48" itemprop="dateCreated datePublished" datetime="2024-12-02T13:42:02+08:00">2024-12-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -294,7 +284,7 @@
         </span>
           ，
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">论文笔记</span></a>
+          <a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/%E7%BC%96%E7%A8%8B%E6%8A%80%E5%B7%A7/" itemprop="url" rel="index"><span itemprop="name">编程技巧</span></a>
         </span>
     </span>
 
@@ -307,8 +297,8 @@
     </span>
     <span class="post-meta-item-text">Waline：</span>
   
-    <a title="waline" href="/posts/8c1493e0/#waline" itemprop="discussionUrl">
-      <span class="post-comments-count waline-comment-count" data-path="/posts/8c1493e0/" itemprop="commentCount"></span>
+    <a title="waline" href="/posts/de1f6638/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/posts/de1f6638/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -319,7 +309,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>287</span>
+      <span>918</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -336,12 +326,11 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p><strong>题目：</strong> GPT Understands, Too<br><strong>链接：</strong> <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2103.10385">https://arxiv.org/pdf/2103.10385</a><br><strong>代码：</strong> <a target="_blank" rel="noopener" href="https://github.com/THUDM/P-tuning">https://github.com/THUDM/P-tuning</a><br><strong>来源：</strong> AI Open 2024<br><strong>单位：</strong> Tsinghua University；Massachusetts Institute of Technology</p>
+    <div class="post-body" itemprop="articleBody"><h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>编写一个程序，通过填充空格来解决数独问题。</p>
 <hr>
-<h4 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h4><p>Prompt 可以提升大语言模型性能，然而，人工提供的离散 prompt 会导致很大的不确定性，几个单词的变动就会导致结果发生大幅度变化。P-Tuning 希望在离散的 prompt 前加入一个可训练的连续 prompt，提升稳定性。</p>
+<h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>简单的深搜会超时，为了防止超时，需要尽可能优先搜索可能性较少的位置。</p>
 <hr>
-<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-22%2017.31.24.png" alt="截屏2024-11-22 17.31.24.png"></p>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">solveSudoku</span>(<span class="params">self, board: <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">str</span>]]</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        U = <span class="built_in">set</span>([<span class="built_in">str</span>(i) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">10</span>)])</span><br><span class="line">        row,col,cell = defaultdict(<span class="built_in">set</span>),defaultdict(<span class="built_in">set</span>),defaultdict(<span class="built_in">set</span>)</span><br><span class="line"></span><br><span class="line">		<span class="comment"># 计算每个位置的可能性</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">get</span>(<span class="params">i, j</span>):</span><br><span class="line">            <span class="keyword">return</span> (U - row[i]) &amp; (U - col[j]) &amp; (U - cell[i//<span class="number">3</span>, j//<span class="number">3</span>])</span><br><span class="line"></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">dfs</span>(<span class="params">cur</span>):</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> cur:</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">            </span><br><span class="line">            minv, x, y = <span class="number">10</span>, <span class="number">0</span>, <span class="number">0</span></span><br><span class="line">            <span class="comment"># 找到可能数值最少的位置</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">9</span>): </span><br><span class="line">                <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">9</span>):</span><br><span class="line">                    <span class="keyword">if</span> board[i][j] == <span class="string">&#x27;.&#x27;</span>:</span><br><span class="line">                        tc = <span class="built_in">len</span>(get(i, j))</span><br><span class="line">                        <span class="keyword">if</span> <span class="built_in">len</span>(get(i, j)) &lt; minv:</span><br><span class="line">                            minv, x, y = tc, i, j</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> get(x, y):</span><br><span class="line">                row[x].add(i)</span><br><span class="line">                col[y].add(i)</span><br><span class="line">                cell[x // <span class="number">3</span>, y // <span class="number">3</span>].add(i)</span><br><span class="line">                board[x][y] = i</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">if</span> dfs(cur - <span class="number">1</span>):</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">                </span><br><span class="line">                row[x].remove(i)</span><br><span class="line">                col[y].remove(i)</span><br><span class="line">                cell[x // <span class="number">3</span>, y // <span class="number">3</span>].remove(i)</span><br><span class="line">                board[x][y] = <span class="string">&#x27;.&#x27;</span></span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">            </span><br><span class="line">        <span class="comment"># 初始化</span></span><br><span class="line">        res = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">9</span>):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">9</span>):</span><br><span class="line">                <span class="keyword">if</span> board[i][j] != <span class="string">&#x27;.&#x27;</span>:</span><br><span class="line">                    row[i].add(board[i][j])</span><br><span class="line">                    col[j].add(board[i][j])</span><br><span class="line">                    cell[i // <span class="number">3</span>, j // <span class="number">3</span>].add(board[i][j])</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    res += <span class="number">1</span></span><br><span class="line">        </span><br><span class="line">        dfs(res)</span><br></pre></td></tr></table></figure><link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
     </div>
 
     
@@ -350,23 +339,18 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" rel="tag"><i class="fa fa-tag"></i> 论文笔记</a>
-              <a href="/tags/LLM/" rel="tag"><i class="fa fa-tag"></i> LLM</a>
-              <a href="/tags/AI-Open-2024/" rel="tag"><i class="fa fa-tag"></i> AI_Open_2024</a>
+              <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"><i class="fa fa-tag"></i> 算法</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/posts/3a5bfa54/" rel="prev" title="LoRA">
-                  <i class="fa fa-angle-left"></i> LoRA
+                <a href="/posts/b65704c0/" rel="prev" title="联愁杀">
+                  <i class="fa fa-angle-left"></i> 联愁杀
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/posts/9feacd8a/" rel="next" title="P-Tuning v2">
-                  P-Tuning v2 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
@@ -456,7 +440,7 @@
 <script src="/js/third-party/math/mathjax.js"></script>
 
 
-<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"hexowaline-ten.vercel.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"(发表评论)","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":true,"comment_count":true,"requiredFields":[],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/posts/8c1493e0/"}</script>
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"hexowaline-ten.vercel.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"(发表评论)","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":true,"comment_count":true,"requiredFields":[],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/posts/de1f6638/"}</script>
 <link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
 <script>
 document.addEventListener('page:loaded', () => {
