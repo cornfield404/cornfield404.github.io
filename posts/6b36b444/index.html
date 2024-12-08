@@ -23,33 +23,32 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"cornfield404.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.21.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="题目： PoliFormer: Scaling On-Policy RL with Transformers Results in Masterful Navigators链接： https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;2406.20083代码： https:&#x2F;&#x2F;github.com&#x2F;allenai&#x2F;poliformer来源： CoRL 2024 (Outstanding Paper Awar">
+    <meta name="description" content="故事梗概水母船视角水母船测试最后一日，二月八日，测试成员威廉起床后发现费弗教授死了。 地面视角">
 <meta property="og:type" content="article">
-<meta property="og:title" content="PoliFormer">
-<meta property="og:url" content="https://cornfield404.github.io/posts/a5f5aaf2/index.html">
+<meta property="og:title" content="水母不会冻结">
+<meta property="og:url" content="https://cornfield404.github.io/posts/6b36b444/index.html">
 <meta property="og:site_name" content="Corn Field">
-<meta property="og:description" content="题目： PoliFormer: Scaling On-Policy RL with Transformers Results in Masterful Navigators链接： https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;2406.20083代码： https:&#x2F;&#x2F;github.com&#x2F;allenai&#x2F;poliformer来源： CoRL 2024 (Outstanding Paper Awar">
+<meta property="og:description" content="故事梗概水母船视角水母船测试最后一日，二月八日，测试成员威廉起床后发现费弗教授死了。 地面视角">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-14%2013.57.35.png">
-<meta property="article:published_time" content="2024-11-13T06:29:29.000Z">
-<meta property="article:modified_time" content="2024-11-26T11:19:19.573Z">
+<meta property="article:published_time" content="2024-12-06T12:49:10.000Z">
+<meta property="article:modified_time" content="2024-12-08T13:53:14.463Z">
 <meta property="article:author" content="Corn">
-<meta property="article:tag" content="论文笔记">
-<meta property="article:tag" content="Reinforcement_Learning">
-<meta property="article:tag" content="Embodied_Navigation">
-<meta property="article:tag" content="CoRL2024">
+<meta property="article:tag" content="推理小说">
+<meta property="article:tag" content="叙述性诡计">
+<meta property="article:tag" content="市川忧人">
+<meta property="article:tag" content="多线叙事">
+<meta property="article:tag" content="鲇川哲也奖">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-14%2013.57.35.png">
 
 
-<link rel="canonical" href="https://cornfield404.github.io/posts/a5f5aaf2/">
+<link rel="canonical" href="https://cornfield404.github.io/posts/6b36b444/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://cornfield404.github.io/posts/a5f5aaf2/","path":"posts/a5f5aaf2/","title":"PoliFormer"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://cornfield404.github.io/posts/6b36b444/","path":"posts/6b36b444/","title":"水母不会冻结"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>PoliFormer | Corn Field</title>
+<title>水母不会冻结 | Corn Field</title>
   
 
 
@@ -171,7 +170,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B9%8B%E5%89%8D%E6%96%B9%E6%B3%95%E7%9A%84%E7%BC%BA%E9%99%B7"><span class="nav-number">1.</span> <span class="nav-text">之前方法的缺陷</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Motivation"><span class="nav-number">2.</span> <span class="nav-text">Motivation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Method"><span class="nav-number">3.</span> <span class="nav-text">Method</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">个人总结</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%85%E4%BA%8B%E6%A2%97%E6%A6%82"><span class="nav-number">1.</span> <span class="nav-text">故事梗概</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B0%B4%E6%AF%8D%E8%88%B9%E8%A7%86%E8%A7%92"><span class="nav-number">1.1.</span> <span class="nav-text">水母船视角</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%9C%B0%E9%9D%A2%E8%A7%86%E8%A7%92"><span class="nav-number">1.2.</span> <span class="nav-text">地面视角</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B0%B4%E6%AF%8D%E8%88%B9%E8%A7%86%E8%A7%92-1"><span class="nav-number">1.3.</span> <span class="nav-text">水母船视角</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%9C%B0%E9%9D%A2%E8%A7%86%E8%A7%92-1"><span class="nav-number">1.4.</span> <span class="nav-text">地面视角</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B0%B4%E6%AF%8D%E8%88%B9%E8%A7%86%E8%A7%92-2"><span class="nav-number">1.5.</span> <span class="nav-text">水母船视角</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%9C%B0%E9%9D%A2%E8%A7%86%E8%A7%92-2"><span class="nav-number">1.6.</span> <span class="nav-text">地面视角</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B0%B4%E6%AF%8D%E8%88%B9%E8%A7%86%E8%A7%92-3"><span class="nav-number">1.7.</span> <span class="nav-text">水母船视角</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%9C%B0%E9%9D%A2%E8%A7%86%E8%A7%92-3"><span class="nav-number">1.8.</span> <span class="nav-text">地面视角</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B0%B4%E6%AF%8D%E8%88%B9%E8%A7%86%E8%A7%92-4"><span class="nav-number">1.9.</span> <span class="nav-text">水母船视角</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%9C%B0%E9%9D%A2%E8%A7%86%E8%A7%92-4"><span class="nav-number">1.10.</span> <span class="nav-text">地面视角</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B0%B4%E6%AF%8D%E8%88%B9%E8%A7%86%E8%A7%92-5"><span class="nav-number">1.11.</span> <span class="nav-text">水母船视角</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%9C%B0%E9%9D%A2%E8%A7%86%E8%A7%92-5"><span class="nav-number">1.12.</span> <span class="nav-text">地面视角</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%AA%E4%BA%BA%E8%AF%84%E4%BB%B7"><span class="nav-number">2.</span> <span class="nav-text">个人评价</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -245,7 +244,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://cornfield404.github.io/posts/a5f5aaf2/">
+    <link itemprop="mainEntityOfPage" href="https://cornfield404.github.io/posts/6b36b444/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -258,12 +257,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="PoliFormer | Corn Field">
+      <meta itemprop="name" content="水母不会冻结 | Corn Field">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          PoliFormer
+          水母不会冻结
         </h1>
 
         <div class="post-meta-container">
@@ -276,14 +275,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2024-11-13 14:29:29" itemprop="dateCreated datePublished" datetime="2024-11-13T14:29:29+08:00">2024-11-13</time>
+      <time title="创建时间：2024-12-06 20:49:10" itemprop="dateCreated datePublished" datetime="2024-12-06T20:49:10+08:00">2024-12-06</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-11-26 19:19:19" itemprop="dateModified" datetime="2024-11-26T19:19:19+08:00">2024-11-26</time>
+      <time title="修改时间：2024-12-08 21:53:14" itemprop="dateModified" datetime="2024-12-08T21:53:14+08:00">2024-12-08</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -291,11 +290,11 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/" itemprop="url" rel="index"><span itemprop="name">技术积累</span></a>
+          <a href="/categories/%E4%BC%91%E9%97%B2%E5%A8%B1%E4%B9%90/" itemprop="url" rel="index"><span itemprop="name">休闲娱乐</span></a>
         </span>
           ，
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">论文笔记</span></a>
+          <a href="/categories/%E4%BC%91%E9%97%B2%E5%A8%B1%E4%B9%90/%E4%B9%A6%E7%B1%8D%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">书籍阅读</span></a>
         </span>
     </span>
 
@@ -315,8 +314,8 @@
     </span>
     <span class="post-meta-item-text">Waline：</span>
   
-    <a title="waline" href="/posts/a5f5aaf2/#waline" itemprop="discussionUrl">
-      <span class="post-comments-count waline-comment-count" data-path="/posts/a5f5aaf2/" itemprop="commentCount"></span>
+    <a title="waline" href="/posts/6b36b444/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/posts/6b36b444/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -327,14 +326,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>1.4k</span>
+      <span>1.9k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
+      <span>2 分钟</span>
     </span>
 </div>
 
@@ -344,25 +343,53 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p><strong>题目：</strong> PoliFormer: Scaling On-Policy RL with Transformers Results in Masterful Navigators<br><strong>链接：</strong> <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2406.20083">https://arxiv.org/pdf/2406.20083</a><br><strong>代码：</strong> <a target="_blank" rel="noopener" href="https://github.com/allenai/poliformer">https://github.com/allenai/poliformer</a><br><strong>来源：</strong> CoRL 2024 (Outstanding Paper Award)<br><strong>单位：</strong> Allen Institute for AI</p>
+    <div class="post-body" itemprop="articleBody"><h4 id="故事梗概"><a href="#故事梗概" class="headerlink" title="故事梗概"></a>故事梗概</h4><h5 id="水母船视角"><a href="#水母船视角" class="headerlink" title="水母船视角"></a>水母船视角</h5><p>水母船测试最后一日，二月八日，测试成员威廉起床后发现费弗教授死了。</p>
+<h5 id="地面视角"><a href="#地面视角" class="headerlink" title="地面视角"></a>地面视角</h5><p>警局接到水母船坠毁的报警，6 名成员死亡，且其中一名头和手脚都被砍下。根据现场情况，警方认为是紧急迫降后发生的谋杀案。</p>
+<h5 id="水母船视角-1"><a href="#水母船视角-1" class="headerlink" title="水母船视角"></a>水母船视角</h5><p>其余五人讨论教授的死因，爱德华提出可能是毒杀而非疾病发作，内维尔坚持继续航行测试，测试结束后再报警。众人发现水母船偏离了预定航线且无法手动航行。</p>
+<h5 id="地面视角-1"><a href="#地面视角-1" class="headerlink" title="地面视角"></a>地面视角</h5><p>查明其中一名死者身份为费弗教授，并推测其余死者是他的学生。警方搜查技术开发部时发现内维尔的值班日记中提到了 R，然而技术开发部的职员名单里找不到与 R 可以对应的人，但在一张合影里找到了 R 的照片。在搜查电脑时，警方发现制作航行程序的电脑被清空。</p>
+<h5 id="水母船视角-2"><a href="#水母船视角-2" class="headerlink" title="水母船视角"></a>水母船视角</h5><p>水母船带着众人被困在雪原上，众人在水母船内等待救援。众人分水时，内维尔担心水被下毒选择了喝酒，然而依然被毒死。克里斯精神崩溃时提到了可能与瑞贝卡的死相关。</p>
+<h5 id="地面视角-2"><a href="#地面视角-2" class="headerlink" title="地面视角"></a>地面视角</h5><p>警方推测出军方是制造这艘新水母船的委托人。空军提出在他们的认知里研发部的人是在测试前就失去了联系，并说出空军的委托是开发隐形水母船。空军整理的遗物内包含一张实验笔记纸，实验笔记属于瑞贝卡。</p>
+<h5 id="水母船视角-3"><a href="#水母船视角-3" class="headerlink" title="水母船视角"></a>水母船视角</h5><p>剩余的四人决定搜查水母船，但没有搜到外人的痕迹。克里斯借口单独去拿烟，拿出了霰弹枪。</p>
+<h5 id="地面视角-3"><a href="#地面视角-3" class="headerlink" title="地面视角"></a>地面视角</h5><p>警方推测瑞贝卡才是发明水母船的关键，教授等人在她去世后抹去了她的名字发表了成果。警方在调查中发现瑞贝卡死于一场实验意外，并前往当时她就读的大学调查那起意外。根据当时的第一发现人的描述，当时的实验室是个密室，塑料片卡住了门且窗户也是关着的，室内没有其他人，且瑞贝卡的实验笔记消失不见了。负责此案的警察表示，他们当时注意到了案件的疑点，但瑞贝卡生前曾被强暴，这可能是她自杀的理由。在无法确定是意外还是自杀的情况下，为了照顾瑞贝卡朋友的情绪，警方按照意外说进行了结案。</p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        瑞贝卡案的真相
+    </div>
+    <div class='spoiler-content'>
+        <p>卡住门的塑料片是制造水母船的素体，素体在硬化前很柔软，可以塞进门缝，酸碱滴定产生的氰化氢硬化了门缝内的素体，使案发现场成为了密室。</p>
+
+    </div>
+</div>
+
+<p>根据尸检结果，六名受害人全部是他杀。</p>
+<h5 id="水母船视角-4"><a href="#水母船视角-4" class="headerlink" title="水母船视角"></a>水母船视角</h5><p>爱德华与威廉联手制服克里斯，拉扯间威廉射杀克里斯。威廉提起当初瑞贝卡是在其他地点去世，大学实验室是伪造出的现场。</p>
+<h5 id="地面视角-4"><a href="#地面视角-4" class="headerlink" title="地面视角"></a>地面视角</h5><p>警方认为现在存在凶手在 6 人之中及凶手不在 6 人之中两种可能性。根据验尸结果，第一种可能性不存在。如果是第二种情况，凶手很难一直躲在水母船里不被发现，如何潜入水母船案发后如何逃脱也会成为问题。<br>一名警察提出只需要提前准备一艘水母船等在迫降地，犯案后乘水母船离开即可，但这样意味着凶手是外人无法完成自动驾驶程序的修改。<br>空军收到的测试计划里，测试时间比真正的测试时间晚了三天，警方认为这可能意味着开发部计划潜逃。</p>
+<h5 id="水母船视角-5"><a href="#水母船视角-5" class="headerlink" title="水母船视角"></a>水母船视角</h5><p>威廉发现琳达与爱德华都被杀，寻找凶手时，自己也被凶手击打后脑身亡。</p>
+<h5 id="地面视角-5"><a href="#地面视角-5" class="headerlink" title="地面视角"></a>地面视角</h5><p>费弗教授宅邸被烧，警方据此推测还存在第 7 人，因为否则不需要毁掉教授的宅邸，且打电话报警的人就是凶手。在别墅后的森林里发现了曾经掩埋过人的痕迹。警方确认在前五个检查点都有人下机采购，按照顺序分别是：克里斯、不明身份的人、琳达、威廉以及内维尔，水母船没有到达第六检查点就偏离了航线。</p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        尸检结果
+    </div>
+    <div class='spoiler-content'>
+        <p>根据法医检查结果，被分尸的尸体身份是——西蒙。</p>
+
+    </div>
+</div>
+
+<p>根据空军反馈结果，隐形水母船的研发成功了，但空军回收的坠毁水母船样本却没有隐形功能。</p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        真相
+    </div>
+    <div class='spoiler-content'>
+        <p>凶手是爱德华。西蒙被分尸的原因是他在测试前就去世了，凶手为了搬运尸体，进行了分尸。因此机上的六个人里并不包括西蒙，而是由爱德华填补了空缺。<br>关于为什么上机的一定是六人而非五人，是从采购过程推断的，费弗教授酗酒且地位高不应参与采购，因此如果仅有 5 人，在第五检查点就应该发生轮班循环，然而 5 个检查点是 5 个不同的人负责采购，因此推断机上有 6 人。<br>多出来的一人被抹去是因为技术开发部的部分成员有另一个潜逃计划。他们计划牺牲部分成员，伪造其余成员下落不明的假象进行潜逃。这个计划被爱德华反向利用，抹去了自己的痕迹。在这个计划里，技术开发部准备了两艘水母船，一艘是新造的水母船，另一艘是存放在费弗教授家里的水母船样机，后一艘不在出售清单上，因此搜查时没有查到。”亡命组”计划控制旧水母船坠毁，新水母船上的成员潜逃，而爱德华使两艘水母船迫降，并搭乘其中一艘逃离雪山。在检查点，两艘水母船交替降落，因此检查点误认为一直是同一艘。</p>
+
+    </div>
+</div>
+
+
 <hr>
-<h4 id="之前方法的缺陷"><a href="#之前方法的缺陷" class="headerlink" title="之前方法的缺陷"></a>之前方法的缺陷</h4><ul>
-<li>基于 GRU 的结构在简单的数据集上取得了很好的效果，但在较难的数据集上结果比较差；<font color="#a5a5a5">（However, this approach fails to result in the same breakthroughs for harder navigation problems like Object Goal Navigation (ObjectNav) where an agent must explore its environment to locate and navigate to an object of the requested type.）</font></li>
-<li>增大网络规模会导致模型训练不稳定且训练时间增加；<font color="#a5a5a5">（RL approaches for ObjectNav have generally not advanced beyond shallow GRU architectures due to challenges presented by training instability and unreasonably long training times with wider and deeper models, such as scaled-up transformers.）</font></li>
-<li>Imitation Learning 可能存在状态空间探索不足的问题。<font color="#a5a5a5">（we suspect this is a consequence of insufficient state-space exploration as expert trajectory datasets frequently contain few examples of error recovery, which can lead to sub-optimal performance due to compounding errors or non-trivial domain shifts during inference.）</font></li>
-</ul>
-<hr>
-<h4 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h4><p>从各个方面增大 RL 的 scale。</p>
-<hr>
-<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-14%2013.57.35.png" alt="截屏2024-11-14 13.57.35.png"></p>
-<ul>
-<li>Encoder 根据当前输入的 RGB 图像以及 goal 编码生成当前的状态 $s^t$，decoder 用于预测 action；</li>
-<li>Vision Transformer Model：DINOv2，训练时，该模块参数冻结，以保证模型在真实环境中的泛化性，否则视觉模块在模拟场景中的训练会影响到真实环境的性能；</li>
-<li>Goal Encoder：为了方便比较，在不同 benchmark 上用了不同的编码器；</li>
-<li>Causal Transformer Decoder：用 KV-cache 加速，使计算用时与时间成正比而非平方正比，加速计算。</li>
-</ul>
-<hr>
-<h4 id="个人总结"><a href="#个人总结" class="headerlink" title="个人总结"></a>个人总结</h4><p>这篇文章通过增大 scale 大幅提升了 embodied navigation 任务的准确性。增大 scale 既包括从模型上采用 transformer 结构增大了模型的 scale；也包括从数据层面上，采用了一系列方法加快了数据的模拟和读取；还包括直接增加训练节点数量，提升训练速度。</p>
+<h4 id="个人评价"><a href="#个人评价" class="headerlink" title="个人评价"></a>个人评价</h4><p>这本的大体框架我都挺喜欢的，不管是大梗还是多线叙事的架构都挺吸引我的。但是读下来整体感觉很碎，文笔不是最差的那种，但是也没啥优点，这么多人物看完都没留下很深刻的印象，不管是被害人、凶手还是侦探。</p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
     </div>
 
@@ -372,21 +399,22 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" rel="tag"><i class="fa fa-tag"></i> 论文笔记</a>
-              <a href="/tags/Reinforcement-Learning/" rel="tag"><i class="fa fa-tag"></i> Reinforcement_Learning</a>
-              <a href="/tags/Embodied-Navigation/" rel="tag"><i class="fa fa-tag"></i> Embodied_Navigation</a>
-              <a href="/tags/CoRL2024/" rel="tag"><i class="fa fa-tag"></i> CoRL2024</a>
+              <a href="/tags/%E6%8E%A8%E7%90%86%E5%B0%8F%E8%AF%B4/" rel="tag"><i class="fa fa-tag"></i> 推理小说</a>
+              <a href="/tags/%E5%8F%99%E8%BF%B0%E6%80%A7%E8%AF%A1%E8%AE%A1/" rel="tag"><i class="fa fa-tag"></i> 叙述性诡计</a>
+              <a href="/tags/%E5%B8%82%E5%B7%9D%E5%BF%A7%E4%BA%BA/" rel="tag"><i class="fa fa-tag"></i> 市川忧人</a>
+              <a href="/tags/%E5%A4%9A%E7%BA%BF%E5%8F%99%E4%BA%8B/" rel="tag"><i class="fa fa-tag"></i> 多线叙事</a>
+              <a href="/tags/%E9%B2%87%E5%B7%9D%E5%93%B2%E4%B9%9F%E5%A5%96/" rel="tag"><i class="fa fa-tag"></i> 鲇川哲也奖</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
+                <a href="/posts/66e39f70/" rel="prev" title="接雨水">
+                  <i class="fa fa-angle-left"></i> 接雨水
+                </a>
             </div>
             <div class="post-nav-item">
-                <a href="/posts/c3cacb08/" rel="next" title="马拉车算法">
-                  马拉车算法 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
@@ -495,7 +523,7 @@
 <script src="/js/third-party/math/mathjax.js"></script>
 
 
-<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"hexowaline-ten.vercel.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"(发表评论)","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":true,"comment_count":true,"requiredFields":[],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/posts/a5f5aaf2/"}</script>
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"hexowaline-ten.vercel.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"(发表评论)","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":true,"comment_count":true,"requiredFields":[],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/posts/6b36b444/"}</script>
 <link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
 <script>
 document.addEventListener('page:loaded', () => {
