@@ -1,6 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>MiniDrive</title>
+    <url>/posts/9dfc0fd2/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> MiniDrive: More Efficient Vision-Language Models with Multi-Level 2 D Features as Text Tokens for Autonomous Driving<br><strong>链接：</strong> <a href="https://arxiv.org/pdf/2409.07267">https://arxiv.org/pdf/2409.07267</a><br><strong>代码：</strong> <a href="https://github.com/EMZucas/minidrive">https://github.com/EMZucas/minidrive</a><br><strong>来源：</strong> arxiv<br><strong>单位：</strong> School of Artificial Intelligence, University of Chinese Academy of Sciences；State Key Laboratory of Multimodal Artificial Intelligence Systems, Institute of Automation, Chinese Academy of Sciences</p>
+<hr>
+<h4 id="目前模型缺陷"><a href="#目前模型缺陷" class="headerlink" title="目前模型缺陷"></a>目前模型缺陷</h4><ul>
+<li>模型规模比较大，导致实际部署困难；</li>
+<li>自动驾驶通常会采用多张图作为输入，目前的模型大多没有结合多张图的能力。</li>
+</ul>
+<hr>
+<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><h5 id="模型整体结构"><a href="#模型整体结构" class="headerlink" title="模型整体结构"></a>模型整体结构</h5><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-12-10%2018.36.05.png" alt="截屏2024-12-10 18.36.05.png"></p>
+<ul>
+<li>Vision encoder 提取多张图的特征，模型采用 UniRepLKNet；</li>
+<li>FE-MoE 融合多张图特征（右侧），对多个 expert 的结果加权；</li>
+<li>Text embedding 作为 key 和 value，vision embedding 作为 query 生成新的特征 $V’$；</li>
+<li>$V’$ 和 V 融合后作为新的 vision embedding 与 text embedding 一起输入大语言模型，并生成最终的结果。</li>
+</ul>
+<hr>
+<h4 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h4><h5 id="与其他方法比"><a href="#与其他方法比" class="headerlink" title="与其他方法比"></a>与其他方法比<img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-12-10%2019.16.29.png" alt="截屏2024-12-10 19.16.29.png"></h5><p>以 83M 的参数量取得了与更大规模模型相近的效果。</p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>技术积累</category>
+        <category>论文笔记</category>
+      </categories>
+      <tags>
+        <tag>论文笔记</tag>
+        <tag>LLM</tag>
+        <tag>自动驾驶</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>第欧根尼变奏曲</title>
+    <url>/posts/5b376781/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="故事梗概"><a href="#故事梗概" class="headerlink" title="故事梗概"></a>故事梗概</h4><h5 id="窥伺蓝色的蓝"><a href="#窥伺蓝色的蓝" class="headerlink" title="窥伺蓝色的蓝"></a>窥伺蓝色的蓝</h5><p>待读</p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+  </entry>
+  <entry>
     <title>水母不会冻结</title>
     <url>/posts/6b36b444/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="故事梗概"><a href="#故事梗概" class="headerlink" title="故事梗概"></a>故事梗概</h4><h5 id="水母船视角"><a href="#水母船视角" class="headerlink" title="水母船视角"></a>水母船视角</h5><p>水母船测试最后一日，二月八日，测试成员威廉起床后发现费弗教授死了。</p>
