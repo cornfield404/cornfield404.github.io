@@ -23,28 +23,29 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"cornfield404.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.21.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="图像保存为 .jpg 后，再次读入像素值有微小变化.jpg 会导致有损压缩，保存为 .png 可以解决该问题。">
+    <meta name="description" content="题目给你一个字符串 s、一个字符串 t。返回 s 中涵盖 t 所有字符的最小子串。如果 s 中不存在涵盖 t 所有字符的子串，则返回空字符串 “”。  思路">
 <meta property="og:type" content="article">
-<meta property="og:title" content="图像读写">
-<meta property="og:url" content="https://cornfield404.github.io/posts/9b91fdde/index.html">
+<meta property="og:title" content="最小覆盖子串">
+<meta property="og:url" content="https://cornfield404.github.io/posts/1c771f88/index.html">
 <meta property="og:site_name" content="Corn Field">
-<meta property="og:description" content="图像保存为 .jpg 后，再次读入像素值有微小变化.jpg 会导致有损压缩，保存为 .png 可以解决该问题。">
+<meta property="og:description" content="题目给你一个字符串 s、一个字符串 t。返回 s 中涵盖 t 所有字符的最小子串。如果 s 中不存在涵盖 t 所有字符的子串，则返回空字符串 “”。  思路">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-12-12T10:27:09.000Z">
-<meta property="article:modified_time" content="2024-12-13T02:36:00.302Z">
+<meta property="article:published_time" content="2024-12-17T10:53:06.000Z">
+<meta property="article:modified_time" content="2024-12-17T11:05:41.925Z">
 <meta property="article:author" content="Corn">
-<meta property="article:tag" content="图像读写">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="双指针">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://cornfield404.github.io/posts/9b91fdde/">
+<link rel="canonical" href="https://cornfield404.github.io/posts/1c771f88/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://cornfield404.github.io/posts/9b91fdde/","path":"posts/9b91fdde/","title":"图像读写"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://cornfield404.github.io/posts/1c771f88/","path":"posts/1c771f88/","title":"最小覆盖子串"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>图像读写 | Corn Field</title>
+<title>最小覆盖子串 | Corn Field</title>
   
 
 
@@ -166,7 +167,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F%E4%BF%9D%E5%AD%98%E4%B8%BA-jpg-%E5%90%8E%EF%BC%8C%E5%86%8D%E6%AC%A1%E8%AF%BB%E5%85%A5%E5%83%8F%E7%B4%A0%E5%80%BC%E6%9C%89%E5%BE%AE%E5%B0%8F%E5%8F%98%E5%8C%96"><span class="nav-number">1.</span> <span class="nav-text">图像保存为 .jpg 后，再次读入像素值有微小变化</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE"><span class="nav-number">1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF"><span class="nav-number">2.</span> <span class="nav-text">思路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-number">3.</span> <span class="nav-text">代码</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -240,7 +241,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://cornfield404.github.io/posts/9b91fdde/">
+    <link itemprop="mainEntityOfPage" href="https://cornfield404.github.io/posts/1c771f88/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -253,12 +254,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="图像读写 | Corn Field">
+      <meta itemprop="name" content="最小覆盖子串 | Corn Field">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          图像读写
+          最小覆盖子串
         </h1>
 
         <div class="post-meta-container">
@@ -270,15 +271,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2024-12-12 18:27:09" itemprop="dateCreated datePublished" datetime="2024-12-12T18:27:09+08:00">2024-12-12</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-12-13 10:36:00" itemprop="dateModified" datetime="2024-12-13T10:36:00+08:00">2024-12-13</time>
+      <time title="创建时间：2024-12-17 18:53:06 / 修改时间：19:05:41" itemprop="dateCreated datePublished" datetime="2024-12-17T18:53:06+08:00">2024-12-17</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -290,7 +285,7 @@
         </span>
           ，
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/%E6%9D%82%E4%B8%83%E6%9D%82%E5%85%AB/" itemprop="url" rel="index"><span itemprop="name">杂七杂八</span></a>
+          <a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/%E7%BC%96%E7%A8%8B%E6%8A%80%E5%B7%A7/" itemprop="url" rel="index"><span itemprop="name">编程技巧</span></a>
         </span>
     </span>
 
@@ -310,8 +305,8 @@
     </span>
     <span class="post-meta-item-text">Waline：</span>
   
-    <a title="waline" href="/posts/9b91fdde/#waline" itemprop="discussionUrl">
-      <span class="post-comments-count waline-comment-count" data-path="/posts/9b91fdde/" itemprop="commentCount"></span>
+    <a title="waline" href="/posts/1c771f88/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/posts/1c771f88/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -322,7 +317,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>50</span>
+      <span>789</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -339,8 +334,11 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h4 id="图像保存为-jpg-后，再次读入像素值有微小变化"><a href="#图像保存为-jpg-后，再次读入像素值有微小变化" class="headerlink" title="图像保存为 .jpg 后，再次读入像素值有微小变化"></a>图像保存为 .jpg 后，再次读入像素值有微小变化</h4><p>.jpg 会导致有损压缩，保存为 .png 可以解决该问题。</p>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+    <div class="post-body" itemprop="articleBody"><h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>给你一个字符串 s、一个字符串 t。返回 s 中涵盖 t 所有字符的最小子串。如果 s 中不存在涵盖 t 所有字符的子串，则返回空字符串 “”。</p>
+<hr>
+<h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>双指针，先把后一个指针逐渐向后搜索直到找到可以覆盖 t 的字符串，然后把前面的指针逐渐向后挪，直到两个指针中间的字符串无法覆盖 t。<br>另一个核心是如何判定字符串是否覆盖 t。可以采用 collections，当所有字符的计数小于等于 0 时，意味着覆盖了。</p>
+<hr>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">minWindow</span>(<span class="params">self, s: <span class="built_in">str</span>, t: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        <span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br><span class="line">        </span><br><span class="line">        sub_counter = Counter(t)</span><br><span class="line">        required = <span class="built_in">len</span>(t)</span><br><span class="line">        start = <span class="number">0</span></span><br><span class="line">        end = <span class="number">0</span></span><br><span class="line">        min_length = <span class="built_in">float</span>(<span class="string">&#x27;inf&#x27;</span>)</span><br><span class="line">        min_start = <span class="literal">None</span></span><br><span class="line">        match_count = <span class="number">0</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span> end &lt; <span class="built_in">len</span>(s):</span><br><span class="line">            char = s[end]</span><br><span class="line">            <span class="keyword">if</span> sub_counter[char] &gt; <span class="number">0</span>:</span><br><span class="line">                match_count += <span class="number">1</span></span><br><span class="line">            sub_counter[char] -= <span class="number">1</span></span><br><span class="line">            end += <span class="number">1</span></span><br><span class="line">            </span><br><span class="line">            <span class="keyword">while</span> match_count == required:</span><br><span class="line">                <span class="keyword">if</span> end - start &lt; min_length:</span><br><span class="line">                    min_length = end - start</span><br><span class="line">                    min_start = start</span><br><span class="line">                char = s[start]</span><br><span class="line">                sub_counter[char] += <span class="number">1</span></span><br><span class="line">                <span class="keyword">if</span> sub_counter[char] &gt; <span class="number">0</span>:</span><br><span class="line">                    match_count -= <span class="number">1</span></span><br><span class="line">                start += <span class="number">1</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> min_length == <span class="built_in">float</span>(<span class="string">&#x27;inf&#x27;</span>):</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> s[min_start:min_start + min_length]</span><br></pre></td></tr></table></figure><link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
     </div>
 
     
@@ -357,7 +355,7 @@
   </li>
   <li class="post-copyright-link">
       <strong>本文链接：</strong>
-      <a href="https://cornfield404.github.io/posts/9b91fdde/" title="图像读写">https://cornfield404.github.io/posts/9b91fdde/</a>
+      <a href="https://cornfield404.github.io/posts/1c771f88/" title="最小覆盖子串">https://cornfield404.github.io/posts/1c771f88/</a>
   </li>
   <li class="post-copyright-license">
       <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -366,21 +364,19 @@
 </div>
 
           <div class="post-tags">
-              <a href="/tags/%E5%9B%BE%E5%83%8F%E8%AF%BB%E5%86%99/" rel="tag"><i class="fa fa-tag"></i> 图像读写</a>
+              <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"><i class="fa fa-tag"></i> 算法</a>
+              <a href="/tags/%E5%8F%8C%E6%8C%87%E9%92%88/" rel="tag"><i class="fa fa-tag"></i> 双指针</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/posts/9dfc0fd2/" rel="prev" title="MiniDrive">
-                  <i class="fa fa-angle-left"></i> MiniDrive
+                <a href="/posts/18e1d79c/" rel="prev" title="矩阵置零">
+                  <i class="fa fa-angle-left"></i> 矩阵置零
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/posts/ca4861d0/" rel="next" title="编辑距离">
-                  编辑距离 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
@@ -506,7 +502,7 @@
 <script src="/js/third-party/math/mathjax.js"></script>
 
 
-<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"hexowaline-ten.vercel.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"(发表评论)","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":true,"comment_count":true,"requiredFields":[],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/posts/9b91fdde/"}</script>
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"hexowaline-ten.vercel.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"(发表评论)","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":true,"comment_count":true,"requiredFields":[],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/posts/1c771f88/"}</script>
 <link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
 <script>
 document.addEventListener('page:loaded', () => {
