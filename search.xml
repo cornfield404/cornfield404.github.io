@@ -1,6 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>qwen2-vl</title>
+    <url>/posts/5fae19d/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> Qwen 2-VL: Enhancing Vision-Language Model’s Perception of the World at Any Resolution<br><strong>链接：</strong> <a href="https://arxiv.org/pdf/2409.12191">https://arxiv.org/pdf/2409.12191</a><br><strong>代码：</strong> <a href="https://github.com/QwenLM/Qwen2-VL">https://github.com/QwenLM/Qwen2-VL</a><br><strong>来源：</strong> arxiv<br><strong>单位：</strong> Qwen Team Alibaba Group</p>
+<hr>
+<h4 id="目前方法的缺陷及-qwen2-vl-的解决方法"><a href="#目前方法的缺陷及-qwen2-vl-的解决方法" class="headerlink" title="目前方法的缺陷及 qwen2-vl 的解决方法"></a>目前方法的缺陷及 qwen2-vl 的解决方法</h4><ul>
+<li>当前大多数 LVLM 会固定输入图像的尺寸，这会导致高分辨率图像信息的丢失。Qwen2-vl 在训练过程中引入动态分辨率；</li>
+<li>当前大多数模型在处理视频时，会把视频帧看作互不关联的图像。Qwen2-vl 设计了 multimodal rotary position embedding 处理时空维度的信息。</li>
+</ul>
+<hr>
+<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><h5 id="模型尺寸"><a href="#模型尺寸" class="headerlink" title="模型尺寸"></a>模型尺寸</h5><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-12-18%2018.21.52.png"></p>
+<h5 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h5><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-12-18%2018.26.03.png"></p>
+<ul>
+<li>Naive Dynamic Resolution：采用 Navit 以及 2D-RoPE；</li>
+<li>M-RoPE：<img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-12-18%2018.53.00.png"></li>
+<li>Unified Image and Video Understanding：输入是单张图时，会把图像复制一份，看作一个 2 帧的视频，从而实现视频和图像的统一。第一层卷积会采用 3D 卷积，使模型可以提取视频三维特征。</li>
+</ul>
+<h5 id="模型训练"><a href="#模型训练" class="headerlink" title="模型训练"></a>模型训练</h5><p>分为三个阶段：</p>
+<ul>
+<li>仅训练 ViT：语言模型从 qwen2 初始化，视觉模型从 DFN 的 ViT 权重初始化；训练的主要任务包括：learning image-text relationships、textual content recognition within images through OCR、image classification tasks；</li>
+<li>训练所有模块：引入更多任务和数据；</li>
+<li>仅训练语言模型：构建 instruction-following data 用于训练。</li>
+</ul>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>技术积累</category>
+        <category>论文笔记</category>
+      </categories>
+      <tags>
+        <tag>论文笔记</tag>
+        <tag>LLM</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>git使用</title>
+    <url>/posts/4896de77/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="把本地分支上传到远程指定分支"><a href="#把本地分支上传到远程指定分支" class="headerlink" title="把本地分支上传到远程指定分支"></a>把本地分支上传到远程指定分支</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git push origin &lt;本地分支名&gt;:&lt;远程分支名&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="用-lfs-上传大文件"><a href="#用-lfs-上传大文件" class="headerlink" title="用 lfs 上传大文件"></a>用 lfs 上传大文件</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git lfs track [文件名]</span><br><span class="line">git add .gitattributes</span><br><span class="line">git add [文件名]</span><br><span class="line">git commit -m</span><br><span class="line">git push</span><br></pre></td></tr></table></figure><link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>技术积累</category>
+        <category>杂七杂八</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>最小覆盖子串</title>
     <url>/posts/1c771f88/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>给你一个字符串 s、一个字符串 t。返回 s 中涵盖 t 所有字符的最小子串。如果 s 中不存在涵盖 t 所有字符的子串，则返回空字符串 “”。</p>
