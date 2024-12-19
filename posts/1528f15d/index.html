@@ -23,23 +23,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"cornfield404.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.21.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta property="og:type" content="website">
-<meta property="og:title" content="Corn Field">
-<meta property="og:url" content="https://cornfield404.github.io/tags/%E5%8F%99%E8%BF%B0%E6%80%A7%E8%AF%A1%E8%AE%A1/index.html">
+    <meta name="description" content="Vae 的原理链接： https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;628604566比较浅显易懂地说明了 vae 模型设计的出发点、基本原理以及损失函数的推导。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="比较好的技术解析文章">
+<meta property="og:url" content="https://cornfield404.github.io/posts/1528f15d/index.html">
 <meta property="og:site_name" content="Corn Field">
+<meta property="og:description" content="Vae 的原理链接： https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;628604566比较浅显易懂地说明了 vae 模型设计的出发点、基本原理以及损失函数的推导。">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-12-19T03:28:34.000Z">
+<meta property="article:modified_time" content="2024-12-19T04:39:25.919Z">
 <meta property="article:author" content="Corn">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://cornfield404.github.io/tags/%E5%8F%99%E8%BF%B0%E6%80%A7%E8%AF%A1%E8%AE%A1/">
+<link rel="canonical" href="https://cornfield404.github.io/posts/1528f15d/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"tags/叙述性诡计/index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://cornfield404.github.io/posts/1528f15d/","path":"posts/1528f15d/","title":"比较好的技术解析文章"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>标签: 叙述性诡计 | Corn Field</title>
+<title>比较好的技术解析文章 | Corn Field</title>
   
 
 
@@ -148,7 +152,7 @@
         mutex="true">
     </meting-js>
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -161,6 +165,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Vae-%E7%9A%84%E5%8E%9F%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">Vae 的原理</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -223,71 +228,159 @@
 
     </div>
 
-    <div class="main-inner tag posts-collapse">
+    <div class="main-inner post posts-expand">
 
 
   
+
+
+<div class="post-block">
   
   
-  <div class="post-block">
-    <div class="post-content">
-      <div class="collection-title">
-        <h1 class="collection-header">叙述性诡计
-          <small>标签</small>
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://cornfield404.github.io/posts/1528f15d/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Corn">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Corn Field">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="比较好的技术解析文章 | Corn Field">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          比较好的技术解析文章
         </h1>
-      </div>
 
+        <div class="post-meta-container">
+          <div class="post-meta">
+
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
       
-    <div class="collection-year">
-      <span class="collection-header">2024</span>
+
+      <time title="创建时间：2024-12-19 11:28:34 / 修改时间：12:39:25" itemprop="dateCreated datePublished" datetime="2024-12-19T11:28:34+08:00">2024-12-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/" itemprop="url" rel="index"><span itemprop="name">技术积累</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/%E6%9D%82%E4%B8%83%E6%9D%82%E5%85%AB/" itemprop="url" rel="index"><span itemprop="name">杂七杂八</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline：</span>
+  
+    <a title="waline" href="/posts/1528f15d/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/posts/1528f15d/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>83</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h4 id="Vae-的原理"><a href="#Vae-的原理" class="headerlink" title="Vae 的原理"></a>Vae 的原理</h4><p><strong>链接：</strong> <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/628604566">https://zhuanlan.zhihu.com/p/628604566</a><br>比较浅显易懂地说明了 vae 模型设计的出发点、基本原理以及损失函数的推导。</p>
+<hr>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2024-12-06T20:49:10+08:00"
-              content="2024-12-06">
-          12-06
-        </time>
-      </div>
+    
+    
+    
 
-      <div class="post-title">
-          <a class="post-title-link" href="/posts/6b36b444/" itemprop="url">
-            <span itemprop="name">水母不会冻结</span>
-          </a>
-      </div>
+    <footer class="post-footer">
+          
 
-      
-    </header>
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Corn
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://cornfield404.github.io/posts/1528f15d/" title="比较好的技术解析文章">https://cornfield404.github.io/posts/1528f15d/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/5fae19d/" rel="prev" title="qwen2-vl">
+                  <i class="fa fa-angle-left"></i> qwen2-vl
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
   </article>
+</div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2024-12-01T19:32:24+08:00"
-              content="2024-12-01">
-          12-01
-        </time>
-      </div>
 
-      <div class="post-title">
-          <a class="post-title-link" href="/posts/b65704c0/" itemprop="url">
-            <span itemprop="name">联愁杀</span>
-          </a>
-      </div>
 
-      
-    </header>
-  </article>
 
-    </div>
-  </div>
-  
-  
-  
 
+
+    <div class="comments" id="waline"></div>
 </div>
   </main>
 
@@ -401,7 +494,7 @@
 <script src="/js/third-party/math/mathjax.js"></script>
 
 
-<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"hexowaline-ten.vercel.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"(发表评论)","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":true,"comment_count":true,"requiredFields":[],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/tags/%E5%8F%99%E8%BF%B0%E6%80%A7%E8%AF%A1%E8%AE%A1/"}</script>
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"hexowaline-ten.vercel.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"(发表评论)","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":true,"comment_count":true,"requiredFields":[],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/posts/1528f15d/"}</script>
 <link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
 <script>
 document.addEventListener('page:loaded', () => {
