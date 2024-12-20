@@ -1,6 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Scaling on Scales</title>
+    <url>/posts/2deeafe3/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> When Do We Not Need Larger Vision Models?<br><strong>链接：</strong> <a href="https://arxiv.org/pdf/2403.13043">https://arxiv.org/pdf/2403.13043</a><br><strong>代码：</strong> <a href="https://github.com/bfshi/scaling_on_scales">https://github.com/bfshi/scaling_on_scales</a><br><strong>来源：</strong> ECCV 2024<br><strong>单位：</strong> UC Berkeley；Microsoft Research</p>
+<hr>
+<h4 id="研究的问题"><a href="#研究的问题" class="headerlink" title="研究的问题"></a>研究的问题</h4><p>计算机视觉领域大模型是否真的带来了更好的效果？</p>
+<hr>
+<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-12-20%2018.22.33.png" alt="截屏2024-12-20 18.22.33.png"></p>
+<ul>
+<li>把低分辨率图像插值得到高分辨率图像（防止直接用高分辨率图像引入额外信息）；</li>
+<li>高分辨率图像裁成与低分辨率图像一样大小的 patch，并用网络进行特征提取；</li>
+<li>不同 patch 的 feature 拼成整个 feature map 后，pooling 得到与低分辨率图像尺寸相同的 feature map；</li>
+<li>不同 feature map 拼起来。</li>
+</ul>
+<hr>
+<h4 id="在不同任务和不同-backbone-上与增大模型尺寸对比"><a href="#在不同任务和不同-backbone-上与增大模型尺寸对比" class="headerlink" title="在不同任务和不同 backbone 上与增大模型尺寸对比"></a>在不同任务和不同 backbone 上与增大模型尺寸对比</h4><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-12-20%2018.54.12.png" alt="截屏2024-12-20 18.54.12.png"></p>
+<ul>
+<li>在图像分割和深度预测上，Scaling on Scales 效果都比较好，这也比较符合直觉，在这些任务上增加分辨率能提供更多细节，从而提升效果；</li>
+<li>在分类任务的部分 backbone 上，Scaling on Scales 比增大模型大小效果差。</li>
+</ul>
+<p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-12-20%2018.56.34.png" alt="截屏2024-12-20 18.56.34.png"></p>
+<ul>
+<li>在 LLM 相关任务上，Scaling on Scales 效果都更好。</li>
+</ul>
+<hr>
+<h4 id="个人看法"><a href="#个人看法" class="headerlink" title="个人看法"></a>个人看法</h4><p>这篇通过实验验证了在 GFLOPS 相近的情况下，小模型+多尺度输入通常略优于或等效于大模型的性能，但是在附录的实验里，小模型+多尺度输入的图像处理速度低于单个大模型，因此似乎并没有明显的优势。</p>
+<hr>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>技术积累</category>
+        <category>论文笔记</category>
+      </categories>
+      <tags>
+        <tag>论文笔记</tag>
+        <tag>ECCV2024</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>柱状图中最大的矩形</title>
+    <url>/posts/7fcd667a/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>给定 n 个非负整数，用来表示柱状图中各个柱子的高度。每个柱子彼此相邻，且宽度为 1。<br>求在该柱状图中，能够勾勒出来的矩形的最大面积。</p>
+<hr>
+<h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>递增栈。当高度值逐渐增加就不断入栈，否则出栈并计算最大面积。</p>
+<hr>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">largestRectangleArea</span>(<span class="params">self, heights: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        stack = [-<span class="number">1</span>]</span><br><span class="line">        result = <span class="number">0</span></span><br><span class="line">        heights.append(-<span class="number">1</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> i, val <span class="keyword">in</span> <span class="built_in">enumerate</span>(heights):</span><br><span class="line">            <span class="keyword">while</span> val &lt; heights[stack[-<span class="number">1</span>]]:</span><br><span class="line">                h = heights[stack.pop()]</span><br><span class="line">                result = <span class="built_in">max</span>(result, (i - stack[-<span class="number">1</span>] - <span class="number">1</span>) * h)</span><br><span class="line">                stack.append(i)</span><br><span class="line">        <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
+
+<hr>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>技术积累</category>
+        <category>编程技巧</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>栈</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>latent diffusion</title>
+    <url>/posts/16f61640/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> High-Resolution Image Synthesis with Latent Diffusion Models<br><strong>链接：</strong> <a href="https://arxiv.org/pdf/2112.10752">https://arxiv.org/pdf/2112.10752</a><br><strong>代码：</strong> <a href="https://github.com/CompVis/latent-diffusion">https://github.com/CompVis/latent-diffusion</a><br><strong>来源：</strong> CVPR 2022<br><strong>单位：</strong> Ludwig Maximilian University of Munich &amp; IWR, Heidelberg University, Germany；Runway ML</p>
+<hr>
+<h4 id="本文希望解决的问题"><a href="#本文希望解决的问题" class="headerlink" title="本文希望解决的问题"></a>本文希望解决的问题</h4><p>Diffusion Model 训练和推理成本都过高。</p>
+<hr>
+<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-12-20%2010.58.33.png" alt="截屏2024-12-20 10.58.33.png"></p>
+<h5 id="Perceptual-Image-Compression"><a href="#Perceptual-Image-Compression" class="headerlink" title="Perceptual Image Compression"></a>Perceptual Image Compression</h5><p>训练一个 autoencoder 把图像压缩到 latent space 中。因为 diffusion model 本身是在二维空间上操作的，因此本文压缩后的 $z$ 也是一个二维的，相比于那些压缩到一维的方法，能保留更多信息，效果更好。</p>
+<h5 id="Conditioning-Mechanisms"><a href="#Conditioning-Mechanisms" class="headerlink" title="Conditioning Mechanisms"></a>Conditioning Mechanisms</h5><p>在 UNet backbone 中加入 cross attention 机制，其中 Q 是原本的 latent feature，K、V 是 condition feature，从而实现控制。</p>
+<hr>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>技术积累</category>
+        <category>论文笔记</category>
+      </categories>
+      <tags>
+        <tag>论文笔记</tag>
+        <tag>高引</tag>
+        <tag>Diffusion</tag>
+        <tag>CVPR2022</tag>
+        <tag>Image_Generation</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>比较好的技术解析文章</title>
     <url>/posts/1528f15d/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="Vae-的原理"><a href="#Vae-的原理" class="headerlink" title="Vae 的原理"></a>Vae 的原理</h4><p><strong>链接：</strong> <a href="https://zhuanlan.zhihu.com/p/628604566">https://zhuanlan.zhihu.com/p/628604566</a><br>比较浅显易懂地说明了 vae 模型设计的出发点、基本原理以及损失函数的推导。</p>
@@ -673,6 +754,8 @@
         <tag>论文笔记</tag>
         <tag>LLM</tag>
         <tag>ACL2022</tag>
+        <tag>finetune</tag>
+        <tag>高引</tag>
       </tags>
   </entry>
   <entry>
@@ -692,7 +775,9 @@
       <tags>
         <tag>论文笔记</tag>
         <tag>LLM</tag>
-        <tag>AI_Open_2024</tag>
+        <tag>finetune</tag>
+        <tag>高引</tag>
+        <tag>AI_Open2024</tag>
       </tags>
   </entry>
   <entry>
@@ -722,6 +807,8 @@
         <tag>论文笔记</tag>
         <tag>LLM</tag>
         <tag>ICLR2022</tag>
+        <tag>finetune</tag>
+        <tag>高引</tag>
       </tags>
   </entry>
   <entry>
