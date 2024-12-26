@@ -1008,4 +1008,36 @@
         <tag>DETR</tag>
       </tags>
   </entry>
+  <entry>
+    <title>ViLLa</title>
+    <url>/posts/28a6509c/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> ViLLa: Video Reasoning Segmentation with Large<br>Language Model<br><strong>链接：</strong> <a href="https://arxiv.org/pdf/2407.14500">https://arxiv.org/pdf/2407.14500</a><br><strong>代码：</strong> <a href="https://github.com/rkzheng99/ViLLa">https://github.com/rkzheng99/ViLLa</a><br><strong>来源：</strong> arxiv<br><strong>单位：</strong> The University of Hong Kong；University of California, Merced；Shanghai Artificial Intelligence Laboratory；SenseTime Research</p>
+<hr>
+<h4 id="Video-Reasoning-Segmentation"><a href="#Video-Reasoning-Segmentation" class="headerlink" title="Video Reasoning Segmentation"></a>Video Reasoning Segmentation</h4><p>根据文本，输出视频对应的分割 mask。其中，文本可能是很复杂的描述，例如：a type of African mammal known for their distinctive black and white striped coat patterns walking at the end of its herd。</p>
+<hr>
+<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-12-25%2013.35.50.png" alt="截屏2024-12-25 13.35.50.png"></p>
+<h5 id="Encoders"><a href="#Encoders" class="headerlink" title="Encoders"></a>Encoders</h5><ul>
+<li>视觉编码器提取多尺度视觉特征 $F_t&#x3D;{F_t^l}_{l&#x3D;1}^L$；</li>
+<li>文本编码器以文本和 visual embedding $F_t^L$ 作为输入。</li>
+</ul>
+<h5 id="Context-Aggregation-Module"><a href="#Context-Aggregation-Module" class="headerlink" title="Context Aggregation Module"></a>Context Aggregation Module</h5><p>$$<br>\begin{align}<br>E_t&amp;&#x3D;FFN(CrossAttn(x_{txt}, F_t^L, F_t^L)) \<br>E_t^c&amp;&#x3D;Concat{E_t^i}_{i&#x3D;1}^K<br>\end{align}<br>$$</p>
+<h5 id="Multi-level-Segmentation-Tokens"><a href="#Multi-level-Segmentation-Tokens" class="headerlink" title="Multi-level Segmentation Tokens"></a>Multi-level Segmentation Tokens</h5><ul>
+<li>采用两个 segmentation token，一个是 frame level token，一个是 video level token；</li>
+<li>两个 token 与图像特征和文本特征一起输入 LLM；</li>
+<li>LLM 除了会生成文本输出，还会生成计算后的 segmentation token。</li>
+</ul>
+<h5 id="Video-Frame-Decoder"><a href="#Video-Frame-Decoder" class="headerlink" title="Video-Frame Decoder"></a>Video-Frame Decoder</h5><p>$$<br>\begin{align}<br>Q^{l+1,s}&amp;&#x3D;FFN^s(h_{SA}^s(h_{CA}^s(Q^{l,s},F_t^l))) \<br>Q^{l+1,v’}&amp;&#x3D;\gamma\cdot Softmax((Q^{l+1,v}\times Q^{l+1,f^T})\times Q^{l+1,f}+(1-\gamma)\cdot Q^{l+1,v})<br>\end{align}<br>$$<br>其中 decoder block 参考了 Mask2Former。</p>
+<hr>
+<h4 id="个人看法"><a href="#个人看法" class="headerlink" title="个人看法"></a>个人看法</h4><p>论文里有部分没有理解的地方，在流程图里，传给 decoder 的是多帧图像提取出的特征，但是在文章内容里，并没有说这是怎么用的，不确定是我没理解还是论文就是没讲。</p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>技术积累</category>
+        <category>论文笔记</category>
+      </categories>
+      <tags>
+        <tag>论文笔记</tag>
+        <tag>LLM</tag>
+        <tag>Video_Segmentation</tag>
+      </tags>
+  </entry>
 </search>
