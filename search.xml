@@ -1,6 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>DDPM</title>
+    <url>/posts/f0775513/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> Denoising Diffusion Probabilistic Models<br><strong>链接：</strong> <a href="https://arxiv.org/format/2006.11239">https://arxiv.org/format/2006.11239</a><br><strong>代码：</strong> <a href="https://github.com/hojonathanho/diffusion">https://github.com/hojonathanho/diffusion</a><br><strong>来源：</strong> NIPS 2020<br><strong>单位：</strong> UC Berkeley</p>
+<hr>
+<h4 id="模型总览"><a href="#模型总览" class="headerlink" title="模型总览"></a>模型总览</h4><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%25E6%2588%25AA%25E5%25B1%258F2023-08-11%252017.10.55.png" alt="截屏2023-08-11 17.10.55.png"></p>
+<p>DDPM 模型主要分为两个过程：forward 加噪过程（从右往左）和 reverse 去噪过程（从左往右）。加噪过程意思是指向数据集的真实图片中逐步加入高斯噪声，而去噪过程是指对加了噪声的图片逐步去噪，从而还原出真实图片。加噪过程满足一定的数学规律，而去噪过程则采用神经网络来学习。这么一来，神经网络就可以从一堆杂乱无章的噪声图片中生成真实图片了。</p>
+<hr>
+<h4 id="Diffusion-扩散过程（Forward-加噪过程）"><a href="#Diffusion-扩散过程（Forward-加噪过程）" class="headerlink" title="Diffusion 扩散过程（Forward 加噪过程）"></a>Diffusion 扩散过程（Forward 加噪过程）</h4><h5 id="数学基础"><a href="#数学基础" class="headerlink" title="数学基础"></a>数学基础</h5><h6 id="马尔可夫性质"><a href="#马尔可夫性质" class="headerlink" title="马尔可夫性质"></a>马尔可夫性质</h6><p>马尔可夫性质是概率论中的一个概念，因为俄国数学家安德雷·马尔可夫得名。当一个随机过程在给定现在状态及所有过去状态情况下，其未来状态的条件概率分布仅依赖于当前状态；换句话说，在给定现在状态时，它与过去状态（即该过程的历史路径）是条件独立的，那么此随机过程即具有马尔可夫性质。具有马尔可夫性质的过程通常称之为马尔可夫过程。</p>
+<h6 id="高斯分布的独立可加性"><a href="#高斯分布的独立可加性" class="headerlink" title="高斯分布的独立可加性"></a>高斯分布的独立可加性</h6><p>若：</p>
+
+$$
+\begin{align}
+X &\sim N(\mu_X,\sigma_X^2) \\
+Y &\sim N(\mu_Y,\sigma_Y^2) \\
+Z &= X+Y
+\end{align}
+$$
+
+<p>则：<br>$$<br>\begin{align}<br>Z&amp;\sim N(\mu_X+\mu_Y,\sigma_X^2+\sigma_Y^2)<br>\end{align}<br>$$</p>
+<h5 id="逐步加噪过程"><a href="#逐步加噪过程" class="headerlink" title="逐步加噪过程"></a>逐步加噪过程</h5><p>向数据分布中逐渐加入高斯噪声，加噪过程持续​ $T$ 次，产生一系列带噪声的图片 $x_1,…,x_T$。在由 $x_{t-1}$ 加噪至 $x_t$ 的过程中，噪声的标准差/方差是以一个在区间 $(0,1)$ 内的固定值 $\beta_T$ 来确定的，均值是以固定值 $\beta_T$ 和当前时刻的图片数据 $x_{t-1}$ 来确定的。<br>以上描述的加噪过程可以写成公式：</p>
+
+$$
+\begin{align}
+q(x_t|x_{t-1})&=\mathcal{N}(x_t;\sqrt{1-\beta_t}x_{t-1},\beta_t\mathbf{I}) \\
+q(x_{1:T}|x_0)&=\prod_{t=1}^Tq(x_t|x_{t-1}) 
+\end{align}
+$$
+
+<p>这个噪声只由 $\beta_T$ 和 $x_{t-1}$ 决定，是一个固定值，而非可学习过程。因此，只要有了 $x_0$，并且提前确定每一步的固定值 $\beta_1,…,\beta_T$，就可以推出任意一步的加噪数据 $x_1,…,x_T$。整个加噪过程是一个马尔可夫过程。</p>
+<h5 id="加噪结果"><a href="#加噪结果" class="headerlink" title="加噪结果"></a>加噪结果</h5><p>随着​ $t$ 的不断增大，最终原始数据​ $x_0$ 会逐步失去它的特征。最终当 $T\rightarrow\infty$ ​时，$x_T$ 趋近于一个各向独立的高斯分布。从视觉上来看，就是将原本一张完好的照片加噪很多步后，图片几乎变成了一张完全是噪声的图片。</p>
+<h5 id="任意时刻数据-x-t-的计算"><a href="#任意时刻数据-x-t-的计算" class="headerlink" title="任意时刻数据 $x_t$ 的计算"></a>任意时刻数据 $x_t$ 的计算</h5><p>在逐步加噪的过程中，其实并不需要一步一步地从 $x_0,x_1,…$ 去迭代得到 $x_t$，可以直接从 $x_0$ 和固定序列值 $\{\beta_T\in(0,1)\}_{t=1}^T$ 计算得到。</p>
+
+$$
+\begin{align}
+x_t&=\sqrt{1-\beta_t}x_{t-1}+\sqrt{\beta_t}z_1,&where\ z_1,z_2,\ldots,\sim\mathcal{N}(0,\mathbf{I}) \\
+&=\sqrt{\alpha_t}x_{t-1}+\sqrt{1-\alpha_t}z_1\\
+&=\sqrt{\alpha_t}(\sqrt{\alpha_{t-1}}x_{t-2}+\sqrt{1-\alpha_{t-1}}z_2)+\sqrt{1-\alpha_t}z_1\\
+&=\sqrt{\alpha_t\alpha_{t-1}}x_{t-2}+\sqrt{\alpha_t}\sqrt{1-\alpha_{t-1}}z_2+\sqrt{1-\alpha_t}z_1\\
+&=\sqrt{\alpha_t\alpha_{t-1}}x_{t-2}+\sqrt{1-a_ta_{t-1}}\overline{z_2},&\overline{z_2}\sim \mathcal{N}(0,\mathbf{I})\\
+&=\ldots\\
+&=\sqrt{\alpha_t\alpha_{t-1}\ldots\alpha_1}x_0+\sqrt{1-a_ta_{t-1}\ldots\alpha_1}\overline{z_t}\\
+&=\sqrt{\overline{\alpha_t}}x_0+\sqrt{1-\overline{\alpha_t}}\cdot\overline{z_t}
+\end{align}
+$$
+
+<p>由上式可得：</p>
+
+$$
+q(x_t|x_0)=\mathcal{N}(x_t;\sqrt{\overline{\alpha_t}}x_0,(1-\overline{\alpha_t})\mathbf{I})
+$$
+
+<p>由此公式可以看出，只要有了 $x_0$ 和固定值序列 $\{\beta_T\in(0,1)\}_{t=1} ^T$ ，再从标准分布 $N(0,1)$ 采样出一个 $z$，就可以直接计算出 $x_t$ 了。</p>
+<p>在最终的等式中，$x_t=\sqrt{\overline{a_t}}x_0+\sqrt{1-\overline{a_t}}\cdot \overline{z_t}$，其中 $\overline{a_t}=\prod_{i=1}^T\alpha_i$ 在 $T$ 次连乘之后接近于 0。因此 $x_t$ 接近于 $0\times x_0+\sqrt{1-0}\overline{z_t}=\overline{z_t}$，即：$\mathcal{N}(0,\mathbf{I})$ 的正态分布。</p>
+<h5 id="beta-t-的取值设置"><a href="#beta-t-的取值设置" class="headerlink" title="$\beta_t$ 的取值设置"></a>$\beta_t$ 的取值设置</h5><p>一般地，随着​ $t$ 的增大，数据越接近随机的高斯分布，$\beta_t$ 的取值就越大。所以 $\beta_1&lt;\beta_2&lt;\ldots&lt;\beta_T$。同时，由于 $\{\beta_T\in(0,1)\}_{t=1}^T$，即 $\beta_1,\beta_2,\ldots,\beta_T$ 的取值区间在 $(0,1)$ 内，因此 $\alpha_1,\alpha_2,\ldots,\alpha_T$ 的取值也在 $(0,1)$ 内。所以，$\overline{\alpha_1}&gt;\overline{\alpha_2}&gt;\ldots&gt;\overline{\alpha_T}$。</p>
+<hr>
+<h4 id="Reverse-Diffusion-逆扩散过程（Reverse-去噪过程）"><a href="#Reverse-Diffusion-逆扩散过程（Reverse-去噪过程）" class="headerlink" title="Reverse Diffusion 逆扩散过程（Reverse 去噪过程）"></a>Reverse Diffusion 逆扩散过程（Reverse 去噪过程）</h4><h5 id="数学基础-1"><a href="#数学基础-1" class="headerlink" title="数学基础"></a>数学基础</h5><h6 id="贝叶斯公式"><a href="#贝叶斯公式" class="headerlink" title="贝叶斯公式"></a>贝叶斯公式</h6><p>用来描述两个条件概率之间的关系。按照乘法法则：<br>$$<br>P(A\cap B)=P(A)\times P(B|A)=P(B)\times P(A|B)<br>$$<br>变形可得：<br>$$<br>P(A|B)=P(A)\times P(B|A)/P(B)<br>$$</p>
+<h5 id="后验扩散条件概率-q-x-t-1-x-t-x-0"><a href="#后验扩散条件概率-q-x-t-1-x-t-x-0" class="headerlink" title="后验扩散条件概率 $q(x_{t-1}|x_t,x_0)$"></a>后验扩散条件概率 $q(x_{t-1}|x_t,x_0)$</h5><p>在逆扩散过程中，如果给定了 $x_t$ 和 $x_0$，就可以计算出 $x_{t-1}$，即后验条件概率 $q(x_{t-1}|x_t,x_0)$ 是可以计算的：</p>
+
+$$
+\begin{align}
+q(x_{t-1}|x_t,x_0)&=q(x_t|x_{t-1},x_0)\frac{q(x_{t-1}|x_0)}{q(x_t|x_0)}
+\end{align}
+$$
+
+<p>由正向加噪过程可知：</p>
+
+$$
+\begin{align}
+q(x_t|x_{t-1},x_0)&=\sqrt{\alpha_t}x_{t-1}+\sqrt{1-\alpha_t}z_1&～\mathcal{N}(\sqrt{\alpha_t}x_{t-1},1-\alpha_t) \\
+q(x_{t-1}|x_0)&=\sqrt{\overline{\alpha_{t-1}}}x_0+\sqrt{1-\overline{\alpha_{t-1}}}\cdot\overline{z_{t-1}}&～\mathcal{N}(\sqrt{\overline{\alpha_{t-1}}}x_0,1-\overline{\alpha_{t-1}}) \\
+q(x_t|x_0)&=\sqrt{\overline{\alpha_t}}x_0+\sqrt{1-\overline{\alpha_t}}\cdot\overline{z_{t-1}}&～\mathcal{N}(\sqrt{\overline{\alpha_t}}x_0,1-\overline{\alpha_t})
+\end{align}
+$$
+
+<p>正态分布可以表示为：$N(\mu, \sigma ^2)\propto\exp(-\frac{(x-\mu)^2}{2\sigma ^2})$<br>推导可知：</p>
+
+$$
+\begin{align}
+q(x_{t-1}|x_t,x_0)&\propto \exp(-\frac{1}{2}(\frac{(x_t-\sqrt{\alpha_t}x_{t-1})^2}{\beta_t}+\frac{(x_{t-1}-\sqrt{\overline{\alpha_{t-1}}}x_0)^2}{1-\overline{\alpha_{t-1}}}-\frac{(x_t-\sqrt{\overline{\alpha_t}}x_0)^2}{1-\overline{\alpha_t}})) \\
+&\propto \exp(-\frac{1}{2}((\frac{\alpha_t}{\beta_t}+\frac{1}{1-\overline{\alpha_{t-1}}})x_{t-1}^2-(\frac{2\sqrt{\alpha_t}x_t}{\beta_t}+\frac{2\sqrt{\overline{\alpha_{t-1}}}x_0}{1-\overline{\alpha_{t-1}}})x_{t-1}+C(x_t,x_0)))
+\end{align}
+$$
+
+<p>对比正态分布公式，可以推出：</p>
+
+$$
+\begin{align}
+\sigma^2&=\frac{1}{\frac{\alpha_t}{\beta_t}+\frac{1}{1-\overline{\alpha_{t-1}}}}=\frac{1-\overline{\alpha_{t-1}}}{1-\overline{\alpha_t}}\beta_t \\
+\mu&=(\frac{\sqrt{\alpha_t}x_t}{\beta_t}+\frac{\sqrt{\overline{\alpha_{t-1}}}x_0}{1-\overline{\alpha_{t-1}}})\cdot \frac{1}{\frac{\alpha_t}{\beta_t}+\frac{1}{1-\overline{\alpha_{t-1}}}}=\frac{(1-\overline{\alpha_{t-1}})\sqrt{\alpha_t}}{1-\overline{\alpha_t}}x_t+\frac{\sqrt{\overline{\alpha_{t-1}}}\beta_t}{1-\overline{\alpha_t}}x_0
+\end{align}
+$$
+
+<p>把 $x_0$ 用 $x_t$ 替换掉可得：</p>
+
+$$
+\begin{align}
+\mu&=\frac{(1-\overline{\alpha_{t-1}})\sqrt{\alpha_t}}{1-\overline{\alpha_t}}x_t+\frac{\sqrt{\overline{\alpha_{t-1}}}\beta_t}{1-\overline{\alpha_t}}x_0 \\
+&=\frac{(1-\overline{\alpha_{t-1}})\sqrt{\alpha_t}}{1-\overline{\alpha_t}}x_t+\frac{\sqrt{\overline{\alpha_{t-1}}}\beta_t}{1-\overline{\alpha_t}}\cdot \frac{x_t-\sqrt{1-\overline{\alpha_t}}\cdot \overline{z_t}}{\sqrt{\overline{\alpha_t}}}\\
+&=\frac{1}{\sqrt{\alpha_t}}(x_t-\frac{\beta_t}{\sqrt{1-\overline{\alpha_t}}}\cdot \overline{z_t})
+\end{align}
+$$
+
+<p>这里可以看出想要推导出前一张图只有 $\overline{z_t}$ 是未知的，所以只要用网络预测出这个 $\overline{z_t}$ 就可以了。</p>
+<hr>
+<h4 id="个人理解"><a href="#个人理解" class="headerlink" title="个人理解"></a>个人理解</h4><p>直观上 diffusion model 是个比较好理解的模型，向图像中一步步加噪使图像变成一个完全的随机噪声，反过来，只要预测出每一步加入的噪声，就可以得到原始的图像。只不过论文中用了复杂的公式给这一过程进行了严密的论证，论证了只需要预测出噪声就可以一步步推导出上一步的图像，也论证了仅用加入的噪声作为监督信息就可以预测出原始图像。</p>
+<p>从代码里也可以看出 diffusion model 的实现非常简洁：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Diffusion</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, noise_steps=<span class="number">1000</span>, beta_start=<span class="number">1e-4</span>, beta_end=<span class="number">0.02</span>, img_size=<span class="number">256</span>, device=<span class="string">&quot;cuda&quot;</span></span>):</span><br><span class="line">        <span class="variable language_">self</span>.noise_steps = noise_steps</span><br><span class="line">        <span class="variable language_">self</span>.beta_start = beta_start</span><br><span class="line">        <span class="variable language_">self</span>.beta_end = beta_end</span><br><span class="line">        <span class="variable language_">self</span>.img_size = img_size</span><br><span class="line">        <span class="variable language_">self</span>.device = device</span><br><span class="line">        </span><br><span class="line">        <span class="variable language_">self</span>.beta = <span class="variable language_">self</span>.prepare_noise_schedule().to(device)</span><br><span class="line">        <span class="variable language_">self</span>.alpha = <span class="number">1.</span> - <span class="variable language_">self</span>.beta</span><br><span class="line">        <span class="variable language_">self</span>.alpha_hat = torch.cumprod(<span class="variable language_">self</span>.alpha, dim=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 用于计算每一步加入噪声的强弱，这里采用了一个线性增加的方式</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">prepare_noise_schedule</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> torch.linspace(<span class="variable language_">self</span>.beta_start, <span class="variable language_">self</span>.beta_end, <span class="variable language_">self</span>.noise_steps)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 计算加噪后的图像，由原始图像，噪声以及加噪比例决定</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">noise_images</span>(<span class="params">self, x, t</span>):</span><br><span class="line">        sqrt_alpha_hat = torch.sqrt(<span class="variable language_">self</span>.alpha_hat[t])[:, <span class="literal">None</span>, <span class="literal">None</span>, <span class="literal">None</span>]</span><br><span class="line">        sqrt_one_minus_alpha_hat = torch.sqrt(<span class="number">1</span> - <span class="variable language_">self</span>.alpha_hat[t])[:, <span class="literal">None</span>, <span class="literal">None</span>, <span class="literal">None</span>]</span><br><span class="line">        Ɛ = torch.randn_like(x)</span><br><span class="line">        <span class="keyword">return</span> sqrt_alpha_hat * x + sqrt_one_minus_alpha_hat * Ɛ, Ɛ</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">sample_timesteps</span>(<span class="params">self, n</span>):</span><br><span class="line">        <span class="keyword">return</span> torch.randint(low=<span class="number">1</span>, high=<span class="variable language_">self</span>.noise_steps, size=(n,))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 根据推导的逆扩散过程的公式逐步推出上一张图</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">sample</span>(<span class="params">self, model, n</span>):</span><br><span class="line">        logging.info(<span class="string">f&quot;Sampling <span class="subst">&#123;n&#125;</span> new images....&quot;</span>)</span><br><span class="line">        model.<span class="built_in">eval</span>()</span><br><span class="line">        <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">            x = torch.randn((n, <span class="number">3</span>, <span class="variable language_">self</span>.img_size, <span class="variable language_">self</span>.img_size)).to(<span class="variable language_">self</span>.device)</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> tqdm(<span class="built_in">reversed</span>(<span class="built_in">range</span>(<span class="number">1</span>, <span class="variable language_">self</span>.noise_steps)), position=<span class="number">0</span>):</span><br><span class="line">                t = (torch.ones(n) * i).long().to(<span class="variable language_">self</span>.device)</span><br><span class="line">                predicted_noise = model(x, t)</span><br><span class="line">                alpha = <span class="variable language_">self</span>.alpha[t][:, <span class="literal">None</span>, <span class="literal">None</span>, <span class="literal">None</span>]</span><br><span class="line">                alpha_hat = <span class="variable language_">self</span>.alpha_hat[t][:, <span class="literal">None</span>, <span class="literal">None</span>, <span class="literal">None</span>]</span><br><span class="line">                beta = <span class="variable language_">self</span>.beta[t][:, <span class="literal">None</span>, <span class="literal">None</span>, <span class="literal">None</span>]</span><br><span class="line">                <span class="keyword">if</span> i &gt; <span class="number">1</span>:</span><br><span class="line">                    noise = torch.randn_like(x)</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    noise = torch.zeros_like(x)</span><br><span class="line">                x = <span class="number">1</span> / torch.sqrt(alpha) * (x - ((<span class="number">1</span> - alpha) / (torch.sqrt(<span class="number">1</span> - alpha_hat))) * predicted_noise) + torch.sqrt(beta) * noise</span><br><span class="line">        model.train()</span><br><span class="line">        x = (x.clamp(-<span class="number">1</span>, <span class="number">1</span>) + <span class="number">1</span>) / <span class="number">2</span></span><br><span class="line">        x = (x * <span class="number">255</span>).<span class="built_in">type</span>(torch.uint8)</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">train</span>(<span class="params">args</span>):</span><br><span class="line">    setup_logging(args.run_name)</span><br><span class="line">    device = args.device</span><br><span class="line">    dataloader = get_data(args)</span><br><span class="line">    model = UNet().to(device)</span><br><span class="line">    optimizer = optim.AdamW(model.parameters(), lr=args.lr)</span><br><span class="line">    mse = nn.MSELoss()</span><br><span class="line">    diffusion = Diffusion(img_size=args.image_size, device=device)</span><br><span class="line">    logger = SummaryWriter(os.path.join(<span class="string">&quot;runs&quot;</span>, args.run_name))</span><br><span class="line">    l = <span class="built_in">len</span>(dataloader)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(args.epochs):</span><br><span class="line">        logging.info(<span class="string">f&quot;Starting epoch <span class="subst">&#123;epoch&#125;</span>:&quot;</span>)</span><br><span class="line">        pbar = tqdm(dataloader)</span><br><span class="line">        <span class="keyword">for</span> i, (images, _) <span class="keyword">in</span> <span class="built_in">enumerate</span>(pbar):</span><br><span class="line">            images = images.to(device)</span><br><span class="line">            t = diffusion.sample_timesteps(images.shape[<span class="number">0</span>]).to(device)</span><br><span class="line">            x_t, noise = diffusion.noise_images(images, t)</span><br><span class="line">            predicted_noise = model(x_t, t)</span><br><span class="line">            loss = mse(noise, predicted_noise)</span><br><span class="line"></span><br><span class="line">            optimizer.zero_grad()</span><br><span class="line">            loss.backward()</span><br><span class="line">            optimizer.step()</span><br><span class="line"></span><br><span class="line">            pbar.set_postfix(MSE=loss.item())</span><br><span class="line">            logger.add_scalar(<span class="string">&quot;MSE&quot;</span>, loss.item(), global_step=epoch * l + i)</span><br><span class="line"></span><br><span class="line">        sampled_images = diffusion.sample(model, n=images.shape[<span class="number">0</span>])</span><br><span class="line">        save_images(sampled_images, os.path.join(<span class="string">&quot;results&quot;</span>, args.run_name, <span class="string">f&quot;<span class="subst">&#123;epoch&#125;</span>.jpg&quot;</span>))</span><br><span class="line">        torch.save(model.state_dict(), os.path.join(<span class="string">&quot;models&quot;</span>, args.run_name, <span class="string">f&quot;ckpt.pt&quot;</span>))</span><br></pre></td></tr></table></figure>
+
+<hr>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>技术积累</category>
+        <category>论文笔记</category>
+      </categories>
+      <tags>
+        <tag>论文笔记</tag>
+        <tag>Diffusion</tag>
+        <tag>Image_Generation</tag>
+        <tag>高引</tag>
+        <tag>NIPS2020</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>InstructSeg</title>
     <url>/posts/57e95ee9/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> InstructSeg: Unifying Instructed Visual Segmentation with Multi-modal Large Language Models<br><strong>链接：</strong> <a href="https://arxiv.org/pdf/2412.14006">https://arxiv.org/pdf/2412.14006</a><br><strong>代码：</strong> <a href="https://github.com/congvvc/InstructSeg">https://github.com/congvvc/InstructSeg</a><br><strong>来源：</strong> arxiv<br><strong>单位：</strong> Tsinghua Shenzhen International Graduate School, Tsinghua University；Meituan Inc.</p>
@@ -8,7 +131,16 @@
 <h4 id="本文目的"><a href="#本文目的" class="headerlink" title="本文目的"></a>本文目的</h4><p>为图像和视频的 referring segmentation 和 reasoning segmentation 设计一个统一的 end-to-end 框架。</p>
 <hr>
 <h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-12-26%2010.52.46.png" alt="截屏2024-12-26 10.52.46.png"></p>
-<h5 id="Object-aware-Video-Perceiver"><a href="#Object-aware-Video-Perceiver" class="headerlink" title="Object-aware Video Perceiver"></a>Object-aware Video Perceiver</h5><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-12-26%2011.04.35.png" alt="截屏2024-12-26 11.04.35.png"><br>该模块根据输入的待分割视频帧及文本信息，提取 query 特征：<br>$$<br>\begin{align}<br>f_r^t&amp;&#x3D;F_{CLIP}(I_r^t) \<br>Q_t&amp;&#x3D;CrossAttn(Q,Concat[F_p(f_r^t), \varepsilon])<br>\end{align}<br>$$<br>其中，$\varepsilon$ 是文本 token，$I_r^t$ 是每一帧的图像输入，$F_p$ 指对其图像及文本空间的投影模块，$Q_t$ 指每一帧的输出。</p>
+<h5 id="Object-aware-Video-Perceiver"><a href="#Object-aware-Video-Perceiver" class="headerlink" title="Object-aware Video Perceiver"></a>Object-aware Video Perceiver</h5><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-12-26%2011.04.35.png" alt="截屏2024-12-26 11.04.35.png"><br>该模块根据输入的待分割视频帧及文本信息，提取 query 特征： </p>
+
+$$
+\begin{align}
+f_r^t&=F_{CLIP}(I_r^t) \\
+Q_t&=CrossAttn(Q,Concat[F_p(f_r^t), \varepsilon])
+\end{align}
+$$
+
+<p>其中，$\varepsilon$ 是文本 token，$I_r^t$ 是每一帧的图像输入，$F_p$ 指对其图像及文本空间的投影模块，$Q_t$ 指每一帧的输出。</p>
 <h5 id="Vision-guided-Multi-granularity-Text-Fusion"><a href="#Vision-guided-Multi-granularity-Text-Fusion" class="headerlink" title="Vision-guided Multi-granularity Text Fusion"></a>Vision-guided Multi-granularity Text Fusion</h5><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-12-26%2013.28.24.png" alt="截屏2024-12-26 13.28.24.png"><br>LLM 输出的 detailed text embed 通过 global average pooling 得到 global text embed $E_g$。两部分 text embed 拼在一起作为 cross attention 的一个输入，图像中提取的图像特征与 global text embed 拼在一起作为 cross attention 的另一个输入，经过多轮 cross attention 与 FFN 后，生成 multi-grained text embed 作为输出。</p>
 <hr>
 <h4 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h4><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-12-26%2013.44.41.png" alt="截屏2024-12-26 13.44.41.png"><br><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-12-26%2013.46.04.png" alt="截屏2024-12-26 13.46.04.png"></p>
@@ -21,8 +153,8 @@
         <category>论文笔记</category>
       </categories>
       <tags>
-        <tag>论文笔记</tag>
         <tag>LLM</tag>
+        <tag>论文笔记</tag>
         <tag>Video_Segmentation</tag>
       </tags>
   </entry>
@@ -35,16 +167,31 @@
 <hr>
 <h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-12-25%2013.35.50.png" alt="截屏2024-12-25 13.35.50.png"></p>
 <h5 id="Encoders"><a href="#Encoders" class="headerlink" title="Encoders"></a>Encoders</h5><ul>
-<li>视觉编码器提取多尺度视觉特征 $F_t&#x3D;{F_t^l}_{l&#x3D;1}^L$；</li>
+<li>视觉编码器提取多尺度视觉特征 $F_t=\{F_t^l\}_{l=1}^L$；</li>
 <li>文本编码器以文本和 visual embedding $F_t^L$ 作为输入。</li>
 </ul>
-<h5 id="Context-Aggregation-Module"><a href="#Context-Aggregation-Module" class="headerlink" title="Context Aggregation Module"></a>Context Aggregation Module</h5><p>$$<br>\begin{align}<br>E_t&amp;&#x3D;FFN(CrossAttn(x_{txt}, F_t^L, F_t^L)) \<br>E_t^c&amp;&#x3D;Concat{E_t^i}_{i&#x3D;1}^K<br>\end{align}<br>$$</p>
+<h5 id="Context-Aggregation-Module"><a href="#Context-Aggregation-Module" class="headerlink" title="Context Aggregation Module"></a>Context Aggregation Module</h5>
+$$
+\begin{align}
+E_t&=FFN(CrossAttn(x_{txt}, F_t^L, F_t^L)) \\
+E_t^c&=Concat\{E_t^i\}_{i=1}^K
+\end{align}
+$$
+
 <h5 id="Multi-level-Segmentation-Tokens"><a href="#Multi-level-Segmentation-Tokens" class="headerlink" title="Multi-level Segmentation Tokens"></a>Multi-level Segmentation Tokens</h5><ul>
 <li>采用两个 segmentation token，一个是 frame level token，一个是 video level token；</li>
 <li>两个 token 与图像特征和文本特征一起输入 LLM；</li>
 <li>LLM 除了会生成文本输出，还会生成计算后的 segmentation token。</li>
 </ul>
-<h5 id="Video-Frame-Decoder"><a href="#Video-Frame-Decoder" class="headerlink" title="Video-Frame Decoder"></a>Video-Frame Decoder</h5><p>$$<br>\begin{align}<br>Q^{l+1,s}&amp;&#x3D;FFN^s(h_{SA}^s(h_{CA}^s(Q^{l,s},F_t^l))) \<br>Q^{l+1,v’}&amp;&#x3D;\gamma\cdot Softmax((Q^{l+1,v}\times Q^{l+1,f^T})\times Q^{l+1,f}+(1-\gamma)\cdot Q^{l+1,v})<br>\end{align}<br>$$<br>其中 decoder block 参考了 Mask2Former。</p>
+<h5 id="Video-Frame-Decoder"><a href="#Video-Frame-Decoder" class="headerlink" title="Video-Frame Decoder"></a>Video-Frame Decoder</h5>
+$$
+\begin{align}
+Q^{l+1,s}&=FFN^s(h_{SA}^s(h_{CA}^s(Q^{l,s},F_t^l))) \\
+Q^{l+1,v'}&=\gamma\cdot Softmax((Q^{l+1,v}\times Q^{l+1,f^T})\times Q^{l+1,f}+(1-\gamma)\cdot Q^{l+1,v}) 
+\end{align}
+$$
+
+<p>其中 decoder block 参考了 Mask2Former。</p>
 <hr>
 <h4 id="个人看法"><a href="#个人看法" class="headerlink" title="个人看法"></a>个人看法</h4><p>论文里有部分没有理解的地方，在流程图里，传给 decoder 的是多帧图像提取出的特征，但是在文章内容里，并没有说这是怎么用的，不确定是我没理解还是论文就是没讲。</p>
 <hr>
@@ -54,8 +201,8 @@
         <category>论文笔记</category>
       </categories>
       <tags>
-        <tag>论文笔记</tag>
         <tag>LLM</tag>
+        <tag>论文笔记</tag>
         <tag>Video_Segmentation</tag>
       </tags>
   </entry>
@@ -89,14 +236,14 @@
   <entry>
     <title>格雷编码</title>
     <url>/posts/662fe68c/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>n 位格雷码序列是一个由 2n 个整数组成的序列，其中：</p>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>n 位格雷码序列是一个由 2n 个整数组成的序列，其中：</p>
 <ul>
-<li>每个整数都在范围 [0, 2n - 1] 内（含 0 和 2n - 1）</li>
-<li>第一个整数是 0</li>
+<li>每个整数都在范围 [0, 2n - 1] 内（含 0 和 2n - 1）</li>
+<li>第一个整数是 0</li>
 <li>一个整数在序列中出现不超过一次</li>
 <li>每对相邻整数的二进制表示恰好一位不同，且第一个和最后一个整数的二进制表示恰好一位不同</li>
 </ul>
-<p>给你一个整数 n ，返回任一有效的 n 位格雷码序列。</p>
+<p>给你一个整数 n ，返回任一有效的 n 位格雷码序列。</p>
 <hr>
 <h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>一个找规律的题，n 位格雷编码可以由 n-1 位编码快速生成。其中前一半就是 n-1 位格雷编码，后一半由 n-1 位格雷编码倒排，且前面加 1 构成。</p>
 <hr>
@@ -171,8 +318,8 @@
         <category>论文笔记</category>
       </categories>
       <tags>
-        <tag>论文笔记</tag>
         <tag>LLM</tag>
+        <tag>论文笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -215,7 +362,7 @@
   <entry>
     <title>柱状图中最大的矩形</title>
     <url>/posts/7fcd667a/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>给定 n 个非负整数，用来表示柱状图中各个柱子的高度。每个柱子彼此相邻，且宽度为 1。<br>求在该柱状图中，能够勾勒出来的矩形的最大面积。</p>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>给定 n 个非负整数，用来表示柱状图中各个柱子的高度。每个柱子彼此相邻，且宽度为 1。<br>求在该柱状图中，能够勾勒出来的矩形的最大面积。</p>
 <hr>
 <h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>递增栈。当高度值逐渐增加就不断入栈，否则出栈并计算最大面积。</p>
 <hr>
@@ -250,10 +397,10 @@
       </categories>
       <tags>
         <tag>论文笔记</tag>
-        <tag>高引</tag>
         <tag>Diffusion</tag>
-        <tag>CVPR2022</tag>
         <tag>Image_Generation</tag>
+        <tag>高引</tag>
+        <tag>CVPR2022</tag>
       </tags>
   </entry>
   <entry>
@@ -279,11 +426,11 @@
 <li>当前大多数模型在处理视频时，会把视频帧看作互不关联的图像。Qwen2-vl 设计了 multimodal rotary position embedding 处理时空维度的信息。</li>
 </ul>
 <hr>
-<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><h5 id="模型尺寸"><a href="#模型尺寸" class="headerlink" title="模型尺寸"></a>模型尺寸</h5><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-12-18%2018.21.52.png"></p>
-<h5 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h5><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-12-18%2018.26.03.png"></p>
+<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><h5 id="模型尺寸"><a href="#模型尺寸" class="headerlink" title="模型尺寸"></a>模型尺寸</h5><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-12-18%2018.21.52.png" alt=""></p>
+<h5 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h5><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-12-18%2018.26.03.png" alt=""></p>
 <ul>
 <li>Naive Dynamic Resolution：采用 Navit 以及 2D-RoPE；</li>
-<li>M-RoPE：<img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-12-18%2018.53.00.png"></li>
+<li>M-RoPE：<img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-12-18%2018.53.00.png" alt=""></li>
 <li>Unified Image and Video Understanding：输入是单张图时，会把图像复制一份，看作一个 2 帧的视频，从而实现视频和图像的统一。第一层卷积会采用 3D 卷积，使模型可以提取视频三维特征。</li>
 </ul>
 <h5 id="模型训练"><a href="#模型训练" class="headerlink" title="模型训练"></a>模型训练</h5><p>分为三个阶段：</p>
@@ -299,8 +446,8 @@
         <category>论文笔记</category>
       </categories>
       <tags>
-        <tag>论文笔记</tag>
         <tag>LLM</tag>
+        <tag>论文笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -323,7 +470,7 @@
   <entry>
     <title>最小覆盖子串</title>
     <url>/posts/1c771f88/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>给你一个字符串 s、一个字符串 t。返回 s 中涵盖 t 所有字符的最小子串。如果 s 中不存在涵盖 t 所有字符的子串，则返回空字符串 “”。</p>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>给你一个字符串 s、一个字符串 t。返回 s 中涵盖 t 所有字符的最小子串。如果 s 中不存在涵盖 t 所有字符的子串，则返回空字符串 “”。</p>
 <hr>
 <h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>双指针，先把后一个指针逐渐向后搜索直到找到可以覆盖 t 的字符串，然后把前面的指针逐渐向后挪，直到两个指针中间的字符串无法覆盖 t。<br>另一个核心是如何判定字符串是否覆盖 t。可以采用 collections，当所有字符的计数小于等于 0 时，意味着覆盖了。</p>
 <hr>
@@ -343,7 +490,7 @@
   <entry>
     <title>矩阵置零</title>
     <url>/posts/18e1d79c/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>给定一个 m x n 的矩阵，如果一个元素为 0，则将其所在行和列的所有元素都设为 0。请使用原地算法。</p>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>给定一个 m x n 的矩阵，如果一个元素为 0，则将其所在行和列的所有元素都设为 0。请使用原地算法。</p>
 <hr>
 <h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>题目本身比较简单，但进阶要求里要求空间复杂度为 $O(1)$。这样就无法记录每一行每一列的状态，否则空间复杂度就是 $O(m+n)$。<br>思路是先把第一行和第一列是否包含 0 的状态用变量记录下来，然后用第一行和第一列的元素记录该行该列是否含 0，之后根据记录将对应的行或列设为 0，最后根据最开始的记录修改第一行第一列的值。</p>
 <hr>
@@ -362,7 +509,7 @@
   <entry>
     <title>编辑距离</title>
     <url>/posts/ca4861d0/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>给你两个单词 word1 和 word2，请返回将 word1 转换成 word2 所使用的最少操作数。</p>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>给你两个单词 word1 和 word2，请返回将 word1 转换成 word2 所使用的最少操作数。</p>
 <p>你可以对一个单词进行如下三种操作：</p>
 <ul>
 <li>插入一个字符</li>
@@ -434,16 +581,10 @@
         <category>论文笔记</category>
       </categories>
       <tags>
-        <tag>论文笔记</tag>
         <tag>LLM</tag>
+        <tag>论文笔记</tag>
         <tag>自动驾驶</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>第欧根尼变奏曲</title>
-    <url>/posts/5b376781/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="故事梗概"><a href="#故事梗概" class="headerlink" title="故事梗概"></a>故事梗概</h4><h5 id="窥伺蓝色的蓝"><a href="#窥伺蓝色的蓝" class="headerlink" title="窥伺蓝色的蓝"></a>窥伺蓝色的蓝</h5><p>待读</p>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
   </entry>
   <entry>
     <title>水母不会冻结</title>
@@ -495,6 +636,7 @@
 
 <hr>
 <h4 id="个人评价"><a href="#个人评价" class="headerlink" title="个人评价"></a>个人评价</h4><p>这本的大体框架我都挺喜欢的，不管是大梗还是多线叙事的架构都挺吸引我的。但是读下来整体感觉很碎，文笔不是最差的那种，但是也没啥优点，这么多人物看完都没留下很深刻的印象，不管是被害人、凶手还是侦探。</p>
+<hr>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
         <category>休闲娱乐</category>
@@ -511,7 +653,7 @@
   <entry>
     <title>接雨水</title>
     <url>/posts/66e39f70/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。</p>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。</p>
 <hr>
 <h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>动态规划，找到每个位置向左和向右的最大值，根据两个最大值及当前位置的高度，计算每个位置的水量，最后求和。</p>
 <hr>
@@ -531,7 +673,7 @@
   <entry>
     <title>缺失的第一个正数</title>
     <url>/posts/1cb194a8/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>给你一个未排序的整数数组 nums，请你找出其中没有出现的最小的正整数。<br>请你实现时间复杂度为 O(n) 并且只使用常数级别额外空间的解决方案。</p>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>给你一个未排序的整数数组 nums，请你找出其中没有出现的最小的正整数。<br>请你实现时间复杂度为 O(n) 并且只使用常数级别额外空间的解决方案。</p>
 <hr>
 <h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>从头开始遍历，如果当前值超过了数组长度范围，则跳过，否则不断与当前值对应下标上的数交换。交换结束后，如果某下标上的值与下标不符，则返回该结果。<br>需要注意重复元素的处理。</p>
 <hr>
@@ -697,6 +839,7 @@
 <hr>
 <h4 id="个人评价"><a href="#个人评价" class="headerlink" title="个人评价"></a>个人评价</h4><p>这本书整体靠每个人轮流提出推理并互相反驳推进，因此推理占了非常大的比例。同时，最后的反转比较出乎意料，虽然有癫癫的部分，但如果之前没想到还是比较震撼的。看完结局再回头看前文，也会发现作者埋了很多伏笔和暗示。</p>
 <p>个人不太喜欢的点是中间在不断抛出线索，甚至互相之间的反驳有时也是根据新提出的线索进行的。</p>
+<hr>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
         <category>休闲娱乐</category>
@@ -712,7 +855,7 @@
   <entry>
     <title>搜索旋转排序数组</title>
     <url>/posts/32377bdc/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>整数数组 nums 按升序排列，数组中的值互不相同。<br>在传递给函数之前，nums 在预先未知的某个下标 k（0 &lt;&#x3D; k &lt; nums.length）上进行了旋转，使数组变为 [nums[k], nums[k+1], …, nums[n-1], nums[0], nums[1], …, nums[k-1]]（下标从 0 开始计数）。例如，[0,1,2,4,5,6,7] 在下标 3 处经旋转后可能变为 [4,5,6,7,0,1,2]。<br>给你旋转后的数组 nums 和一个整数 target，如果 nums 中存在这个目标值 target，则返回它的下标，否则返回 -1。<br>你必须设计一个时间复杂度为 O(log n) 的算法解决此问题。</p>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>整数数组 nums 按升序排列，数组中的值互不相同。<br>在传递给函数之前，nums 在预先未知的某个下标 k（0 &lt;= k &lt; nums.length）上进行了旋转，使数组变为 [nums[k], nums[k+1], …, nums[n-1], nums[0], nums[1], …, nums[k-1]]（下标从 0 开始计数）。例如，[0,1,2,4,5,6,7] 在下标 3 处经旋转后可能变为 [4,5,6,7,0,1,2]。<br>给你旋转后的数组 nums 和一个整数 target，如果 nums 中存在这个目标值 target，则返回它的下标，否则返回 -1。<br>你必须设计一个时间复杂度为 O(log n) 的算法解决此问题。</p>
 <hr>
 <h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>二分法的变形，与普通二分法的区别是需要加入更复杂的判断条件。对于旋转数组，从中间分开后，有两种可能：</p>
 <ul>
@@ -737,7 +880,7 @@
   <entry>
     <title>串联所有单词的子串</title>
     <url>/posts/44658eea/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>给定一个字符串 s 和一个字符串数组 words。words 中所有字符串长度相同。<br>s 中的串联子串是指一个包含 words 中所有字符串以任意顺序排列连接起来的子串。<br>返回所有串联子串在 s 中的开始索引。你可以以任意顺序返回答案。</p>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>给定一个字符串 s 和一个字符串数组 words。words 中所有字符串长度相同。<br>s 中的串联子串是指一个包含 words 中所有字符串以任意顺序排列连接起来的子串。<br>返回所有串联子串在 s 中的开始索引。你可以以任意顺序返回答案。</p>
 <hr>
 <h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>利用所有字符串等长的特点，逐位置搜索。</p>
 <hr>
@@ -760,7 +903,7 @@
 <h5 id="Stages-of-building-and-using-LLMS"><a href="#Stages-of-building-and-using-LLMS" class="headerlink" title="Stages of building and using LLMS"></a>Stages of building and using LLMS</h5><p>目前的研究表明，模型在特定任务或特定领域上训练后可以表现出超过通用 LLM 的性能。因此 LLM 训练通常包括两步：</p>
 <ul>
 <li>Pretrain 指模型在大规模数据库上训练，使模型具有语言理解能力，这一阶段的数据是不需要标注的；</li>
-<li>Finetune 指模型在细分领域&#x2F;细分任务的数据上训练，目前比较常用的 finetune 方式包括两类：<ul>
+<li>Finetune 指模型在细分领域/细分任务的数据上训练，目前比较常用的 finetune 方式包括两类：<ul>
 <li>Instruction finetuning：标注数据由 instruction 和 answer 组成，例如：要求模型翻译某段话的 query 以及正确的翻译后的文本；</li>
 <li>Classification finetuning：标注数据由文本以及对应的类别组成，例如：邮件内容以及该邮件是否是垃圾邮件的标注。<br><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-26%2014.09.22.png" alt="截屏2024-11-26 14.09.22.png"></li>
 </ul>
@@ -802,7 +945,7 @@
 <hr>
 <h4 id="Pretraining-on-unlabeled-data"><a href="#Pretraining-on-unlabeled-data" class="headerlink" title="Pretraining on unlabeled data"></a>Pretraining on unlabeled data</h4><h5 id="Evaluating-generative-text-models"><a href="#Evaluating-generative-text-models" class="headerlink" title="Evaluating generative text models"></a>Evaluating generative text models</h5><ul>
 <li>采用 cross entropy loss；</li>
-<li>Perplexity 也被用来评估模型，该指标用 $perplexity&#x3D;torch.exp(loss)$ 计算，该指标的含义是模型认为有多少个可能且合理的备选，该指标越大，表示模型认为有更多可能的备选，模型不确定性越高。</li>
+<li>Perplexity 也被用来评估模型，该指标用 $perplexity=torch.exp(loss)$ 计算，该指标的含义是模型认为有多少个可能且合理的备选，该指标越大，表示模型认为有更多可能的备选，模型不确定性越高。</li>
 </ul>
 <h5 id="Training-an-LLM"><a href="#Training-an-LLM" class="headerlink" title="Training an LLM"></a>Training an LLM</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">train_model_simple</span>(<span class="params">model, train_loader, val_loader, </span></span><br><span class="line"><span class="params">                       optimizer, device, num_epochs, </span></span><br><span class="line"><span class="params">                       eval_freq, eval_iter, start_context, tokenizer</span>):</span><br><span class="line">    train_losses, val_losses, track_tokens_seen = [], [], []</span><br><span class="line">    tokens_seen, global_step = <span class="number">0</span>, -<span class="number">1</span> </span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(num_epochs): </span><br><span class="line">        model.train() </span><br><span class="line">        <span class="keyword">for</span> input_batch, target_batch <span class="keyword">in</span> train_loader:</span><br><span class="line">            optimizer.zero_grad() </span><br><span class="line">            loss = calc_loss_batch( </span><br><span class="line">                input_batch, target_batch, model, device </span><br><span class="line">            ) </span><br><span class="line">            loss.backward() </span><br><span class="line">            optimizer.step() </span><br><span class="line">            tokens_seen += input_batch.numel() </span><br><span class="line">            global_step += <span class="number">1</span> </span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> global_step % eval_freq == <span class="number">0</span>: </span><br><span class="line">                train_loss, val_loss = evaluate_model( </span><br><span class="line">                    model, train_loader, val_loader, device, eval_iter)</span><br><span class="line">                train_losses.append(train_loss)</span><br><span class="line">                val_losses.append(val_loss)</span><br><span class="line">                track_tokens_seen.append(tokens_seen) </span><br><span class="line">                <span class="built_in">print</span>(<span class="string">f&quot;Ep <span class="subst">&#123;epoch+<span class="number">1</span>&#125;</span> (Step <span class="subst">&#123;global_step:06d&#125;</span>): &quot;</span> </span><br><span class="line">                      <span class="string">f&quot;Train loss <span class="subst">&#123;train_loss:<span class="number">.3</span>f&#125;</span>, &quot;</span> </span><br><span class="line">                      <span class="string">f&quot;Val loss <span class="subst">&#123;val_loss:<span class="number">.3</span>f&#125;</span>&quot;</span> </span><br><span class="line">                )</span><br><span class="line">        generate_and_print_sample( </span><br><span class="line">            model, tokenizer, device, start_context </span><br><span class="line">        ) </span><br><span class="line">    <span class="keyword">return</span> train_losses, val_losses, track_tokens_seen</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">calc_loss_batch</span>(<span class="params">input_batch, target_batch, model, device</span>):</span><br><span class="line">    input_batch = input_batch.to(device) </span><br><span class="line">    target_batch = target_batch.to(device) </span><br><span class="line">    logits = model(input_batch) </span><br><span class="line">    loss = torch.nn.functional.cross_entropy( </span><br><span class="line">        logits.flatten(<span class="number">0</span>, <span class="number">1</span>), target_batch.flatten() </span><br><span class="line">    ) </span><br><span class="line">    <span class="keyword">return</span> loss</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">calc_loss_loader</span>(<span class="params">data_loader, model, device, num_batches=<span class="literal">None</span></span>):</span><br><span class="line">    total_loss = <span class="number">0.</span> </span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(data_loader) == <span class="number">0</span>: </span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">float</span>(<span class="string">&quot;nan&quot;</span>) </span><br><span class="line">    <span class="keyword">elif</span> num_batches <span class="keyword">is</span> <span class="literal">None</span>: </span><br><span class="line">        num_batches = <span class="built_in">len</span>(data_loader) </span><br><span class="line">    <span class="keyword">else</span>: </span><br><span class="line">        num_batches = <span class="built_in">min</span>(num_batches, <span class="built_in">len</span>(data_loader)) </span><br><span class="line">    <span class="keyword">for</span> i, (input_batch, target_batch) <span class="keyword">in</span> <span class="built_in">enumerate</span>(data_loader): </span><br><span class="line">        <span class="keyword">if</span> i &lt; num_batches: </span><br><span class="line">            loss = calc_loss_batch( </span><br><span class="line">                input_batch, target_batch, model, device </span><br><span class="line">            ) </span><br><span class="line">            total_loss += loss.item() </span><br><span class="line">        <span class="keyword">else</span>: </span><br><span class="line">            <span class="keyword">break</span> </span><br><span class="line">    <span class="keyword">return</span> total_loss / num_batches</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">evaluate_model</span>(<span class="params">model, train_loader, val_loader, device, eval_iter</span>):</span><br><span class="line">    model.<span class="built_in">eval</span>() </span><br><span class="line">    <span class="keyword">with</span> torch.no_grad(): </span><br><span class="line">        train_loss = calc_loss_loader( </span><br><span class="line">            train_loader, model, device, num_batches=eval_iter</span><br><span class="line">        ) </span><br><span class="line">        val_loss = calc_loss_loader( </span><br><span class="line">            val_loader, model, device, num_batches=eval_iter </span><br><span class="line">        ) </span><br><span class="line">    model.train() </span><br><span class="line">    <span class="keyword">return</span> train_loss, val_loss</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">generate_and_print_sample</span>(<span class="params">model, tokenizer, device, start_context</span>):</span><br><span class="line">    model.<span class="built_in">eval</span>() </span><br><span class="line">    context_size = model.pos_emb.weight.shape[<span class="number">0</span>] </span><br><span class="line">    encoded = text_to_token_ids(start_context, tokenizer).to(device)</span><br><span class="line">    <span class="keyword">with</span> torch.no_grad(): </span><br><span class="line">        token_ids = generate_text_simple( </span><br><span class="line">            model=model, idx=encoded, </span><br><span class="line">            max_new_tokens=<span class="number">50</span>, context_size=context_size </span><br><span class="line">        ) </span><br><span class="line">    decoded_text = token_ids_to_text(token_ids, tokenizer)</span><br><span class="line">    <span class="built_in">print</span>(decoded_text.replace(<span class="string">&quot;\n&quot;</span>, <span class="string">&quot; &quot;</span>)) </span><br><span class="line">    model.train()</span><br></pre></td></tr></table></figure>
 
@@ -826,8 +969,8 @@
         <category>读书笔记</category>
       </categories>
       <tags>
-        <tag>LLM</tag>
         <tag>读书笔记</tag>
+        <tag>LLM</tag>
       </tags>
   </entry>
   <entry>
@@ -904,6 +1047,7 @@
 <hr>
 <h4 id="个人评价"><a href="#个人评价" class="headerlink" title="个人评价"></a>个人评价</h4><p>很有趣的侦探形象，通常侦探是负责证明奇迹不存在的，然而这本书的侦探希望否定所有可能性以证明奇迹存在。故事的发展就是不断由其他人提出可能性，侦探对这些可能一一进行否定推动。在这样的设定里，提出可能性的人不需要证明这种可能性是真实存在的，只要有可能性就算成功，所以很多解答看起来非常牵强。个人最喜欢的环节是否定之否定那里，最初看到的时候非常震撼。</p>
 <p>比较明显的缺点应该是文风，文风和人物形象都过于轻小说化，个人不是很喜欢。</p>
+<hr>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
         <category>休闲娱乐</category>
@@ -938,11 +1082,11 @@
         <category>论文笔记</category>
       </categories>
       <tags>
-        <tag>论文笔记</tag>
         <tag>LLM</tag>
-        <tag>ACL2022</tag>
-        <tag>finetune</tag>
+        <tag>论文笔记</tag>
         <tag>高引</tag>
+        <tag>finetune</tag>
+        <tag>ACL2022</tag>
       </tags>
   </entry>
   <entry>
@@ -960,10 +1104,10 @@
         <category>论文笔记</category>
       </categories>
       <tags>
-        <tag>论文笔记</tag>
         <tag>LLM</tag>
-        <tag>finetune</tag>
+        <tag>论文笔记</tag>
         <tag>高引</tag>
+        <tag>finetune</tag>
         <tag>AI_Open2024</tag>
       </tags>
   </entry>
@@ -978,7 +1122,7 @@
 <li>Optimizing prompt 难以训练，且保留一部分 prompt 会导致下游任务可用的 prompt 长度变小，从而影响模型整体性能。</li>
 </ul>
 <hr>
-<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p>假设在 finetune 过程中权重矩阵的变化量是低秩的，即：$W_0+\Delta W&#x3D;W_0+BA$，其中：$B\in \mathbb{R}^{d\times r}$，$A\in \mathbb{R}^{r\times k}$ 且 $r\ll \min(d, k)$。训练过程中 $W_0$ 保持不变，仅更新 $A$ 和 $B$。</p>
+<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p>假设在 finetune 过程中权重矩阵的变化量是低秩的，即：$W_0+\Delta W=W_0+BA$，其中：$B\in \mathbb{R}^{d\times r}$，$A\in \mathbb{R}^{r\times k}$ 且 $r\ll \min(d, k)$。训练过程中 $W_0$ 保持不变，仅更新 $A$ 和 $B$。</p>
 <hr>
 <h4 id="LoRA-的优势"><a href="#LoRA-的优势" class="headerlink" title="LoRA 的优势"></a>LoRA 的优势</h4><ul>
 <li>方法灵活，可以根据需要调整 $r$，当逐渐增大 $r$ 时，LoRA 会逐渐接近 finetune 所有参数；</li>
@@ -991,11 +1135,11 @@
         <category>论文笔记</category>
       </categories>
       <tags>
-        <tag>论文笔记</tag>
         <tag>LLM</tag>
+        <tag>论文笔记</tag>
+        <tag>高引</tag>
         <tag>ICLR2022</tag>
         <tag>finetune</tag>
-        <tag>高引</tag>
       </tags>
   </entry>
   <entry>

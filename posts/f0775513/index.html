@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"cornfield404.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.21.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="题目： Denoising Diffusion Probabilistic Models链接： https:&#x2F;&#x2F;arxiv.org&#x2F;format&#x2F;2006.11239代码： https:&#x2F;&#x2F;github.com&#x2F;hojonathanho&#x2F;diffusion来源： NIPS 2020单位： UC Berkeley  模型总览">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DDPM">
+<meta property="og:url" content="https://cornfield404.github.io/posts/f0775513/index.html">
+<meta property="og:site_name" content="Corn Field">
+<meta property="og:description" content="题目： Denoising Diffusion Probabilistic Models链接： https:&#x2F;&#x2F;arxiv.org&#x2F;format&#x2F;2006.11239代码： https:&#x2F;&#x2F;github.com&#x2F;hojonathanho&#x2F;diffusion来源： NIPS 2020单位： UC Berkeley  模型总览">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%25E6%2588%25AA%25E5%25B1%258F2023-08-11%252017.10.55.png">
+<meta property="article:published_time" content="2024-12-26T10:35:25.000Z">
+<meta property="article:modified_time" content="2024-12-27T05:14:18.080Z">
+<meta property="article:author" content="Corn">
+<meta property="article:tag" content="论文笔记">
+<meta property="article:tag" content="Diffusion">
+<meta property="article:tag" content="Image_Generation">
+<meta property="article:tag" content="高引">
+<meta property="article:tag" content="NIPS2020">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%25E6%2588%25AA%25E5%25B1%258F2023-08-11%252017.10.55.png">
+
+
+<link rel="canonical" href="https://cornfield404.github.io/posts/f0775513/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://cornfield404.github.io/posts/f0775513/","path":"posts/f0775513/","title":"DDPM"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>DDPM | Corn Field</title>
+  
+
+
+
+
+
+
+
+<link rel="dns-prefetch" href="hexowaline-ten.vercel.app">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Corn Field</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-技术积累"><a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/" rel="section"><i class="fa fa-book fa-fw"></i>技术积累</a></li><li class="menu-item menu-item-休闲娱乐"><a href="/categories/%E4%BC%91%E9%97%B2%E5%A8%B1%E4%B9%90/" rel="section"><i class="fa fa-film fa-fw"></i>休闲娱乐</a></li><li class="menu-item menu-item-生活琐事"><a href="/categories/%E7%94%9F%E6%B4%BB%E7%90%90%E4%BA%8B/" rel="section"><i class="fa fa-camera fa-fw"></i>生活琐事</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-random"><a href="/random.html" rel="section"><i class="fas fa-random fa-fw"></i>随便逛逛</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <!--网易云音乐插件-->
+    <!-- require APlayer -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+    <!-- require MetingJS-->
+    <script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script> 
+    <!--网易云playlist外链地址-->   
+    <meting-js
+        server="netease"
+        type="playlist" 
+        id="12848243996"
+        mini="false"
+        fixed="false"
+        list-folded="true"
+        autoplay="false"
+        volume="0.7"
+        theme="#FADFA3"
+        order="list"
+        loop="all"
+        preload="auto"
+        mutex="true">
+    </meting-js>
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E6%80%BB%E8%A7%88"><span class="nav-number">1.</span> <span class="nav-text">模型总览</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Diffusion-%E6%89%A9%E6%95%A3%E8%BF%87%E7%A8%8B%EF%BC%88Forward-%E5%8A%A0%E5%99%AA%E8%BF%87%E7%A8%8B%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">Diffusion 扩散过程（Forward 加噪过程）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80"><span class="nav-number">2.1.</span> <span class="nav-text">数学基础</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%80%A7%E8%B4%A8"><span class="nav-number">2.1.1.</span> <span class="nav-text">马尔可夫性质</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E9%AB%98%E6%96%AF%E5%88%86%E5%B8%83%E7%9A%84%E7%8B%AC%E7%AB%8B%E5%8F%AF%E5%8A%A0%E6%80%A7"><span class="nav-number">2.1.2.</span> <span class="nav-text">高斯分布的独立可加性</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%80%90%E6%AD%A5%E5%8A%A0%E5%99%AA%E8%BF%87%E7%A8%8B"><span class="nav-number">2.2.</span> <span class="nav-text">逐步加噪过程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8A%A0%E5%99%AA%E7%BB%93%E6%9E%9C"><span class="nav-number">2.3.</span> <span class="nav-text">加噪结果</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BB%BB%E6%84%8F%E6%97%B6%E5%88%BB%E6%95%B0%E6%8D%AE-x-t-%E7%9A%84%E8%AE%A1%E7%AE%97"><span class="nav-number">2.4.</span> <span class="nav-text">任意时刻数据 $x_t$ 的计算</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#beta-t-%E7%9A%84%E5%8F%96%E5%80%BC%E8%AE%BE%E7%BD%AE"><span class="nav-number">2.5.</span> <span class="nav-text">$\beta_t$ 的取值设置</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Reverse-Diffusion-%E9%80%86%E6%89%A9%E6%95%A3%E8%BF%87%E7%A8%8B%EF%BC%88Reverse-%E5%8E%BB%E5%99%AA%E8%BF%87%E7%A8%8B%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">Reverse Diffusion 逆扩散过程（Reverse 去噪过程）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80-1"><span class="nav-number">3.1.</span> <span class="nav-text">数学基础</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%85%AC%E5%BC%8F"><span class="nav-number">3.1.1.</span> <span class="nav-text">贝叶斯公式</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%90%8E%E9%AA%8C%E6%89%A9%E6%95%A3%E6%9D%A1%E4%BB%B6%E6%A6%82%E7%8E%87-q-x-t-1-x-t-x-0"><span class="nav-number">3.2.</span> <span class="nav-text">后验扩散条件概率 $q(x_{t-1}|x_t,x_0)$</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%AA%E4%BA%BA%E7%90%86%E8%A7%A3"><span class="nav-number">4.</span> <span class="nav-text">个人理解</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Corn</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">33</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+  <div class="links-of-recent-posts motion-element">
+    <div class="links-of-recent-posts-title">
+      <i class="fa fa-history fa-fw"></i>
+      最近文章
+    </div>
+    <ul class="links-of-recent-posts-list">
+        <li class="links-of-recent-posts-item">
+          <a href="/posts/f0775513/" title="posts&#x2F;f0775513&#x2F;">DDPM</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/posts/57e95ee9/" title="posts&#x2F;57e95ee9&#x2F;">InstructSeg</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/posts/28a6509c/" title="posts&#x2F;28a6509c&#x2F;">ViLLa</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/posts/befdae7d/" title="posts&#x2F;befdae7d&#x2F;">RT-DETR</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/posts/662fe68c/" title="posts&#x2F;662fe68c&#x2F;">格雷编码</a>
+        </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://cornfield404.github.io/posts/f0775513/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Corn">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Corn Field">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="DDPM | Corn Field">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          DDPM
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-26 18:35:25" itemprop="dateCreated datePublished" datetime="2024-12-26T18:35:25+08:00">2024-12-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-12-27 13:14:18" itemprop="dateModified" datetime="2024-12-27T13:14:18+08:00">2024-12-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/" itemprop="url" rel="index"><span itemprop="name">技术积累</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">论文笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline：</span>
+  
+    <a title="waline" href="/posts/f0775513/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/posts/f0775513/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>8.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p><strong>题目：</strong> Denoising Diffusion Probabilistic Models<br><strong>链接：</strong> <a target="_blank" rel="noopener" href="https://arxiv.org/format/2006.11239">https://arxiv.org/format/2006.11239</a><br><strong>代码：</strong> <a target="_blank" rel="noopener" href="https://github.com/hojonathanho/diffusion">https://github.com/hojonathanho/diffusion</a><br><strong>来源：</strong> NIPS 2020<br><strong>单位：</strong> UC Berkeley</p>
+<hr>
+<h4 id="模型总览"><a href="#模型总览" class="headerlink" title="模型总览"></a>模型总览</h4><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%25E6%2588%25AA%25E5%25B1%258F2023-08-11%252017.10.55.png" alt="截屏2023-08-11 17.10.55.png"></p>
+<p>DDPM 模型主要分为两个过程：forward 加噪过程（从右往左）和 reverse 去噪过程（从左往右）。加噪过程意思是指向数据集的真实图片中逐步加入高斯噪声，而去噪过程是指对加了噪声的图片逐步去噪，从而还原出真实图片。加噪过程满足一定的数学规律，而去噪过程则采用神经网络来学习。这么一来，神经网络就可以从一堆杂乱无章的噪声图片中生成真实图片了。</p>
+<hr>
+<h4 id="Diffusion-扩散过程（Forward-加噪过程）"><a href="#Diffusion-扩散过程（Forward-加噪过程）" class="headerlink" title="Diffusion 扩散过程（Forward 加噪过程）"></a>Diffusion 扩散过程（Forward 加噪过程）</h4><h5 id="数学基础"><a href="#数学基础" class="headerlink" title="数学基础"></a>数学基础</h5><h6 id="马尔可夫性质"><a href="#马尔可夫性质" class="headerlink" title="马尔可夫性质"></a>马尔可夫性质</h6><p>马尔可夫性质是概率论中的一个概念，因为俄国数学家安德雷·马尔可夫得名。当一个随机过程在给定现在状态及所有过去状态情况下，其未来状态的条件概率分布仅依赖于当前状态；换句话说，在给定现在状态时，它与过去状态（即该过程的历史路径）是条件独立的，那么此随机过程即具有马尔可夫性质。具有马尔可夫性质的过程通常称之为马尔可夫过程。</p>
+<h6 id="高斯分布的独立可加性"><a href="#高斯分布的独立可加性" class="headerlink" title="高斯分布的独立可加性"></a>高斯分布的独立可加性</h6><p>若：</p>
+
+$$
+\begin{align}
+X &\sim N(\mu_X,\sigma_X^2) \\
+Y &\sim N(\mu_Y,\sigma_Y^2) \\
+Z &= X+Y
+\end{align}
+$$
+
+<p>则：<br>$$<br>\begin{align}<br>Z&amp;\sim N(\mu_X+\mu_Y,\sigma_X^2+\sigma_Y^2)<br>\end{align}<br>$$</p>
+<h5 id="逐步加噪过程"><a href="#逐步加噪过程" class="headerlink" title="逐步加噪过程"></a>逐步加噪过程</h5><p>向数据分布中逐渐加入高斯噪声，加噪过程持续​ $T$ 次，产生一系列带噪声的图片 $x_1,…,x_T$。在由 $x_{t-1}$ 加噪至 $x_t$ 的过程中，噪声的标准差/方差是以一个在区间 $(0,1)$ 内的固定值 $\beta_T$ 来确定的，均值是以固定值 $\beta_T$ 和当前时刻的图片数据 $x_{t-1}$ 来确定的。<br>以上描述的加噪过程可以写成公式：</p>
+
+$$
+\begin{align}
+q(x_t|x_{t-1})&=\mathcal{N}(x_t;\sqrt{1-\beta_t}x_{t-1},\beta_t\mathbf{I}) \\
+q(x_{1:T}|x_0)&=\prod_{t=1}^Tq(x_t|x_{t-1}) 
+\end{align}
+$$
+
+<p>这个噪声只由 $\beta_T$ 和 $x_{t-1}$ 决定，是一个固定值，而非可学习过程。因此，只要有了 $x_0$，并且提前确定每一步的固定值 $\beta_1,…,\beta_T$，就可以推出任意一步的加噪数据 $x_1,…,x_T$。整个加噪过程是一个马尔可夫过程。</p>
+<h5 id="加噪结果"><a href="#加噪结果" class="headerlink" title="加噪结果"></a>加噪结果</h5><p>随着​ $t$ 的不断增大，最终原始数据​ $x_0$ 会逐步失去它的特征。最终当 $T\rightarrow\infty$ ​时，$x_T$ 趋近于一个各向独立的高斯分布。从视觉上来看，就是将原本一张完好的照片加噪很多步后，图片几乎变成了一张完全是噪声的图片。</p>
+<h5 id="任意时刻数据-x-t-的计算"><a href="#任意时刻数据-x-t-的计算" class="headerlink" title="任意时刻数据 $x_t$ 的计算"></a>任意时刻数据 $x_t$ 的计算</h5><p>在逐步加噪的过程中，其实并不需要一步一步地从 $x_0,x_1,…$ 去迭代得到 $x_t$，可以直接从 $x_0$ 和固定序列值 $\{\beta_T\in(0,1)\}_{t=1}^T$ 计算得到。</p>
+
+$$
+\begin{align}
+x_t&=\sqrt{1-\beta_t}x_{t-1}+\sqrt{\beta_t}z_1,&where\ z_1,z_2,\ldots,\sim\mathcal{N}(0,\mathbf{I}) \\
+&=\sqrt{\alpha_t}x_{t-1}+\sqrt{1-\alpha_t}z_1\\
+&=\sqrt{\alpha_t}(\sqrt{\alpha_{t-1}}x_{t-2}+\sqrt{1-\alpha_{t-1}}z_2)+\sqrt{1-\alpha_t}z_1\\
+&=\sqrt{\alpha_t\alpha_{t-1}}x_{t-2}+\sqrt{\alpha_t}\sqrt{1-\alpha_{t-1}}z_2+\sqrt{1-\alpha_t}z_1\\
+&=\sqrt{\alpha_t\alpha_{t-1}}x_{t-2}+\sqrt{1-a_ta_{t-1}}\overline{z_2},&\overline{z_2}\sim \mathcal{N}(0,\mathbf{I})\\
+&=\ldots\\
+&=\sqrt{\alpha_t\alpha_{t-1}\ldots\alpha_1}x_0+\sqrt{1-a_ta_{t-1}\ldots\alpha_1}\overline{z_t}\\
+&=\sqrt{\overline{\alpha_t}}x_0+\sqrt{1-\overline{\alpha_t}}\cdot\overline{z_t}
+\end{align}
+$$
+
+<p>由上式可得：</p>
+
+$$
+q(x_t|x_0)=\mathcal{N}(x_t;\sqrt{\overline{\alpha_t}}x_0,(1-\overline{\alpha_t})\mathbf{I})
+$$
+
+<p>由此公式可以看出，只要有了 $x_0$ 和固定值序列 $\{\beta_T\in(0,1)\}_{t=1} ^T$ ，再从标准分布 $N(0,1)$ 采样出一个 $z$，就可以直接计算出 $x_t$ 了。</p>
+<p>在最终的等式中，$x_t=\sqrt{\overline{a_t}}x_0+\sqrt{1-\overline{a_t}}\cdot \overline{z_t}$，其中 $\overline{a_t}=\prod_{i=1}^T\alpha_i$ 在 $T$ 次连乘之后接近于 0。因此 $x_t$ 接近于 $0\times x_0+\sqrt{1-0}\overline{z_t}=\overline{z_t}$，即：$\mathcal{N}(0,\mathbf{I})$ 的正态分布。</p>
+<h5 id="beta-t-的取值设置"><a href="#beta-t-的取值设置" class="headerlink" title="$\beta_t$ 的取值设置"></a>$\beta_t$ 的取值设置</h5><p>一般地，随着​ $t$ 的增大，数据越接近随机的高斯分布，$\beta_t$ 的取值就越大。所以 $\beta_1&lt;\beta_2&lt;\ldots&lt;\beta_T$。同时，由于 $\{\beta_T\in(0,1)\}_{t=1}^T$，即 $\beta_1,\beta_2,\ldots,\beta_T$ 的取值区间在 $(0,1)$ 内，因此 $\alpha_1,\alpha_2,\ldots,\alpha_T$ 的取值也在 $(0,1)$ 内。所以，$\overline{\alpha_1}&gt;\overline{\alpha_2}&gt;\ldots&gt;\overline{\alpha_T}$。</p>
+<hr>
+<h4 id="Reverse-Diffusion-逆扩散过程（Reverse-去噪过程）"><a href="#Reverse-Diffusion-逆扩散过程（Reverse-去噪过程）" class="headerlink" title="Reverse Diffusion 逆扩散过程（Reverse 去噪过程）"></a>Reverse Diffusion 逆扩散过程（Reverse 去噪过程）</h4><h5 id="数学基础-1"><a href="#数学基础-1" class="headerlink" title="数学基础"></a>数学基础</h5><h6 id="贝叶斯公式"><a href="#贝叶斯公式" class="headerlink" title="贝叶斯公式"></a>贝叶斯公式</h6><p>用来描述两个条件概率之间的关系。按照乘法法则：<br>$$<br>P(A\cap B)=P(A)\times P(B|A)=P(B)\times P(A|B)<br>$$<br>变形可得：<br>$$<br>P(A|B)=P(A)\times P(B|A)/P(B)<br>$$</p>
+<h5 id="后验扩散条件概率-q-x-t-1-x-t-x-0"><a href="#后验扩散条件概率-q-x-t-1-x-t-x-0" class="headerlink" title="后验扩散条件概率 $q(x_{t-1}|x_t,x_0)$"></a>后验扩散条件概率 $q(x_{t-1}|x_t,x_0)$</h5><p>在逆扩散过程中，如果给定了 $x_t$ 和 $x_0$，就可以计算出 $x_{t-1}$，即后验条件概率 $q(x_{t-1}|x_t,x_0)$ 是可以计算的：</p>
+
+$$
+\begin{align}
+q(x_{t-1}|x_t,x_0)&=q(x_t|x_{t-1},x_0)\frac{q(x_{t-1}|x_0)}{q(x_t|x_0)}
+\end{align}
+$$
+
+<p>由正向加噪过程可知：</p>
+
+$$
+\begin{align}
+q(x_t|x_{t-1},x_0)&=\sqrt{\alpha_t}x_{t-1}+\sqrt{1-\alpha_t}z_1&～\mathcal{N}(\sqrt{\alpha_t}x_{t-1},1-\alpha_t) \\
+q(x_{t-1}|x_0)&=\sqrt{\overline{\alpha_{t-1}}}x_0+\sqrt{1-\overline{\alpha_{t-1}}}\cdot\overline{z_{t-1}}&～\mathcal{N}(\sqrt{\overline{\alpha_{t-1}}}x_0,1-\overline{\alpha_{t-1}}) \\
+q(x_t|x_0)&=\sqrt{\overline{\alpha_t}}x_0+\sqrt{1-\overline{\alpha_t}}\cdot\overline{z_{t-1}}&～\mathcal{N}(\sqrt{\overline{\alpha_t}}x_0,1-\overline{\alpha_t})
+\end{align}
+$$
+
+<p>正态分布可以表示为：$N(\mu, \sigma ^2)\propto\exp(-\frac{(x-\mu)^2}{2\sigma ^2})$<br>推导可知：</p>
+
+$$
+\begin{align}
+q(x_{t-1}|x_t,x_0)&\propto \exp(-\frac{1}{2}(\frac{(x_t-\sqrt{\alpha_t}x_{t-1})^2}{\beta_t}+\frac{(x_{t-1}-\sqrt{\overline{\alpha_{t-1}}}x_0)^2}{1-\overline{\alpha_{t-1}}}-\frac{(x_t-\sqrt{\overline{\alpha_t}}x_0)^2}{1-\overline{\alpha_t}})) \\
+&\propto \exp(-\frac{1}{2}((\frac{\alpha_t}{\beta_t}+\frac{1}{1-\overline{\alpha_{t-1}}})x_{t-1}^2-(\frac{2\sqrt{\alpha_t}x_t}{\beta_t}+\frac{2\sqrt{\overline{\alpha_{t-1}}}x_0}{1-\overline{\alpha_{t-1}}})x_{t-1}+C(x_t,x_0)))
+\end{align}
+$$
+
+<p>对比正态分布公式，可以推出：</p>
+
+$$
+\begin{align}
+\sigma^2&=\frac{1}{\frac{\alpha_t}{\beta_t}+\frac{1}{1-\overline{\alpha_{t-1}}}}=\frac{1-\overline{\alpha_{t-1}}}{1-\overline{\alpha_t}}\beta_t \\
+\mu&=(\frac{\sqrt{\alpha_t}x_t}{\beta_t}+\frac{\sqrt{\overline{\alpha_{t-1}}}x_0}{1-\overline{\alpha_{t-1}}})\cdot \frac{1}{\frac{\alpha_t}{\beta_t}+\frac{1}{1-\overline{\alpha_{t-1}}}}=\frac{(1-\overline{\alpha_{t-1}})\sqrt{\alpha_t}}{1-\overline{\alpha_t}}x_t+\frac{\sqrt{\overline{\alpha_{t-1}}}\beta_t}{1-\overline{\alpha_t}}x_0
+\end{align}
+$$
+
+<p>把 $x_0$ 用 $x_t$ 替换掉可得：</p>
+
+$$
+\begin{align}
+\mu&=\frac{(1-\overline{\alpha_{t-1}})\sqrt{\alpha_t}}{1-\overline{\alpha_t}}x_t+\frac{\sqrt{\overline{\alpha_{t-1}}}\beta_t}{1-\overline{\alpha_t}}x_0 \\
+&=\frac{(1-\overline{\alpha_{t-1}})\sqrt{\alpha_t}}{1-\overline{\alpha_t}}x_t+\frac{\sqrt{\overline{\alpha_{t-1}}}\beta_t}{1-\overline{\alpha_t}}\cdot \frac{x_t-\sqrt{1-\overline{\alpha_t}}\cdot \overline{z_t}}{\sqrt{\overline{\alpha_t}}}\\
+&=\frac{1}{\sqrt{\alpha_t}}(x_t-\frac{\beta_t}{\sqrt{1-\overline{\alpha_t}}}\cdot \overline{z_t})
+\end{align}
+$$
+
+<p>这里可以看出想要推导出前一张图只有 $\overline{z_t}$ 是未知的，所以只要用网络预测出这个 $\overline{z_t}$ 就可以了。</p>
+<hr>
+<h4 id="个人理解"><a href="#个人理解" class="headerlink" title="个人理解"></a>个人理解</h4><p>直观上 diffusion model 是个比较好理解的模型，向图像中一步步加噪使图像变成一个完全的随机噪声，反过来，只要预测出每一步加入的噪声，就可以得到原始的图像。只不过论文中用了复杂的公式给这一过程进行了严密的论证，论证了只需要预测出噪声就可以一步步推导出上一步的图像，也论证了仅用加入的噪声作为监督信息就可以预测出原始图像。</p>
+<p>从代码里也可以看出 diffusion model 的实现非常简洁：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Diffusion</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, noise_steps=<span class="number">1000</span>, beta_start=<span class="number">1e-4</span>, beta_end=<span class="number">0.02</span>, img_size=<span class="number">256</span>, device=<span class="string">&quot;cuda&quot;</span></span>):</span><br><span class="line">        <span class="variable language_">self</span>.noise_steps = noise_steps</span><br><span class="line">        <span class="variable language_">self</span>.beta_start = beta_start</span><br><span class="line">        <span class="variable language_">self</span>.beta_end = beta_end</span><br><span class="line">        <span class="variable language_">self</span>.img_size = img_size</span><br><span class="line">        <span class="variable language_">self</span>.device = device</span><br><span class="line">        </span><br><span class="line">        <span class="variable language_">self</span>.beta = <span class="variable language_">self</span>.prepare_noise_schedule().to(device)</span><br><span class="line">        <span class="variable language_">self</span>.alpha = <span class="number">1.</span> - <span class="variable language_">self</span>.beta</span><br><span class="line">        <span class="variable language_">self</span>.alpha_hat = torch.cumprod(<span class="variable language_">self</span>.alpha, dim=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 用于计算每一步加入噪声的强弱，这里采用了一个线性增加的方式</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">prepare_noise_schedule</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> torch.linspace(<span class="variable language_">self</span>.beta_start, <span class="variable language_">self</span>.beta_end, <span class="variable language_">self</span>.noise_steps)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 计算加噪后的图像，由原始图像，噪声以及加噪比例决定</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">noise_images</span>(<span class="params">self, x, t</span>):</span><br><span class="line">        sqrt_alpha_hat = torch.sqrt(<span class="variable language_">self</span>.alpha_hat[t])[:, <span class="literal">None</span>, <span class="literal">None</span>, <span class="literal">None</span>]</span><br><span class="line">        sqrt_one_minus_alpha_hat = torch.sqrt(<span class="number">1</span> - <span class="variable language_">self</span>.alpha_hat[t])[:, <span class="literal">None</span>, <span class="literal">None</span>, <span class="literal">None</span>]</span><br><span class="line">        Ɛ = torch.randn_like(x)</span><br><span class="line">        <span class="keyword">return</span> sqrt_alpha_hat * x + sqrt_one_minus_alpha_hat * Ɛ, Ɛ</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">sample_timesteps</span>(<span class="params">self, n</span>):</span><br><span class="line">        <span class="keyword">return</span> torch.randint(low=<span class="number">1</span>, high=<span class="variable language_">self</span>.noise_steps, size=(n,))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 根据推导的逆扩散过程的公式逐步推出上一张图</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">sample</span>(<span class="params">self, model, n</span>):</span><br><span class="line">        logging.info(<span class="string">f&quot;Sampling <span class="subst">&#123;n&#125;</span> new images....&quot;</span>)</span><br><span class="line">        model.<span class="built_in">eval</span>()</span><br><span class="line">        <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">            x = torch.randn((n, <span class="number">3</span>, <span class="variable language_">self</span>.img_size, <span class="variable language_">self</span>.img_size)).to(<span class="variable language_">self</span>.device)</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> tqdm(<span class="built_in">reversed</span>(<span class="built_in">range</span>(<span class="number">1</span>, <span class="variable language_">self</span>.noise_steps)), position=<span class="number">0</span>):</span><br><span class="line">                t = (torch.ones(n) * i).long().to(<span class="variable language_">self</span>.device)</span><br><span class="line">                predicted_noise = model(x, t)</span><br><span class="line">                alpha = <span class="variable language_">self</span>.alpha[t][:, <span class="literal">None</span>, <span class="literal">None</span>, <span class="literal">None</span>]</span><br><span class="line">                alpha_hat = <span class="variable language_">self</span>.alpha_hat[t][:, <span class="literal">None</span>, <span class="literal">None</span>, <span class="literal">None</span>]</span><br><span class="line">                beta = <span class="variable language_">self</span>.beta[t][:, <span class="literal">None</span>, <span class="literal">None</span>, <span class="literal">None</span>]</span><br><span class="line">                <span class="keyword">if</span> i &gt; <span class="number">1</span>:</span><br><span class="line">                    noise = torch.randn_like(x)</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    noise = torch.zeros_like(x)</span><br><span class="line">                x = <span class="number">1</span> / torch.sqrt(alpha) * (x - ((<span class="number">1</span> - alpha) / (torch.sqrt(<span class="number">1</span> - alpha_hat))) * predicted_noise) + torch.sqrt(beta) * noise</span><br><span class="line">        model.train()</span><br><span class="line">        x = (x.clamp(-<span class="number">1</span>, <span class="number">1</span>) + <span class="number">1</span>) / <span class="number">2</span></span><br><span class="line">        x = (x * <span class="number">255</span>).<span class="built_in">type</span>(torch.uint8)</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">train</span>(<span class="params">args</span>):</span><br><span class="line">    setup_logging(args.run_name)</span><br><span class="line">    device = args.device</span><br><span class="line">    dataloader = get_data(args)</span><br><span class="line">    model = UNet().to(device)</span><br><span class="line">    optimizer = optim.AdamW(model.parameters(), lr=args.lr)</span><br><span class="line">    mse = nn.MSELoss()</span><br><span class="line">    diffusion = Diffusion(img_size=args.image_size, device=device)</span><br><span class="line">    logger = SummaryWriter(os.path.join(<span class="string">&quot;runs&quot;</span>, args.run_name))</span><br><span class="line">    l = <span class="built_in">len</span>(dataloader)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(args.epochs):</span><br><span class="line">        logging.info(<span class="string">f&quot;Starting epoch <span class="subst">&#123;epoch&#125;</span>:&quot;</span>)</span><br><span class="line">        pbar = tqdm(dataloader)</span><br><span class="line">        <span class="keyword">for</span> i, (images, _) <span class="keyword">in</span> <span class="built_in">enumerate</span>(pbar):</span><br><span class="line">            images = images.to(device)</span><br><span class="line">            t = diffusion.sample_timesteps(images.shape[<span class="number">0</span>]).to(device)</span><br><span class="line">            x_t, noise = diffusion.noise_images(images, t)</span><br><span class="line">            predicted_noise = model(x_t, t)</span><br><span class="line">            loss = mse(noise, predicted_noise)</span><br><span class="line"></span><br><span class="line">            optimizer.zero_grad()</span><br><span class="line">            loss.backward()</span><br><span class="line">            optimizer.step()</span><br><span class="line"></span><br><span class="line">            pbar.set_postfix(MSE=loss.item())</span><br><span class="line">            logger.add_scalar(<span class="string">&quot;MSE&quot;</span>, loss.item(), global_step=epoch * l + i)</span><br><span class="line"></span><br><span class="line">        sampled_images = diffusion.sample(model, n=images.shape[<span class="number">0</span>])</span><br><span class="line">        save_images(sampled_images, os.path.join(<span class="string">&quot;results&quot;</span>, args.run_name, <span class="string">f&quot;<span class="subst">&#123;epoch&#125;</span>.jpg&quot;</span>))</span><br><span class="line">        torch.save(model.state_dict(), os.path.join(<span class="string">&quot;models&quot;</span>, args.run_name, <span class="string">f&quot;ckpt.pt&quot;</span>))</span><br></pre></td></tr></table></figure>
+
+<hr>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" rel="tag"><i class="fa fa-tag"></i> 论文笔记</a>
+              <a href="/tags/Diffusion/" rel="tag"><i class="fa fa-tag"></i> Diffusion</a>
+              <a href="/tags/Image-Generation/" rel="tag"><i class="fa fa-tag"></i> Image_Generation</a>
+              <a href="/tags/%E9%AB%98%E5%BC%95/" rel="tag"><i class="fa fa-tag"></i> 高引</a>
+              <a href="/tags/NIPS2020/" rel="tag"><i class="fa fa-tag"></i> NIPS2020</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/57e95ee9/" rel="prev" title="InstructSeg">
+                  <i class="fa fa-angle-left"></i> InstructSeg
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Corn</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">51k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">46 分钟</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("11/13/2024 09:00:00");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 "+hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+    setInterval("createtime()",250);
+</script>
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"hexowaline-ten.vercel.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"(发表评论)","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":true,"comment_count":true,"requiredFields":[],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/posts/f0775513/"}</script>
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true}});</script></body>
+</html>

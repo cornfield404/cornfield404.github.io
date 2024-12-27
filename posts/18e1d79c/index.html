@@ -23,12 +23,12 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"cornfield404.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.21.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="题目给定一个 m x n 的矩阵，如果一个元素为 0，则将其所在行和列的所有元素都设为 0。请使用原地算法。  思路">
+    <meta name="description" content="题目给定一个 m x n 的矩阵，如果一个元素为 0，则将其所在行和列的所有元素都设为 0。请使用原地算法。  思路">
 <meta property="og:type" content="article">
 <meta property="og:title" content="矩阵置零">
 <meta property="og:url" content="https://cornfield404.github.io/posts/18e1d79c/index.html">
 <meta property="og:site_name" content="Corn Field">
-<meta property="og:description" content="题目给定一个 m x n 的矩阵，如果一个元素为 0，则将其所在行和列的所有元素都设为 0。请使用原地算法。  思路">
+<meta property="og:description" content="题目给定一个 m x n 的矩阵，如果一个元素为 0，则将其所在行和列的所有元素都设为 0。请使用原地算法。  思路">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-12-13T02:26:30.000Z">
 <meta property="article:modified_time" content="2024-12-19T10:45:31.767Z">
@@ -190,7 +190,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-count">42</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -203,6 +203,9 @@
     </div>
     <ul class="links-of-recent-posts-list">
         <li class="links-of-recent-posts-item">
+          <a href="/posts/f0775513/" title="posts&#x2F;f0775513&#x2F;">DDPM</a>
+        </li>
+        <li class="links-of-recent-posts-item">
           <a href="/posts/57e95ee9/" title="posts&#x2F;57e95ee9&#x2F;">InstructSeg</a>
         </li>
         <li class="links-of-recent-posts-item">
@@ -213,9 +216,6 @@
         </li>
         <li class="links-of-recent-posts-item">
           <a href="/posts/662fe68c/" title="posts&#x2F;662fe68c&#x2F;">格雷编码</a>
-        </li>
-        <li class="links-of-recent-posts-item">
-          <a href="/posts/44b7472c/" title="posts&#x2F;44b7472c&#x2F;">Decoder-Only优势</a>
         </li>
     </ul>
   </div>
@@ -339,7 +339,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>给定一个 m x n 的矩阵，如果一个元素为 0，则将其所在行和列的所有元素都设为 0。请使用原地算法。</p>
+    <div class="post-body" itemprop="articleBody"><h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>给定一个 m x n 的矩阵，如果一个元素为 0，则将其所在行和列的所有元素都设为 0。请使用原地算法。</p>
 <hr>
 <h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>题目本身比较简单，但进阶要求里要求空间复杂度为 $O(1)$。这样就无法记录每一行每一列的状态，否则空间复杂度就是 $O(m+n)$。<br>思路是先把第一行和第一列是否包含 0 的状态用变量记录下来，然后用第一行和第一列的元素记录该行该列是否含 0，之后根据记录将对应的行或列设为 0，最后根据最开始的记录修改第一行第一列的值。</p>
 <hr>
@@ -401,13 +401,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">43k</span>
+    <span title="站点总字数">51k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">39 分钟</span>
+    <span title="站点阅读时长">46 分钟</span>
   </span>
 </div>
 <div class="busuanzi-count">
