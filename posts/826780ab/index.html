@@ -23,23 +23,35 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"cornfield404.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.21.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta property="og:type" content="website">
-<meta property="og:title" content="Corn Field">
-<meta property="og:url" content="https://cornfield404.github.io/tags/%E5%88%86%E6%B2%BB/index.html">
+    <meta name="description" content="题目： SDXL: Improving Latent Diffusion Models for High-Resolution Image Synthesis链接： https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;2307.01952代码： https:&#x2F;&#x2F;github.com&#x2F;Stability-AI&#x2F;generative-models来源： ICLR 2024单位： Stability AI, A">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SDXL">
+<meta property="og:url" content="https://cornfield404.github.io/posts/826780ab/index.html">
 <meta property="og:site_name" content="Corn Field">
+<meta property="og:description" content="题目： SDXL: Improving Latent Diffusion Models for High-Resolution Image Synthesis链接： https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;2307.01952代码： https:&#x2F;&#x2F;github.com&#x2F;Stability-AI&#x2F;generative-models来源： ICLR 2024单位： Stability AI, A">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-12-30%2016.53.54.png">
+<meta property="og:image" content="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-12-30%2019.19.11.png">
+<meta property="article:published_time" content="2024-12-27T05:23:39.000Z">
+<meta property="article:modified_time" content="2024-12-30T11:23:13.750Z">
 <meta property="article:author" content="Corn">
+<meta property="article:tag" content="论文笔记">
+<meta property="article:tag" content="Diffusion">
+<meta property="article:tag" content="Image_Generation">
+<meta property="article:tag" content="高引">
+<meta property="article:tag" content="ICLR2024">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-12-30%2016.53.54.png">
 
 
-<link rel="canonical" href="https://cornfield404.github.io/tags/%E5%88%86%E6%B2%BB/">
+<link rel="canonical" href="https://cornfield404.github.io/posts/826780ab/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"tags/分治/index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://cornfield404.github.io/posts/826780ab/","path":"posts/826780ab/","title":"SDXL"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>标签: 分治 | Corn Field</title>
+<title>SDXL | Corn Field</title>
   
 
 
@@ -148,7 +160,7 @@
         mutex="true">
     </meting-js>
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -161,6 +173,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%AC%E6%96%87%E7%9B%AE%E7%9A%84"><span class="nav-number">1.</span> <span class="nav-text">本文目的</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Method"><span class="nav-number">2.</span> <span class="nav-text">Method</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E7%9B%B8%E6%AF%94%E4%B9%8B%E5%89%8D%E7%9A%84%E4%B8%BB%E8%A6%81%E8%B0%83%E6%95%B4"><span class="nav-number">2.1.</span> <span class="nav-text">模型相比之前的主要调整</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Conditioning-the-Model-on-Image-Size"><span class="nav-number">2.2.</span> <span class="nav-text">Conditioning the Model on Image Size</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Conditioning-the-Model-on-Cropping-Parameters"><span class="nav-number">2.3.</span> <span class="nav-text">Conditioning the Model on Cropping Parameters</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Multi-Aspect-Training"><span class="nav-number">2.4.</span> <span class="nav-text">Multi-Aspect Training</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Improved-Autoencoder"><span class="nav-number">2.5.</span> <span class="nav-text">Improved Autoencoder</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Putting-Everything-Together"><span class="nav-number">2.6.</span> <span class="nav-text">Putting Everything Together</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -223,51 +236,171 @@
 
     </div>
 
-    <div class="main-inner tag posts-collapse">
+    <div class="main-inner post posts-expand">
 
 
   
+
+
+<div class="post-block">
   
   
-  <div class="post-block">
-    <div class="post-content">
-      <div class="collection-title">
-        <h1 class="collection-header">分治
-          <small>标签</small>
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://cornfield404.github.io/posts/826780ab/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Corn">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Corn Field">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="SDXL | Corn Field">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SDXL
         </h1>
-      </div>
 
-      
-    <div class="collection-year">
-      <span class="collection-header">2024</span>
+        <div class="post-meta-container">
+          <div class="post-meta">
+
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-27 13:23:39" itemprop="dateCreated datePublished" datetime="2024-12-27T13:23:39+08:00">2024-12-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-12-30 19:23:13" itemprop="dateModified" datetime="2024-12-30T19:23:13+08:00">2024-12-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/" itemprop="url" rel="index"><span itemprop="name">技术积累</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">论文笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline：</span>
+  
+    <a title="waline" href="/posts/826780ab/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/posts/826780ab/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p><strong>题目：</strong> SDXL: Improving Latent Diffusion Models for High-Resolution Image Synthesis<br><strong>链接：</strong> <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2307.01952">https://arxiv.org/pdf/2307.01952</a><br><strong>代码：</strong> <a target="_blank" rel="noopener" href="https://github.com/Stability-AI/generative-models">https://github.com/Stability-AI/generative-models</a><br><strong>来源：</strong> ICLR 2024<br><strong>单位：</strong> Stability AI, Applied Research</p>
+<hr>
+<h4 id="本文目的"><a href="#本文目的" class="headerlink" title="本文目的"></a>本文目的</h4><p>在 stable diffusion 基础上，提升生成效果。</p>
+<hr>
+<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><h5 id="模型相比之前的主要调整"><a href="#模型相比之前的主要调整" class="headerlink" title="模型相比之前的主要调整"></a>模型相比之前的主要调整</h5><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-12-30%2016.53.54.png" alt="截屏2024-12-30 16.53.54.png"></p>
+<ul>
+<li>模型结构上，删掉 unet lowest level，highest level 里不加 transformer block，中间两层 level 分别加入 2 个和 10 个 transformer block；</li>
+<li>Text encoder 采用两个 encoder 输出 concat 的结果；</li>
+<li>加入了 pooled text embedding。</li>
+</ul>
+<h5 id="Conditioning-the-Model-on-Image-Size"><a href="#Conditioning-the-Model-on-Image-Size" class="headerlink" title="Conditioning the Model on Image Size"></a>Conditioning the Model on Image Size</h5><p>因为 <a href="https://cornfield404.github.io/posts/16f61640/">latent diffusion model</a> 模型分为两个阶段（auto encoder 以及 diffusion），所以如果训练图像尺寸比较小可能会导致经过 auto encoder 下采样的图像不足以用来训练 diffusion。之前解决该问题主要有两个方案：丢掉尺寸比较小的图像（可能导致很多图不可用影响训练效果）以及对图像上采样（可能导致图像里有 artifacts，影响图片生成效果）。</p>
+<p>本文采用了另一种方式：把图像原始尺寸作为 condition embedding，和 timestep embedding 一起输入网络。</p>
+<h5 id="Conditioning-the-Model-on-Cropping-Parameters"><a href="#Conditioning-the-Model-on-Cropping-Parameters" class="headerlink" title="Conditioning the Model on Cropping Parameters"></a>Conditioning the Model on Cropping Parameters</h5><p>之前的生成模型可能有物体生成不全的情况，这很可能是因为模型训练时为了保证每个 batch 的尺寸一致，需要对输入图像进行 crop，crop 之后的物体是不全的，而这种特征被生成模型学到了。</p>
+<p>本文采用的解决方案：训练时把 crop 的值进行 embedding 并输入网络，测试时把 crop 设为 $(0,0)$。</p>
+<h5 id="Multi-Aspect-Training"><a href="#Multi-Aspect-Training" class="headerlink" title="Multi-Aspect Training"></a>Multi-Aspect Training</h5><p>之前的生成模型主要都是在方图上训练，但是这种方式对于屏幕来说不是很自然，所以本文预设了不同的纵横比作为 target size，把图片划分到不同的 target size 里，每个 batch 从同一 target size 里采样图片，且 target size 作为一个 embedding 输入模型。</p>
+<h5 id="Improved-Autoencoder"><a href="#Improved-Autoencoder" class="headerlink" title="Improved Autoencoder"></a>Improved Autoencoder</h5><p>优化 VAE 的训练：采用更大的 batch size，并用 EMA 更新模型权重。</p>
+<h5 id="Putting-Everything-Together"><a href="#Putting-Everything-Together" class="headerlink" title="Putting Everything Together"></a>Putting Everything Together</h5><p>训练过程分三步：$256\times 256$，$512\times 512$，multi-aspect training。在这三步之后模型在一些细节上的效果可能还是不太好，因此本文采用了一个 refinement stage。Refinement stage 在 base model 输出的基础上进行优化。<br><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-12-30%2019.19.11.png" alt="截屏2024-12-30 19.19.11.png"></p>
+<hr>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2024-11-28T19:01:37+08:00"
-              content="2024-11-28">
-          11-28
-        </time>
-      </div>
+    
+    
+    
 
-      <div class="post-title">
-          <a class="post-title-link" href="/posts/32377bdc/" itemprop="url">
-            <span itemprop="name">搜索旋转排序数组</span>
-          </a>
-      </div>
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" rel="tag"><i class="fa fa-tag"></i> 论文笔记</a>
+              <a href="/tags/Diffusion/" rel="tag"><i class="fa fa-tag"></i> Diffusion</a>
+              <a href="/tags/Image-Generation/" rel="tag"><i class="fa fa-tag"></i> Image_Generation</a>
+              <a href="/tags/%E9%AB%98%E5%BC%95/" rel="tag"><i class="fa fa-tag"></i> 高引</a>
+              <a href="/tags/ICLR2024/" rel="tag"><i class="fa fa-tag"></i> ICLR2024</a>
+          </div>
 
-      
-    </header>
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/f0775513/" rel="prev" title="DDPM">
+                  <i class="fa fa-angle-left"></i> DDPM
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
   </article>
+</div>
 
-    </div>
-  </div>
-  
-  
-  
 
+
+
+
+
+    <div class="comments" id="waline"></div>
 </div>
   </main>
 
@@ -381,7 +514,7 @@
 <script src="/js/third-party/math/mathjax.js"></script>
 
 
-<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"hexowaline-ten.vercel.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"(发表评论)","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":true,"comment_count":true,"requiredFields":[],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/tags/%E5%88%86%E6%B2%BB/"}</script>
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"hexowaline-ten.vercel.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"(发表评论)","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":true,"comment_count":true,"requiredFields":[],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/posts/826780ab/"}</script>
 <link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
 <script>
 document.addEventListener('page:loaded', () => {

@@ -1,6 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>SDXL</title>
+    <url>/posts/826780ab/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> SDXL: Improving Latent Diffusion Models for High-Resolution Image Synthesis<br><strong>链接：</strong> <a href="https://arxiv.org/pdf/2307.01952">https://arxiv.org/pdf/2307.01952</a><br><strong>代码：</strong> <a href="https://github.com/Stability-AI/generative-models">https://github.com/Stability-AI/generative-models</a><br><strong>来源：</strong> ICLR 2024<br><strong>单位：</strong> Stability AI, Applied Research</p>
+<hr>
+<h4 id="本文目的"><a href="#本文目的" class="headerlink" title="本文目的"></a>本文目的</h4><p>在 stable diffusion 基础上，提升生成效果。</p>
+<hr>
+<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><h5 id="模型相比之前的主要调整"><a href="#模型相比之前的主要调整" class="headerlink" title="模型相比之前的主要调整"></a>模型相比之前的主要调整</h5><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-12-30%2016.53.54.png" alt="截屏2024-12-30 16.53.54.png"></p>
+<ul>
+<li>模型结构上，删掉 unet lowest level，highest level 里不加 transformer block，中间两层 level 分别加入 2 个和 10 个 transformer block；</li>
+<li>Text encoder 采用两个 encoder 输出 concat 的结果；</li>
+<li>加入了 pooled text embedding。</li>
+</ul>
+<h5 id="Conditioning-the-Model-on-Image-Size"><a href="#Conditioning-the-Model-on-Image-Size" class="headerlink" title="Conditioning the Model on Image Size"></a>Conditioning the Model on Image Size</h5><p>因为 <a href="https://cornfield404.github.io/posts/16f61640/">latent diffusion model</a> 模型分为两个阶段（auto encoder 以及 diffusion），所以如果训练图像尺寸比较小可能会导致经过 auto encoder 下采样的图像不足以用来训练 diffusion。之前解决该问题主要有两个方案：丢掉尺寸比较小的图像（可能导致很多图不可用影响训练效果）以及对图像上采样（可能导致图像里有 artifacts，影响图片生成效果）。</p>
+<p>本文采用了另一种方式：把图像原始尺寸作为 condition embedding，和 timestep embedding 一起输入网络。</p>
+<h5 id="Conditioning-the-Model-on-Cropping-Parameters"><a href="#Conditioning-the-Model-on-Cropping-Parameters" class="headerlink" title="Conditioning the Model on Cropping Parameters"></a>Conditioning the Model on Cropping Parameters</h5><p>之前的生成模型可能有物体生成不全的情况，这很可能是因为模型训练时为了保证每个 batch 的尺寸一致，需要对输入图像进行 crop，crop 之后的物体是不全的，而这种特征被生成模型学到了。</p>
+<p>本文采用的解决方案：训练时把 crop 的值进行 embedding 并输入网络，测试时把 crop 设为 $(0,0)$。</p>
+<h5 id="Multi-Aspect-Training"><a href="#Multi-Aspect-Training" class="headerlink" title="Multi-Aspect Training"></a>Multi-Aspect Training</h5><p>之前的生成模型主要都是在方图上训练，但是这种方式对于屏幕来说不是很自然，所以本文预设了不同的纵横比作为 target size，把图片划分到不同的 target size 里，每个 batch 从同一 target size 里采样图片，且 target size 作为一个 embedding 输入模型。</p>
+<h5 id="Improved-Autoencoder"><a href="#Improved-Autoencoder" class="headerlink" title="Improved Autoencoder"></a>Improved Autoencoder</h5><p>优化 VAE 的训练：采用更大的 batch size，并用 EMA 更新模型权重。</p>
+<h5 id="Putting-Everything-Together"><a href="#Putting-Everything-Together" class="headerlink" title="Putting Everything Together"></a>Putting Everything Together</h5><p>训练过程分三步：$256\times 256$，$512\times 512$，multi-aspect training。在这三步之后模型在一些细节上的效果可能还是不太好，因此本文采用了一个 refinement stage。Refinement stage 在 base model 输出的基础上进行优化。<br><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-12-30%2019.19.11.png" alt="截屏2024-12-30 19.19.11.png"></p>
+<hr>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>技术积累</category>
+        <category>论文笔记</category>
+      </categories>
+      <tags>
+        <tag>论文笔记</tag>
+        <tag>Diffusion</tag>
+        <tag>Image_Generation</tag>
+        <tag>高引</tag>
+        <tag>ICLR2024</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>DDPM</title>
     <url>/posts/f0775513/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> Denoising Diffusion Probabilistic Models<br><strong>链接：</strong> <a href="https://arxiv.org/format/2006.11239">https://arxiv.org/format/2006.11239</a><br><strong>代码：</strong> <a href="https://github.com/hojonathanho/diffusion">https://github.com/hojonathanho/diffusion</a><br><strong>来源：</strong> NIPS 2020<br><strong>单位：</strong> UC Berkeley</p>
@@ -384,11 +418,19 @@ $$
     <url>/posts/16f61640/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> High-Resolution Image Synthesis with Latent Diffusion Models<br><strong>链接：</strong> <a href="https://arxiv.org/pdf/2112.10752">https://arxiv.org/pdf/2112.10752</a><br><strong>代码：</strong> <a href="https://github.com/CompVis/latent-diffusion">https://github.com/CompVis/latent-diffusion</a><br><strong>来源：</strong> CVPR 2022<br><strong>单位：</strong> Ludwig Maximilian University of Munich &amp; IWR, Heidelberg University, Germany；Runway ML</p>
 <hr>
-<h4 id="本文希望解决的问题"><a href="#本文希望解决的问题" class="headerlink" title="本文希望解决的问题"></a>本文希望解决的问题</h4><p>Diffusion Model 训练和推理成本都过高。</p>
+<h4 id="本文希望解决的问题及解决方案"><a href="#本文希望解决的问题及解决方案" class="headerlink" title="本文希望解决的问题及解决方案"></a>本文希望解决的问题及解决方案</h4><p>本文想要解决的问题是 Diffusion Model 训练和推理成本都过高。文章中认为 diffusion model 在每个像素上计算是没必要的，因此希望找到一个等效空间，在该空间上进行 diffusion 操作。</p>
 <hr>
 <h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-12-20%2010.58.33.png" alt="截屏2024-12-20 10.58.33.png"></p>
 <h5 id="Perceptual-Image-Compression"><a href="#Perceptual-Image-Compression" class="headerlink" title="Perceptual Image Compression"></a>Perceptual Image Compression</h5><p>训练一个 autoencoder 把图像压缩到 latent space 中。因为 diffusion model 本身是在二维空间上操作的，因此本文压缩后的 $z$ 也是一个二维的，相比于那些压缩到一维的方法，能保留更多信息，效果更好。</p>
 <h5 id="Conditioning-Mechanisms"><a href="#Conditioning-Mechanisms" class="headerlink" title="Conditioning Mechanisms"></a>Conditioning Mechanisms</h5><p>在 UNet backbone 中加入 cross attention 机制，其中 Q 是原本的 latent feature，K、V 是 condition feature，从而实现控制。</p>
+<hr>
+<h4 id="代码解读"><a href="#代码解读" class="headerlink" title="代码解读"></a>代码解读</h4><p><a href="https://blog.csdn.net/yusijinfs/article/details/134684608">一文详解 Latent Diffusion官方源码_diagonalgaussiandistribution-CSDN博客</a></p>
+<hr>
+<h4 id="个人看法"><a href="#个人看法" class="headerlink" title="个人看法"></a>个人看法</h4><p>相比于原始的 diffusion，latent diffusion 主要有两点改进：</p>
+<ul>
+<li>通过 autoencoder，在 latent 空间进行 diffusion 操作；</li>
+<li>用 cross attention 对生成内容进行控制。</li>
+</ul>
 <hr>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
@@ -407,6 +449,8 @@ $$
     <title>比较好的技术解析文章</title>
     <url>/posts/1528f15d/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="Vae-的原理"><a href="#Vae-的原理" class="headerlink" title="Vae 的原理"></a>Vae 的原理</h4><p><strong>链接：</strong> <a href="https://zhuanlan.zhihu.com/p/628604566">https://zhuanlan.zhihu.com/p/628604566</a><br>比较浅显易懂地说明了 vae 模型设计的出发点、基本原理以及损失函数的推导。</p>
+<hr>
+<h4 id="DDIM-原理"><a href="#DDIM-原理" class="headerlink" title="DDIM 原理"></a>DDIM 原理</h4><p><strong>链接：</strong> <a href="https://www.zhangzhenhu.com/aigc/ddim.html#equation-eq-ddim-216">3. 去噪扩散隐式模型（Denoising Diffusion Implicit Models,DDIM） — 张振虎的博客 张振虎 文档</a><br>DDIM 的解析里比较好懂的一个。</p>
 <hr>
 <h4 id="不同的-normalization"><a href="#不同的-normalization" class="headerlink" title="不同的 normalization"></a>不同的 normalization</h4><p><strong>链接：</strong> <a href="https://zhuanlan.zhihu.com/p/86765356">https://zhuanlan.zhihu.com/p/86765356</a><br>说明了 BN、LN、IN 以及 GN 的区别。</p>
 <hr>
@@ -727,6 +771,16 @@ $$
 另外，被教练带着用超快的速度蹬冰滑了几圈，感受到了起飞的感觉，非常快乐。</p>
 
                 <span class="cd-timeline__date svelte-1t2uafz">2024-12-21</span>
+            </div>
+        </div><div class="cd-timeline__block js-cd-block svelte-1t2uafz">
+            <div class="cd-timeline__img cd-timeline__img--movie js-cd-img svelte-1t2uafz">
+            </div>
+            <div class="cd-timeline__content js-cd-content svelte-1t2uafz">
+                <h2 class="svelte-1t2uafz">前压步</h2>
+                <p>顺时针压步果然还有大问题 TAT 也算达成两面压步都摔过成就了，希望顺时针也可以像逆时针一样突然开窍。
+被教练说上身完全没有控制，果然啥运动都得练核心 QAQ</p>
+
+                <span class="cd-timeline__date svelte-1t2uafz">2024-12-28</span>
             </div>
         </div>
     </div>
