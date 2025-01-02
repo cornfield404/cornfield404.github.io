@@ -450,7 +450,7 @@ $$
     <url>/posts/1528f15d/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="Vae-的原理"><a href="#Vae-的原理" class="headerlink" title="Vae 的原理"></a>Vae 的原理</h4><p><strong>链接：</strong> <a href="https://zhuanlan.zhihu.com/p/628604566">https://zhuanlan.zhihu.com/p/628604566</a><br>比较浅显易懂地说明了 vae 模型设计的出发点、基本原理以及损失函数的推导。</p>
 <hr>
-<h4 id="DDIM-原理"><a href="#DDIM-原理" class="headerlink" title="DDIM 原理"></a>DDIM 原理</h4><p><strong>链接：</strong> <a href="https://www.zhangzhenhu.com/aigc/ddim.html#equation-eq-ddim-216">3. 去噪扩散隐式模型（Denoising Diffusion Implicit Models,DDIM） — 张振虎的博客 张振虎 文档</a><br>DDIM 的解析里比较好懂的一个。</p>
+<h4 id="DDIM-原理"><a href="#DDIM-原理" class="headerlink" title="DDIM 原理"></a>DDIM 原理</h4><p><strong>链接：</strong> <a href="https://littlenyima.github.io/posts/14-denoising-diffusion-implicit-models/">笔记｜扩散模型（二）：DDIM 理论与实现 | 極東晝寢愛好家</a><br>我看到的 DDIM 的解析里讲的比较清楚的一个。</p>
 <hr>
 <h4 id="不同的-normalization"><a href="#不同的-normalization" class="headerlink" title="不同的 normalization"></a>不同的 normalization</h4><p><strong>链接：</strong> <a href="https://zhuanlan.zhihu.com/p/86765356">https://zhuanlan.zhihu.com/p/86765356</a><br>说明了 BN、LN、IN 以及 GN 的区别。</p>
 <hr>
@@ -781,6 +781,16 @@ $$
 被教练说上身完全没有控制，果然啥运动都得练核心 QAQ</p>
 
                 <span class="cd-timeline__date svelte-1t2uafz">2024-12-28</span>
+            </div>
+        </div><div class="cd-timeline__block js-cd-block svelte-1t2uafz">
+            <div class="cd-timeline__img cd-timeline__img--movie js-cd-img svelte-1t2uafz">
+            </div>
+            <div class="cd-timeline__content js-cd-content svelte-1t2uafz">
+                <h2 class="svelte-1t2uafz">前压步</h2>
+                <p>元旦冰场居然没什么人，快乐地滑了一下午，顺时针压步勉强也以压起来了，但是没有逆时针那种突然悟了觉得很稳很安心的感觉，单纯是出于封建迷信不希望新年第一个 flag 倒了的心态，在顽强对抗恐惧～
+以为自己蹬得很努力了，一看拍的视频，龟速爬行 QAQ</p>
+
+                <span class="cd-timeline__date svelte-1t2uafz">2025-01-01</span>
             </div>
         </div>
     </div>
