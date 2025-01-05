@@ -1,6 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>2025愿望清单</title>
+    <url>/posts/5ea7715c/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h4 id="工作"><a href="#工作" class="headerlink" title="工作"></a>工作</h4><ol>
+<li>目前手上的 task 取得提升，去年做了很多尝试但指标都没有提升希望今年有所突破；</li>
+<li>至少 50 篇不少于 1000 字的论文笔记 blog；</li>
+<li>至少 3 个领域相对系统的 survey。</li>
+</ol>
+<hr>
+<h4 id="提升自己"><a href="#提升自己" class="headerlink" title="提升自己"></a>提升自己</h4><ol>
+<li>考下专利代理师证；</li>
+<li>花滑达到步法一级水平，机会合适考下证书。</li>
+</ol>
+<hr>
+<h4 id="零零碎碎"><a href="#零零碎碎" class="headerlink" title="零零碎碎"></a>零零碎碎</h4><ol>
+<li>30 本推理小说；</li>
+<li>10 部电影；</li>
+<li>Blog 美化。</li>
+</ol>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>生活琐事</category>
+        <category>点点滴滴</category>
+      </categories>
+      <tags>
+        <tag>愿望清单</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SDXL</title>
     <url>/posts/826780ab/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> SDXL: Improving Latent Diffusion Models for High-Resolution Image Synthesis<br><strong>链接：</strong> <a href="https://arxiv.org/pdf/2307.01952">https://arxiv.org/pdf/2307.01952</a><br><strong>代码：</strong> <a href="https://github.com/Stability-AI/generative-models">https://github.com/Stability-AI/generative-models</a><br><strong>来源：</strong> ICLR 2024<br><strong>单位：</strong> Stability AI, Applied Research</p>

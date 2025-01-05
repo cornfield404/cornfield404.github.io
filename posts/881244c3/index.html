@@ -1,351 +1,177 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <!--pjax：防止跳转页面音乐暂停-->
-  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/images/logo.svg" color="#222">
-
-<link rel="stylesheet" href="/css/main.css">
-
-
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
-
-<script class="next-config" data-name="main" type="application/json">{"hostname":"cornfield404.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.21.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
-
-    <meta name="description" content="Understanding LLMLLM 与传统方法相比的优势之前的方法在比较复杂的理解和生成任务中表现不佳，例如：上下文分析、生成连贯文本，同时只适用于一些特定的任务。而 LLM 可以在一系列任务上表现出较好的性能。LLM 成功的原因包括 transformer 结构以及大量的训练数据。 Stages of building and using LLMS">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Build a LLM From Scratch | Corn Field</title><meta name="author" content="Corn"><meta name="copyright" content="Corn"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Understanding LLMLLM 与传统方法相比的优势之前的方法在比较复杂的理解和生成任务中表现不佳，例如：上下文分析、生成连贯文本，同时只适用于一些特定的任务。而 LLM 可以在一系列任务上表现出较好的性能。LLM 成功的原因包括 transformer 结构以及大量的训练数据。 Stages of building and using LLMS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Build a LLM From Scratch">
 <meta property="og:url" content="https://cornfield404.github.io/posts/881244c3/index.html">
 <meta property="og:site_name" content="Corn Field">
 <meta property="og:description" content="Understanding LLMLLM 与传统方法相比的优势之前的方法在比较复杂的理解和生成任务中表现不佳，例如：上下文分析、生成连贯文本，同时只适用于一些特定的任务。而 LLM 可以在一系列任务上表现出较好的性能。LLM 成功的原因包括 transformer 结构以及大量的训练数据。 Stages of building and using LLMS">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-26%2014.09.22.png">
-<meta property="og:image" content="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-26%2015.49.54.png">
-<meta property="og:image" content="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-27%2010.51.33.png">
-<meta property="og:image" content="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-27%2015.26.48.png">
+<meta property="og:image" content="https://cornfield404.github.io/img/avatar.jpg">
 <meta property="article:published_time" content="2024-11-26T05:55:59.000Z">
 <meta property="article:modified_time" content="2024-12-19T10:44:57.004Z">
 <meta property="article:author" content="Corn">
 <meta property="article:tag" content="读书笔记">
 <meta property="article:tag" content="LLM">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-11-26%2014.09.22.png">
+<meta name="twitter:image" content="https://cornfield404.github.io/img/avatar.jpg"><link rel="shortcut icon" href="/img/butterfly-icon.png"><link rel="canonical" href="https://cornfield404.github.io/posts/881244c3/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
 
-
-<link rel="canonical" href="https://cornfield404.github.io/posts/881244c3/">
-
-
-
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://cornfield404.github.io/posts/881244c3/","path":"posts/881244c3/","title":"Build a LLM From Scratch"}</script>
-
-<script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Build a LLM From Scratch | Corn Field</title>
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
   
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
 
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
 
-
-
-
-
-
-<link rel="dns-prefetch" href="hexowaline-ten.vercel.app">
-  <noscript>
-    <link rel="stylesheet" href="/css/noscript.css">
-  </noscript>
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
-  <div class="headband"></div>
-
-  <main class="main">
-    <div class="column">
-      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="切换导航栏" role="button">
-        <span class="toggle-line"></span>
-        <span class="toggle-line"></span>
-        <span class="toggle-line"></span>
-    </div>
-  </div>
-
-  <div class="site-meta">
-
-    <a href="/" class="brand" rel="start">
-      <i class="logo-line"></i>
-      <p class="site-title">Corn Field</p>
-      <i class="logo-line"></i>
-    </a>
-  </div>
-
-  <div class="site-nav-right">
-    <div class="toggle popup-trigger" aria-label="搜索" role="button">
-        <i class="fa fa-search fa-fw fa-lg"></i>
-    </div>
-  </div>
-</div>
-
-
-
-<nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-技术积累"><a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/" rel="section"><i class="fa fa-book fa-fw"></i>技术积累</a></li><li class="menu-item menu-item-休闲娱乐"><a href="/categories/%E4%BC%91%E9%97%B2%E5%A8%B1%E4%B9%90/" rel="section"><i class="fa fa-film fa-fw"></i>休闲娱乐</a></li><li class="menu-item menu-item-生活琐事"><a href="/categories/%E7%94%9F%E6%B4%BB%E7%90%90%E4%BA%8B/" rel="section"><i class="fa fa-camera fa-fw"></i>生活琐事</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-random"><a href="/random.html" rel="section"><i class="fas fa-random fa-fw"></i>随便逛逛</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>友链</a></li><li class="menu-item menu-item-碎碎念"><a href="/artitalk/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>碎碎念</a></li>
-      <li class="menu-item menu-item-search">
-        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
-        </a>
-      </li>
-  </ul>
-</nav>
-
-
-
-  <div class="search-pop-overlay">
-    <div class="popup search-popup">
-      <div class="search-header">
-        <span class="search-icon">
-          <i class="fa fa-search"></i>
-        </span>
-        <div class="search-input-container">
-          <input autocomplete="off" autocapitalize="off" maxlength="80"
-                placeholder="搜索..." spellcheck="false"
-                type="search" class="search-input">
-        </div>
-        <span class="popup-btn-close" role="button">
-          <i class="fa fa-times-circle"></i>
-        </span>
-      </div>
-      <div class="search-result-container">
-        <div class="search-result-icon">
-          <i class="fa fa-spinner fa-pulse fa-5x"></i>
-        </div>
-      </div>
-    </div>
-  </div>
-
-</header>
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
         
-  
-  <aside class="sidebar">
-
-    <!--网易云音乐插件-->
-    <!-- require APlayer -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
-    <!-- require MetingJS-->
-    <script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script> 
-    <!--网易云playlist外链地址-->   
-    <meting-js
-        server="netease"
-        type="playlist" 
-        id="12848243996"
-        mini="false"
-        fixed="false"
-        list-folded="true"
-        autoplay="false"
-        volume="0.7"
-        theme="#FADFA3"
-        order="list"
-        loop="all"
-        preload="auto"
-        mutex="true">
-    </meting-js>
-
-    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
-      <ul class="sidebar-nav">
-        <li class="sidebar-nav-toc">
-          文章目录
-        </li>
-        <li class="sidebar-nav-overview">
-          站点概览
-        </li>
-      </ul>
-
-      <div class="sidebar-panel-container">
-        <!--noindex-->
-        <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Understanding-LLM"><span class="nav-number">1.</span> <span class="nav-text">Understanding LLM</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#LLM-%E4%B8%8E%E4%BC%A0%E7%BB%9F%E6%96%B9%E6%B3%95%E7%9B%B8%E6%AF%94%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="nav-number">1.1.</span> <span class="nav-text">LLM 与传统方法相比的优势</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Stages-of-building-and-using-LLMS"><span class="nav-number">1.2.</span> <span class="nav-text">Stages of building and using LLMS</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Working-with-text-data"><span class="nav-number">2.</span> <span class="nav-text">Working with text data</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Understanding-word-embeddings"><span class="nav-number">2.1.</span> <span class="nav-text">Understanding word embeddings</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Tokenizing-text"><span class="nav-number">2.2.</span> <span class="nav-text">Tokenizing text</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Converting-tokens-into-token-IDs"><span class="nav-number">2.3.</span> <span class="nav-text">Converting tokens into token IDs</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Adding-special-context-tokens"><span class="nav-number">2.4.</span> <span class="nav-text">Adding special context tokens</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Byte-pair-encoding"><span class="nav-number">2.5.</span> <span class="nav-text">Byte pair encoding</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Data-sampling-with-a-sliding-window"><span class="nav-number">2.6.</span> <span class="nav-text">Data sampling with a sliding window</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Creating-token-embeddings"><span class="nav-number">2.7.</span> <span class="nav-text">Creating token embeddings</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Embedding-word-positions"><span class="nav-number">2.8.</span> <span class="nav-text">Embedding word positions</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Coding-attention-mechanisms"><span class="nav-number">3.</span> <span class="nav-text">Coding attention mechanisms</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#The-problem-with-modeling-long-sequences"><span class="nav-number">3.1.</span> <span class="nav-text">The problem with modeling long sequences</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Implementing-self-attention-with-trainable-weights"><span class="nav-number">3.2.</span> <span class="nav-text">Implementing self-attention with trainable weights</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Hiding-future-words-with-causal-attention"><span class="nav-number">3.3.</span> <span class="nav-text">Hiding future words with causal attention</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Extending-single-head-attention-to-multi-head-attention"><span class="nav-number">3.4.</span> <span class="nav-text">Extending single-head attention to multi-head attention</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Implementing-a-GPT-model-from-scratch-to-generate-text"><span class="nav-number">4.</span> <span class="nav-text">Implementing a GPT model from scratch to generate text</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Pretraining-on-unlabeled-data"><span class="nav-number">5.</span> <span class="nav-text">Pretraining on unlabeled data</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Evaluating-generative-text-models"><span class="nav-number">5.1.</span> <span class="nav-text">Evaluating generative text models</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Training-an-LLM"><span class="nav-number">5.2.</span> <span class="nav-text">Training an LLM</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Decoding-strategies-to-control-randomness"><span class="nav-number">5.3.</span> <span class="nav-text">Decoding strategies to control randomness</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Fine-tuning-for-classification"><span class="nav-number">6.</span> <span class="nav-text">Fine-tuning for classification</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Fine-tuning-to-follow-instructions"><span class="nav-number">7.</span> <span class="nav-text">Fine-tuning to follow instructions</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%AA%E4%BA%BA%E8%AF%84%E4%BB%B7"><span class="nav-number">8.</span> <span class="nav-text">个人评价</span></a></li></ol></div>
-        </div>
-        <!--/noindex-->
-
-        <div class="site-overview-wrap sidebar-panel">
-          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">Corn</p>
-  <div class="site-description" itemprop="description"></div>
-</div>
-<div class="site-state-wrap animated">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-        <a href="/archives/">
-          <span class="site-state-item-count">34</span>
-          <span class="site-state-item-name">日志</span>
-        </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-          <a href="/categories/">
-        <span class="site-state-item-count">9</span>
-        <span class="site-state-item-name">分类</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-          <a href="/tags/">
-        <span class="site-state-item-count">43</span>
-        <span class="site-state-item-name">标签</span></a>
-      </div>
-  </nav>
-</div>
-
-  <div class="links-of-recent-posts motion-element">
-    <div class="links-of-recent-posts-title">
-      <i class="fa fa-history fa-fw"></i>
-      最近文章
-    </div>
-    <ul class="links-of-recent-posts-list">
-        <li class="links-of-recent-posts-item">
-          <a href="/posts/826780ab/" title="posts&#x2F;826780ab&#x2F;">SDXL</a>
-        </li>
-        <li class="links-of-recent-posts-item">
-          <a href="/posts/f0775513/" title="posts&#x2F;f0775513&#x2F;">DDPM</a>
-        </li>
-        <li class="links-of-recent-posts-item">
-          <a href="/posts/57e95ee9/" title="posts&#x2F;57e95ee9&#x2F;">InstructSeg</a>
-        </li>
-        <li class="links-of-recent-posts-item">
-          <a href="/posts/28a6509c/" title="posts&#x2F;28a6509c&#x2F;">ViLLa</a>
-        </li>
-        <li class="links-of-recent-posts-item">
-          <a href="/posts/befdae7d/" title="posts&#x2F;befdae7d&#x2F;">RT-DETR</a>
-        </li>
-    </ul>
-  </div>
-        </div>
-      </div>
-    </div>
-
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
     
-  </aside>
-
-
-    </div>
-
-    <div class="main-inner post posts-expand">
-
-
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
   
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Build a LLM From Scratch',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="loading-box" onclick="document.getElementById(&quot;loading-box&quot;).classList.add(&quot;loaded&quot;)"><div class="loading-bg"><div class="loading-img"></div><div class="loading-image-dot"></div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
 
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
 
-<div class="post-block">
-  
-  
+if (false) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><script>window.paceOptions = {
+  restartOnPushState: false
+}
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://cornfield404.github.io/posts/881244c3/">
+btf.addGlobalFn('pjaxSend', () => {
+  Pace.restart()
+}, 'pace_restart')
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Corn">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Corn Field">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="Build a LLM From Scratch | Corn Field">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          Build a LLM From Scratch
-        </h1>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-
-  
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2024-11-26 13:55:59" itemprop="dateCreated datePublished" datetime="2024-11-26T13:55:59+08:00">2024-11-26</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-12-19 18:44:57" itemprop="dateModified" datetime="2024-12-19T18:44:57+08:00">2024-12-19</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/" itemprop="url" rel="index"><span itemprop="name">技术积累</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">读书笔记</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">阅读次数：</span>
-      <span id="busuanzi_value_page_pv"></span>
-    </span>
-  
-  <span class="post-meta-item">
-    
-    <span class="post-meta-item-icon">
-      <i class="far fa-comment"></i>
-    </span>
-    <span class="post-meta-item-text">Waline：</span>
-  
-    <a title="waline" href="/posts/881244c3/#waline" itemprop="discussionUrl">
-      <span class="post-comments-count waline-comment-count" data-path="/posts/881244c3/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>12k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>11 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody"><h4 id="Understanding-LLM"><a href="#Understanding-LLM" class="headerlink" title="Understanding LLM"></a>Understanding LLM</h4><h5 id="LLM-与传统方法相比的优势"><a href="#LLM-与传统方法相比的优势" class="headerlink" title="LLM 与传统方法相比的优势"></a>LLM 与传统方法相比的优势</h5><p>之前的方法在比较复杂的理解和生成任务中表现不佳，例如：上下文分析、生成连贯文本，同时只适用于一些特定的任务。而 LLM 可以在一系列任务上表现出较好的性能。LLM 成功的原因包括 transformer 结构以及大量的训练数据。</p>
+</script><link rel="stylesheet" href="/css/progress_bar.css"/><script src="https://cdn.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">35</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">44</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-book"></i><span> 技术积累</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/%E7%BC%96%E7%A8%8B%E6%8A%80%E5%B7%A7/"><i class="fa-fw fa fa-code"></i><span> 编程技巧</span></a></li><li><a class="site-page child" href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/"><i class="fa-fw fa fa-newspaper"></i><span> 论文笔记</span></a></li><li><a class="site-page child" href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"><i class="fa-fw fa fa-book-open"></i><span> 读书笔记</span></a></li><li><a class="site-page child" href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/%E6%9D%82%E4%B8%83%E6%9D%82%E5%85%AB/"><i class="fa-fw fa fa-paperclip"></i><span> 杂七杂八</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-clapperboard"></i><span> 休闲娱乐</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/%E4%BC%91%E9%97%B2%E5%A8%B1%E4%B9%90/%E4%B9%A6%E7%B1%8D%E9%98%85%E8%AF%BB/"><i class="fa-fw fa fa-book-open-reader"></i><span> 书籍阅读</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-camera"></i><span> 生活琐事</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/%E7%94%9F%E6%B4%BB%E7%90%90%E4%BA%8B/%E7%A5%9E%E5%A5%87%E6%8A%80%E8%83%BD/"><i class="fa-fw fa fa-person-skating"></i><span> 神奇技能</span></a></li><li><a class="site-page child" href="/categories/%E7%94%9F%E6%B4%BB%E7%90%90%E4%BA%8B/%E7%82%B9%E7%82%B9%E6%BB%B4%E6%BB%B4/"><i class="fa-fw fa fa-puzzle-piece"></i><span> 点点滴滴</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-folder-open"></i><span> 整理</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-th"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-bars"></i><span> 其他</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/random.html"><i class="fa-fw fas fa-random"></i><span> 随便逛逛</span></a></li><li><a class="site-page child" href="/artitalk/"><i class="fa-fw fa fa-heartbeat"></i><span> 碎碎念</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-user"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></li><li><a class="site-page child" href="/sitemap.xml"><i class="fa-fw fa fa-sitemap"></i><span> 站点地图</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/background.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Corn Field</span></a><a class="nav-page-title" href="/"><span class="site-name">Build a LLM From Scratch</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-book"></i><span> 技术积累</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/%E7%BC%96%E7%A8%8B%E6%8A%80%E5%B7%A7/"><i class="fa-fw fa fa-code"></i><span> 编程技巧</span></a></li><li><a class="site-page child" href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/"><i class="fa-fw fa fa-newspaper"></i><span> 论文笔记</span></a></li><li><a class="site-page child" href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"><i class="fa-fw fa fa-book-open"></i><span> 读书笔记</span></a></li><li><a class="site-page child" href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/%E6%9D%82%E4%B8%83%E6%9D%82%E5%85%AB/"><i class="fa-fw fa fa-paperclip"></i><span> 杂七杂八</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-clapperboard"></i><span> 休闲娱乐</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/%E4%BC%91%E9%97%B2%E5%A8%B1%E4%B9%90/%E4%B9%A6%E7%B1%8D%E9%98%85%E8%AF%BB/"><i class="fa-fw fa fa-book-open-reader"></i><span> 书籍阅读</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-camera"></i><span> 生活琐事</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/%E7%94%9F%E6%B4%BB%E7%90%90%E4%BA%8B/%E7%A5%9E%E5%A5%87%E6%8A%80%E8%83%BD/"><i class="fa-fw fa fa-person-skating"></i><span> 神奇技能</span></a></li><li><a class="site-page child" href="/categories/%E7%94%9F%E6%B4%BB%E7%90%90%E4%BA%8B/%E7%82%B9%E7%82%B9%E6%BB%B4%E6%BB%B4/"><i class="fa-fw fa fa-puzzle-piece"></i><span> 点点滴滴</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-folder-open"></i><span> 整理</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-th"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-bars"></i><span> 其他</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/random.html"><i class="fa-fw fas fa-random"></i><span> 随便逛逛</span></a></li><li><a class="site-page child" href="/artitalk/"><i class="fa-fw fa fa-heartbeat"></i><span> 碎碎念</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-user"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></li><li><a class="site-page child" href="/sitemap.xml"><i class="fa-fw fa fa-sitemap"></i><span> 站点地图</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Build a LLM From Scratch</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-11-26T05:55:59.000Z" title="发表于 2024-11-26 13:55:59">2024-11-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-19T10:44:57.004Z" title="更新于 2024-12-19 18:44:57">2024-12-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/">技术积累</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h4 id="Understanding-LLM"><a href="#Understanding-LLM" class="headerlink" title="Understanding LLM"></a>Understanding LLM</h4><h5 id="LLM-与传统方法相比的优势"><a href="#LLM-与传统方法相比的优势" class="headerlink" title="LLM 与传统方法相比的优势"></a>LLM 与传统方法相比的优势</h5><p>之前的方法在比较复杂的理解和生成任务中表现不佳，例如：上下文分析、生成连贯文本，同时只适用于一些特定的任务。而 LLM 可以在一系列任务上表现出较好的性能。LLM 成功的原因包括 transformer 结构以及大量的训练数据。</p>
 <h5 id="Stages-of-building-and-using-LLMS"><a href="#Stages-of-building-and-using-LLMS" class="headerlink" title="Stages of building and using LLMS"></a>Stages of building and using LLMS</h5><p>目前的研究表明，模型在特定任务或特定领域上训练后可以表现出超过通用 LLM 的性能。因此 LLM 训练通常包括两步：</p>
 <ul>
 <li>Pretrain 指模型在大规模数据库上训练，使模型具有语言理解能力，这一阶段的数据是不需要标注的；</li>
@@ -409,167 +235,4 @@
 <hr>
 <h4 id="个人评价"><a href="#个人评价" class="headerlink" title="个人评价"></a>个人评价</h4><p>整体上是一本比较好的大模型入门书，不需要有太多基础知识，只要大概熟悉 python 就能看懂。用比较简单的例子，说明了大模型的各个模块的功能以及代码。但是整体确实比较浅，如果已经有过一定经验的话，再看意义就不大。</p>
 <hr>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag"><i class="fa fa-tag"></i> 读书笔记</a>
-              <a href="/tags/LLM/" rel="tag"><i class="fa fa-tag"></i> LLM</a>
-          </div>
-
-        
-
-          <div class="post-nav">
-            <div class="post-nav-item">
-                <a href="/posts/8215b0f1/" rel="prev" title="那种可能性早已料及">
-                  <i class="fa fa-angle-left"></i> 那种可能性早已料及
-                </a>
-            </div>
-            <div class="post-nav-item">
-                <a href="/posts/44658eea/" rel="next" title="串联所有单词的子串">
-                  串联所有单词的子串 <i class="fa fa-angle-right"></i>
-                </a>
-            </div>
-          </div>
-    </footer>
-  </article>
-</div>
-
-
-
-
-
-
-    <div class="comments" id="waline"></div>
-</div>
-  </main>
-
-  <footer class="footer">
-    <div class="footer-inner">
-
-  <div class="copyright">
-    &copy; 2024 – 
-    <span itemprop="copyrightYear">2025</span>
-    <span class="with-love">
-      <i class="fa fa-heart"></i>
-    </span>
-    <span class="author" itemprop="copyrightHolder">Corn</span>
-  </div>
-<div class="wordcount">
-  <span class="post-meta-item">
-    <span class="post-meta-item-icon">
-      <i class="fa fa-chart-line"></i>
-    </span>
-    <span title="站点总字数">53k</span>
-  </span>
-  <span class="post-meta-item">
-    <span class="post-meta-item-icon">
-      <i class="fa fa-coffee"></i>
-    </span>
-    <span title="站点阅读时长">48 分钟</span>
-  </span>
-</div>
-<div class="busuanzi-count">
-    <span class="post-meta-item" id="busuanzi_container_site_uv">
-      <span class="post-meta-item-icon">
-        <i class="fa fa-user"></i>
-      </span>
-      <span class="site-uv" title="总访客量">
-        <span id="busuanzi_value_site_uv"></span>
-      </span>
-    </span>
-    <span class="post-meta-item" id="busuanzi_container_site_pv">
-      <span class="post-meta-item-icon">
-        <i class="fa fa-eye"></i>
-      </span>
-      <span class="site-pv" title="总访问量">
-        <span id="busuanzi_value_site_pv"></span>
-      </span>
-    </span>
-</div>
-  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
-  </div>
-
-<!-- 网站运行时间的设置 -->
-<span id="timeDate">载入天数...</span>
-<script>
-    var now = new Date();
-    function createtime() {
-        var grt= new Date("11/13/2024 09:00:00");//此处修改你的建站时间或者网站上线时间
-        now.setTime(now.getTime()+250);
-        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
-        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
-        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
-        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
-        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
-        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
-        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 "+hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
-    }
-    setInterval("createtime()",250);
-</script>
-    </div>
-  </footer>
-
-  
-  <div class="toggle sidebar-toggle" role="button">
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-  </div>
-  <div class="sidebar-dimmer"></div>
-  <div class="back-to-top" role="button" aria-label="返回顶部">
-    <i class="fa fa-arrow-up fa-lg"></i>
-    <span>0%</span>
-  </div>
-
-<noscript>
-  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
-</noscript>
-
-
-  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
-<script src="/js/third-party/search/local-search.js"></script>
-
-
-
-
-
-  <script src="/js/third-party/pace.js"></script>
-
-
-  
-  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-
-
-  
-
-  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
-<script src="/js/third-party/math/mathjax.js"></script>
-
-
-<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"hexowaline-ten.vercel.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"(发表评论)","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":true,"comment_count":true,"requiredFields":[],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/posts/881244c3/"}</script>
-<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
-<script>
-document.addEventListener('page:loaded', () => {
-  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
-    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
-  ).then(() => 
-    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
-  );
-});
-</script>
-
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true}});</script></body>
-</html>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://cornfield404.github.io">Corn</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://cornfield404.github.io/posts/881244c3/">https://cornfield404.github.io/posts/881244c3/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://cornfield404.github.io" target="_blank">Corn Field</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a><a class="post-meta__tags" href="/tags/LLM/">LLM</a></div><div class="post-share"><div class="social-share" data-image="/img/avatar.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/44658eea/" title="串联所有单词的子串"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">串联所有单词的子串</div></div><div class="info-2"><div class="info-item-1">题目给定一个字符串 s 和一个字符串数组 words。words 中所有字符串长度相同。s 中的串联子串是指一个包含 words 中所有字符串以任意顺序排列连接起来的子串。返回所有串联子串在 s 中的开始索引。你可以以任意顺序返回答案。  思路利用所有字符串等长的特点，逐位置搜索。  代码1234567891011121314151617181920212223class Solution:    def findSubstring(self, s: str, words: List[str]) -&gt; List[int]:        from collections import Counter        if not s or not words:            return []                one_word = len(words[0])        all_len = len(words) * one_word        n = len(s)                words = Counter(words)    ...</div></div></div></a><a class="pagination-related" href="/posts/8215b0f1/" title="那种可能性早已料及"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">那种可能性早已料及</div></div><div class="info-2"><div class="info-item-1">故事梗概自称渡良濑莉世的委托人怀疑自己十年前杀过人，希望委托侦探上苙丞调查确认。十年前，莉世和堂仁被各自的母亲带到教团”血赎”的居住地，二人都希望从村里逃走。村里的出入口只有一个，除交易日外不常打开，悬崖的岩石很脆不能攀爬，村里材料不足无法制造梯子或高台等工具，但堂仁依旧在为逃走准备，并承诺带莉世一起。村里共三十三人，一名教祖，其余是信徒。 村里的猪身上都带有号码牌，按照顺序决定下次吃那一头。某天堂仁发现莉世把 12 号的号码牌藏了起来，莉世回答自己喜欢 12...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/57e95ee9/" title="InstructSeg"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-26</div><div class="info-item-2">InstructSeg</div></div><div class="info-2"><div class="info-item-1">题目： InstructSeg: Unifying Instructed Visual Segmentation with Multi-modal Large Language Models链接： https://arxiv.org/pdf/2412.14006代码： https://github.com/congvvc/InstructSeg来源： arxiv单位： Tsinghua Shenzhen International Graduate School, Tsinghua University；Meituan Inc.  本文目的为图像和视频的 referring segmentation 和 reasoning segmentation 设计一个统一的 end-to-end 框架。  Method Object-aware Video Perceiver该模块根据输入的待分割视频帧及文本信息，提取 query 特征：   $$ \begin{align} f_r^t&=F_{CLIP}(I_r^t)...</div></div></div></a><a class="pagination-related" href="/posts/28a6509c/" title="ViLLa"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-25</div><div class="info-item-2">ViLLa</div></div><div class="info-2"><div class="info-item-1">题目： ViLLa: Video Reasoning Segmentation with LargeLanguage Model链接： https://arxiv.org/pdf/2407.14500代码： https://github.com/rkzheng99/ViLLa来源： arxiv单位： The University of Hong Kong；University of California, Merced；Shanghai Artificial Intelligence Laboratory；SenseTime Research  Video Reasoning Segmentation根据文本，输出视频对应的分割 mask。其中，文本可能是很复杂的描述，例如：a type of African mammal known for their distinctive black and white striped coat patterns walking at the end of its herd。  Method Encoders 视觉编码器提取多尺度视觉特征...</div></div></div></a><a class="pagination-related" href="/posts/44b7472c/" title="Decoder-Only优势"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-23</div><div class="info-item-2">Decoder-Only优势</div></div><div class="info-2"><div class="info-item-1">问题为什么目前的模型大多数采用 decoder only 架构而非 encoder decoder 模型？  参考为什么现在的 LLM 都是 Decoder only 的架构？ - Sam 聊算法的回答 - 知乎https://www.zhihu.com/question/588325646/answer/3357252612  实验证据 Zero shot 任务里，decoder only 模型泛化性更好 wang22u.pdf Few shot 任务里，也是一样 2212.10559   理论说明 为什么现在的LLM都是Decoder-only的架构？ - 科学空间|Scientific Spaces 里认为可能是由于 encoder decoder 模型可能导致 attention map 是低秩的，但 decoder only 模型里采用 causal attention 的 attention map 一定是满秩的，所以有更强的表达能力； 为什么现在的 LLM 都是 Decoder only 的架构？ - yili 的回答 -...</div></div></div></a><a class="pagination-related" href="/posts/49eb3a2b/" title="Decoder-Only or Encoder-Decoder"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-23</div><div class="info-item-2">Decoder-Only or Encoder-Decoder</div></div><div class="info-2"><div class="info-item-1">题目： Decoder-Only or Encoder-Decoder? Interpreting Language Model as a Regularized Encoder-Decoder链接： https://arxiv.org/pdf/2304.04052来源： arxiv单位： Language Technology Lab, University of Cambridge；The Chinese University of Hong Kong；JD. Com；Department of Computer Science and Technology, Tsinghua University  本文目的以前的论文里有的认为 decoder only 结构更好，有的认为 encoder decoder 结构更好，本文希望进一步分析比较这两种模型。  MethodRegularized Encoder-Decoder目的对传统 encoder decoder 模型进行了变体，使模型在行为上更接近 decoder only 模型。 模型结构  Unidirectional...</div></div></div></a><a class="pagination-related" href="/posts/5fae19d/" title="qwen2-vl"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-18</div><div class="info-item-2">qwen2-vl</div></div><div class="info-2"><div class="info-item-1">题目： Qwen 2-VL: Enhancing Vision-Language Model’s Perception of the World at Any Resolution链接： https://arxiv.org/pdf/2409.12191代码： https://github.com/QwenLM/Qwen2-VL来源： arxiv单位： Qwen Team Alibaba Group  目前方法的缺陷及 qwen2-vl 的解决方法 当前大多数 LVLM 会固定输入图像的尺寸，这会导致高分辨率图像信息的丢失。Qwen2-vl 在训练过程中引入动态分辨率； 当前大多数模型在处理视频时，会把视频帧看作互不关联的图像。Qwen2-vl 设计了 multimodal rotary position embedding 处理时空维度的信息。   Method模型尺寸 模型结构  Naive Dynamic Resolution：采用 Navit 以及 2D-RoPE； M-RoPE： Unified Image and Video...</div></div></div></a><a class="pagination-related" href="/posts/9dfc0fd2/" title="MiniDrive"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">MiniDrive</div></div><div class="info-2"><div class="info-item-1">题目： MiniDrive: More Efficient Vision-Language Models with Multi-Level 2 D Features as Text Tokens for Autonomous Driving链接： https://arxiv.org/pdf/2409.07267代码： https://github.com/EMZucas/minidrive来源： arxiv单位： School of Artificial Intelligence, University of Chinese Academy of Sciences；State Key Laboratory of Multimodal Artificial Intelligence Systems, Institute of Automation, Chinese Academy of Sciences  目前模型缺陷 模型规模比较大，导致实际部署困难； 自动驾驶通常会采用多张图作为输入，目前的模型大多没有结合多张图的能力。   Method模型整体结构  Vision...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Corn</div><div class="author-info-description">来者可追</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">35</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">44</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#Understanding-LLM"><span class="toc-number">1.</span> <span class="toc-text">Understanding LLM</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#LLM-%E4%B8%8E%E4%BC%A0%E7%BB%9F%E6%96%B9%E6%B3%95%E7%9B%B8%E6%AF%94%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="toc-number">1.1.</span> <span class="toc-text">LLM 与传统方法相比的优势</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Stages-of-building-and-using-LLMS"><span class="toc-number">1.2.</span> <span class="toc-text">Stages of building and using LLMS</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Working-with-text-data"><span class="toc-number">2.</span> <span class="toc-text">Working with text data</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Understanding-word-embeddings"><span class="toc-number">2.1.</span> <span class="toc-text">Understanding word embeddings</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Tokenizing-text"><span class="toc-number">2.2.</span> <span class="toc-text">Tokenizing text</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Converting-tokens-into-token-IDs"><span class="toc-number">2.3.</span> <span class="toc-text">Converting tokens into token IDs</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Adding-special-context-tokens"><span class="toc-number">2.4.</span> <span class="toc-text">Adding special context tokens</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Byte-pair-encoding"><span class="toc-number">2.5.</span> <span class="toc-text">Byte pair encoding</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Data-sampling-with-a-sliding-window"><span class="toc-number">2.6.</span> <span class="toc-text">Data sampling with a sliding window</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Creating-token-embeddings"><span class="toc-number">2.7.</span> <span class="toc-text">Creating token embeddings</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Embedding-word-positions"><span class="toc-number">2.8.</span> <span class="toc-text">Embedding word positions</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Coding-attention-mechanisms"><span class="toc-number">3.</span> <span class="toc-text">Coding attention mechanisms</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#The-problem-with-modeling-long-sequences"><span class="toc-number">3.1.</span> <span class="toc-text">The problem with modeling long sequences</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Implementing-self-attention-with-trainable-weights"><span class="toc-number">3.2.</span> <span class="toc-text">Implementing self-attention with trainable weights</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Hiding-future-words-with-causal-attention"><span class="toc-number">3.3.</span> <span class="toc-text">Hiding future words with causal attention</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Extending-single-head-attention-to-multi-head-attention"><span class="toc-number">3.4.</span> <span class="toc-text">Extending single-head attention to multi-head attention</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Implementing-a-GPT-model-from-scratch-to-generate-text"><span class="toc-number">4.</span> <span class="toc-text">Implementing a GPT model from scratch to generate text</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Pretraining-on-unlabeled-data"><span class="toc-number">5.</span> <span class="toc-text">Pretraining on unlabeled data</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Evaluating-generative-text-models"><span class="toc-number">5.1.</span> <span class="toc-text">Evaluating generative text models</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Training-an-LLM"><span class="toc-number">5.2.</span> <span class="toc-text">Training an LLM</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Decoding-strategies-to-control-randomness"><span class="toc-number">5.3.</span> <span class="toc-text">Decoding strategies to control randomness</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Fine-tuning-for-classification"><span class="toc-number">6.</span> <span class="toc-text">Fine-tuning for classification</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Fine-tuning-to-follow-instructions"><span class="toc-number">7.</span> <span class="toc-text">Fine-tuning to follow instructions</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%AA%E4%BA%BA%E8%AF%84%E4%BB%B7"><span class="toc-number">8.</span> <span class="toc-text">个人评价</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><div class="content"><a class="title" href="/posts/5ea7715c/" title="2025愿望清单">2025愿望清单</a><time datetime="2025-01-03T11:09:47.000Z" title="发表于 2025-01-03 19:09:47">2025-01-03</time></div></div><div class="aside-list-item"><div class="content"><a class="title" href="/posts/826780ab/" title="SDXL">SDXL</a><time datetime="2024-12-27T05:23:39.000Z" title="发表于 2024-12-27 13:23:39">2024-12-27</time></div></div><div class="aside-list-item"><div class="content"><a class="title" href="/posts/f0775513/" title="DDPM">DDPM</a><time datetime="2024-12-26T10:35:25.000Z" title="发表于 2024-12-26 18:35:25">2024-12-26</time></div></div><div class="aside-list-item"><div class="content"><a class="title" href="/posts/57e95ee9/" title="InstructSeg">InstructSeg</a><time datetime="2024-12-26T02:46:31.000Z" title="发表于 2024-12-26 10:46:31">2024-12-26</time></div></div><div class="aside-list-item"><div class="content"><a class="title" href="/posts/28a6509c/" title="ViLLa">ViLLa</a><time datetime="2024-12-25T03:08:24.000Z" title="发表于 2024-12-25 11:08:24">2024-12-25</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By Corn</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true}});</script></body></html>

@@ -1,513 +1,181 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <!--pjax：防止跳转页面音乐暂停-->
-  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/images/logo.svg" color="#222">
-
-<link rel="stylesheet" href="/css/main.css">
-
-
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
-
-<script class="next-config" data-name="main" type="application/json">{"hostname":"cornfield404.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.21.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
-
-    <meta name="description" content="题目编写一个程序，通过填充空格来解决数独问题。  思路">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>解数独 | Corn Field</title><meta name="author" content="Corn"><meta name="copyright" content="Corn"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="题目编写一个程序，通过填充空格来解决数独问题。  思路">
 <meta property="og:type" content="article">
 <meta property="og:title" content="解数独">
 <meta property="og:url" content="https://cornfield404.github.io/posts/de1f6638/index.html">
 <meta property="og:site_name" content="Corn Field">
 <meta property="og:description" content="题目编写一个程序，通过填充空格来解决数独问题。  思路">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cornfield404.github.io/img/avatar.jpg">
 <meta property="article:published_time" content="2024-12-02T05:42:02.000Z">
 <meta property="article:modified_time" content="2024-12-19T10:45:23.968Z">
 <meta property="article:author" content="Corn">
 <meta property="article:tag" content="算法">
 <meta property="article:tag" content="深搜">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cornfield404.github.io/img/avatar.jpg"><link rel="shortcut icon" href="/img/butterfly-icon.png"><link rel="canonical" href="https://cornfield404.github.io/posts/de1f6638/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
 
-
-<link rel="canonical" href="https://cornfield404.github.io/posts/de1f6638/">
-
-
-
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://cornfield404.github.io/posts/de1f6638/","path":"posts/de1f6638/","title":"解数独"}</script>
-
-<script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>解数独 | Corn Field</title>
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
   
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
 
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
 
-
-
-
-
-
-<link rel="dns-prefetch" href="hexowaline-ten.vercel.app">
-  <noscript>
-    <link rel="stylesheet" href="/css/noscript.css">
-  </noscript>
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
-  <div class="headband"></div>
-
-  <main class="main">
-    <div class="column">
-      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="切换导航栏" role="button">
-        <span class="toggle-line"></span>
-        <span class="toggle-line"></span>
-        <span class="toggle-line"></span>
-    </div>
-  </div>
-
-  <div class="site-meta">
-
-    <a href="/" class="brand" rel="start">
-      <i class="logo-line"></i>
-      <p class="site-title">Corn Field</p>
-      <i class="logo-line"></i>
-    </a>
-  </div>
-
-  <div class="site-nav-right">
-    <div class="toggle popup-trigger" aria-label="搜索" role="button">
-        <i class="fa fa-search fa-fw fa-lg"></i>
-    </div>
-  </div>
-</div>
-
-
-
-<nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-技术积累"><a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/" rel="section"><i class="fa fa-book fa-fw"></i>技术积累</a></li><li class="menu-item menu-item-休闲娱乐"><a href="/categories/%E4%BC%91%E9%97%B2%E5%A8%B1%E4%B9%90/" rel="section"><i class="fa fa-film fa-fw"></i>休闲娱乐</a></li><li class="menu-item menu-item-生活琐事"><a href="/categories/%E7%94%9F%E6%B4%BB%E7%90%90%E4%BA%8B/" rel="section"><i class="fa fa-camera fa-fw"></i>生活琐事</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-random"><a href="/random.html" rel="section"><i class="fas fa-random fa-fw"></i>随便逛逛</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>友链</a></li><li class="menu-item menu-item-碎碎念"><a href="/artitalk/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>碎碎念</a></li>
-      <li class="menu-item menu-item-search">
-        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
-        </a>
-      </li>
-  </ul>
-</nav>
-
-
-
-  <div class="search-pop-overlay">
-    <div class="popup search-popup">
-      <div class="search-header">
-        <span class="search-icon">
-          <i class="fa fa-search"></i>
-        </span>
-        <div class="search-input-container">
-          <input autocomplete="off" autocapitalize="off" maxlength="80"
-                placeholder="搜索..." spellcheck="false"
-                type="search" class="search-input">
-        </div>
-        <span class="popup-btn-close" role="button">
-          <i class="fa fa-times-circle"></i>
-        </span>
-      </div>
-      <div class="search-result-container">
-        <div class="search-result-icon">
-          <i class="fa fa-spinner fa-pulse fa-5x"></i>
-        </div>
-      </div>
-    </div>
-  </div>
-
-</header>
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
         
-  
-  <aside class="sidebar">
-
-    <!--网易云音乐插件-->
-    <!-- require APlayer -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
-    <!-- require MetingJS-->
-    <script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script> 
-    <!--网易云playlist外链地址-->   
-    <meting-js
-        server="netease"
-        type="playlist" 
-        id="12848243996"
-        mini="false"
-        fixed="false"
-        list-folded="true"
-        autoplay="false"
-        volume="0.7"
-        theme="#FADFA3"
-        order="list"
-        loop="all"
-        preload="auto"
-        mutex="true">
-    </meting-js>
-
-    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
-      <ul class="sidebar-nav">
-        <li class="sidebar-nav-toc">
-          文章目录
-        </li>
-        <li class="sidebar-nav-overview">
-          站点概览
-        </li>
-      </ul>
-
-      <div class="sidebar-panel-container">
-        <!--noindex-->
-        <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE"><span class="nav-number">1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF"><span class="nav-number">2.</span> <span class="nav-text">思路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-number">3.</span> <span class="nav-text">代码</span></a></li></ol></div>
-        </div>
-        <!--/noindex-->
-
-        <div class="site-overview-wrap sidebar-panel">
-          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">Corn</p>
-  <div class="site-description" itemprop="description"></div>
-</div>
-<div class="site-state-wrap animated">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-        <a href="/archives/">
-          <span class="site-state-item-count">34</span>
-          <span class="site-state-item-name">日志</span>
-        </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-          <a href="/categories/">
-        <span class="site-state-item-count">9</span>
-        <span class="site-state-item-name">分类</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-          <a href="/tags/">
-        <span class="site-state-item-count">43</span>
-        <span class="site-state-item-name">标签</span></a>
-      </div>
-  </nav>
-</div>
-
-  <div class="links-of-recent-posts motion-element">
-    <div class="links-of-recent-posts-title">
-      <i class="fa fa-history fa-fw"></i>
-      最近文章
-    </div>
-    <ul class="links-of-recent-posts-list">
-        <li class="links-of-recent-posts-item">
-          <a href="/posts/826780ab/" title="posts&#x2F;826780ab&#x2F;">SDXL</a>
-        </li>
-        <li class="links-of-recent-posts-item">
-          <a href="/posts/f0775513/" title="posts&#x2F;f0775513&#x2F;">DDPM</a>
-        </li>
-        <li class="links-of-recent-posts-item">
-          <a href="/posts/57e95ee9/" title="posts&#x2F;57e95ee9&#x2F;">InstructSeg</a>
-        </li>
-        <li class="links-of-recent-posts-item">
-          <a href="/posts/28a6509c/" title="posts&#x2F;28a6509c&#x2F;">ViLLa</a>
-        </li>
-        <li class="links-of-recent-posts-item">
-          <a href="/posts/befdae7d/" title="posts&#x2F;befdae7d&#x2F;">RT-DETR</a>
-        </li>
-    </ul>
-  </div>
-        </div>
-      </div>
-    </div>
-
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
     
-  </aside>
-
-
-    </div>
-
-    <div class="main-inner post posts-expand">
-
-
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
   
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '解数独',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="loading-box" onclick="document.getElementById(&quot;loading-box&quot;).classList.add(&quot;loaded&quot;)"><div class="loading-bg"><div class="loading-img"></div><div class="loading-image-dot"></div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
 
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
 
-<div class="post-block">
-  
-  
+if (false) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><script>window.paceOptions = {
+  restartOnPushState: false
+}
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://cornfield404.github.io/posts/de1f6638/">
+btf.addGlobalFn('pjaxSend', () => {
+  Pace.restart()
+}, 'pace_restart')
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Corn">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Corn Field">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="解数独 | Corn Field">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          解数独
-        </h1>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-
-  
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2024-12-02 13:42:02" itemprop="dateCreated datePublished" datetime="2024-12-02T13:42:02+08:00">2024-12-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-12-19 18:45:23" itemprop="dateModified" datetime="2024-12-19T18:45:23+08:00">2024-12-19</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/" itemprop="url" rel="index"><span itemprop="name">技术积累</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/%E7%BC%96%E7%A8%8B%E6%8A%80%E5%B7%A7/" itemprop="url" rel="index"><span itemprop="name">编程技巧</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">阅读次数：</span>
-      <span id="busuanzi_value_page_pv"></span>
-    </span>
-  
-  <span class="post-meta-item">
-    
-    <span class="post-meta-item-icon">
-      <i class="far fa-comment"></i>
-    </span>
-    <span class="post-meta-item-text">Waline：</span>
-  
-    <a title="waline" href="/posts/de1f6638/#waline" itemprop="discussionUrl">
-      <span class="post-comments-count waline-comment-count" data-path="/posts/de1f6638/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-    <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>918</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody"><h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>编写一个程序，通过填充空格来解决数独问题。</p>
+</script><link rel="stylesheet" href="/css/progress_bar.css"/><script src="https://cdn.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">35</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">44</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-book"></i><span> 技术积累</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/%E7%BC%96%E7%A8%8B%E6%8A%80%E5%B7%A7/"><i class="fa-fw fa fa-code"></i><span> 编程技巧</span></a></li><li><a class="site-page child" href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/"><i class="fa-fw fa fa-newspaper"></i><span> 论文笔记</span></a></li><li><a class="site-page child" href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"><i class="fa-fw fa fa-book-open"></i><span> 读书笔记</span></a></li><li><a class="site-page child" href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/%E6%9D%82%E4%B8%83%E6%9D%82%E5%85%AB/"><i class="fa-fw fa fa-paperclip"></i><span> 杂七杂八</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-clapperboard"></i><span> 休闲娱乐</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/%E4%BC%91%E9%97%B2%E5%A8%B1%E4%B9%90/%E4%B9%A6%E7%B1%8D%E9%98%85%E8%AF%BB/"><i class="fa-fw fa fa-book-open-reader"></i><span> 书籍阅读</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-camera"></i><span> 生活琐事</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/%E7%94%9F%E6%B4%BB%E7%90%90%E4%BA%8B/%E7%A5%9E%E5%A5%87%E6%8A%80%E8%83%BD/"><i class="fa-fw fa fa-person-skating"></i><span> 神奇技能</span></a></li><li><a class="site-page child" href="/categories/%E7%94%9F%E6%B4%BB%E7%90%90%E4%BA%8B/%E7%82%B9%E7%82%B9%E6%BB%B4%E6%BB%B4/"><i class="fa-fw fa fa-puzzle-piece"></i><span> 点点滴滴</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-folder-open"></i><span> 整理</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-th"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-bars"></i><span> 其他</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/random.html"><i class="fa-fw fas fa-random"></i><span> 随便逛逛</span></a></li><li><a class="site-page child" href="/artitalk/"><i class="fa-fw fa fa-heartbeat"></i><span> 碎碎念</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-user"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></li><li><a class="site-page child" href="/sitemap.xml"><i class="fa-fw fa fa-sitemap"></i><span> 站点地图</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/background.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Corn Field</span></a><a class="nav-page-title" href="/"><span class="site-name">解数独</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-book"></i><span> 技术积累</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/%E7%BC%96%E7%A8%8B%E6%8A%80%E5%B7%A7/"><i class="fa-fw fa fa-code"></i><span> 编程技巧</span></a></li><li><a class="site-page child" href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/"><i class="fa-fw fa fa-newspaper"></i><span> 论文笔记</span></a></li><li><a class="site-page child" href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"><i class="fa-fw fa fa-book-open"></i><span> 读书笔记</span></a></li><li><a class="site-page child" href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/%E6%9D%82%E4%B8%83%E6%9D%82%E5%85%AB/"><i class="fa-fw fa fa-paperclip"></i><span> 杂七杂八</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-clapperboard"></i><span> 休闲娱乐</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/%E4%BC%91%E9%97%B2%E5%A8%B1%E4%B9%90/%E4%B9%A6%E7%B1%8D%E9%98%85%E8%AF%BB/"><i class="fa-fw fa fa-book-open-reader"></i><span> 书籍阅读</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-camera"></i><span> 生活琐事</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/%E7%94%9F%E6%B4%BB%E7%90%90%E4%BA%8B/%E7%A5%9E%E5%A5%87%E6%8A%80%E8%83%BD/"><i class="fa-fw fa fa-person-skating"></i><span> 神奇技能</span></a></li><li><a class="site-page child" href="/categories/%E7%94%9F%E6%B4%BB%E7%90%90%E4%BA%8B/%E7%82%B9%E7%82%B9%E6%BB%B4%E6%BB%B4/"><i class="fa-fw fa fa-puzzle-piece"></i><span> 点点滴滴</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-folder-open"></i><span> 整理</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-th"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-bars"></i><span> 其他</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/random.html"><i class="fa-fw fas fa-random"></i><span> 随便逛逛</span></a></li><li><a class="site-page child" href="/artitalk/"><i class="fa-fw fa fa-heartbeat"></i><span> 碎碎念</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fa fa-user"></i><span> 关于我</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></li><li><a class="site-page child" href="/sitemap.xml"><i class="fa-fw fa fa-sitemap"></i><span> 站点地图</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">解数独</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-02T05:42:02.000Z" title="发表于 2024-12-02 13:42:02">2024-12-02</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-19T10:45:23.968Z" title="更新于 2024-12-19 18:45:23">2024-12-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/">技术积累</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/%E7%BC%96%E7%A8%8B%E6%8A%80%E5%B7%A7/">编程技巧</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>编写一个程序，通过填充空格来解决数独问题。</p>
 <hr>
 <h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>简单的深搜会超时，为了防止超时，需要尽可能优先搜索可能性较少的位置。</p>
 <hr>
 <h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">solveSudoku</span>(<span class="params">self, board: <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">str</span>]]</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        U = <span class="built_in">set</span>([<span class="built_in">str</span>(i) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">10</span>)])</span><br><span class="line">        row,col,cell = defaultdict(<span class="built_in">set</span>),defaultdict(<span class="built_in">set</span>),defaultdict(<span class="built_in">set</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 计算每个位置的可能性</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">get</span>(<span class="params">i, j</span>):</span><br><span class="line">            <span class="keyword">return</span> (U - row[i]) &amp; (U - col[j]) &amp; (U - cell[i//<span class="number">3</span>, j//<span class="number">3</span>])</span><br><span class="line"></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">dfs</span>(<span class="params">cur</span>):</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> cur:</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">            </span><br><span class="line">            minv, x, y = <span class="number">10</span>, <span class="number">0</span>, <span class="number">0</span></span><br><span class="line">            <span class="comment"># 找到可能数值最少的位置</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">9</span>): </span><br><span class="line">                <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">9</span>):</span><br><span class="line">                    <span class="keyword">if</span> board[i][j] == <span class="string">&#x27;.&#x27;</span>:</span><br><span class="line">                        tc = <span class="built_in">len</span>(get(i, j))</span><br><span class="line">                        <span class="keyword">if</span> <span class="built_in">len</span>(get(i, j)) &lt; minv:</span><br><span class="line">                            minv, x, y = tc, i, j</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> get(x, y):</span><br><span class="line">                row[x].add(i)</span><br><span class="line">                col[y].add(i)</span><br><span class="line">                cell[x // <span class="number">3</span>, y // <span class="number">3</span>].add(i)</span><br><span class="line">                board[x][y] = i</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">if</span> dfs(cur - <span class="number">1</span>):</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">                </span><br><span class="line">                row[x].remove(i)</span><br><span class="line">                col[y].remove(i)</span><br><span class="line">                cell[x // <span class="number">3</span>, y // <span class="number">3</span>].remove(i)</span><br><span class="line">                board[x][y] = <span class="string">&#x27;.&#x27;</span></span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">            </span><br><span class="line">        <span class="comment"># 初始化</span></span><br><span class="line">        res = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">9</span>):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">9</span>):</span><br><span class="line">                <span class="keyword">if</span> board[i][j] != <span class="string">&#x27;.&#x27;</span>:</span><br><span class="line">                    row[i].add(board[i][j])</span><br><span class="line">                    col[j].add(board[i][j])</span><br><span class="line">                    cell[i // <span class="number">3</span>, j // <span class="number">3</span>].add(board[i][j])</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    res += <span class="number">1</span></span><br><span class="line">        </span><br><span class="line">        dfs(res)</span><br></pre></td></tr></table></figure>
 
 <hr>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"><i class="fa fa-tag"></i> 算法</a>
-              <a href="/tags/%E6%B7%B1%E6%90%9C/" rel="tag"><i class="fa fa-tag"></i> 深搜</a>
-          </div>
-
-        
-
-          <div class="post-nav">
-            <div class="post-nav-item">
-                <a href="/posts/b65704c0/" rel="prev" title="联愁杀">
-                  <i class="fa fa-angle-left"></i> 联愁杀
-                </a>
-            </div>
-            <div class="post-nav-item">
-                <a href="/posts/6ce289f7/" rel="next" title="花样滑冰">
-                  花样滑冰 <i class="fa fa-angle-right"></i>
-                </a>
-            </div>
-          </div>
-    </footer>
-  </article>
-</div>
-
-
-
-
-
-
-    <div class="comments" id="waline"></div>
-</div>
-  </main>
-
-  <footer class="footer">
-    <div class="footer-inner">
-
-  <div class="copyright">
-    &copy; 2024 – 
-    <span itemprop="copyrightYear">2025</span>
-    <span class="with-love">
-      <i class="fa fa-heart"></i>
-    </span>
-    <span class="author" itemprop="copyrightHolder">Corn</span>
-  </div>
-<div class="wordcount">
-  <span class="post-meta-item">
-    <span class="post-meta-item-icon">
-      <i class="fa fa-chart-line"></i>
-    </span>
-    <span title="站点总字数">53k</span>
-  </span>
-  <span class="post-meta-item">
-    <span class="post-meta-item-icon">
-      <i class="fa fa-coffee"></i>
-    </span>
-    <span title="站点阅读时长">48 分钟</span>
-  </span>
-</div>
-<div class="busuanzi-count">
-    <span class="post-meta-item" id="busuanzi_container_site_uv">
-      <span class="post-meta-item-icon">
-        <i class="fa fa-user"></i>
-      </span>
-      <span class="site-uv" title="总访客量">
-        <span id="busuanzi_value_site_uv"></span>
-      </span>
-    </span>
-    <span class="post-meta-item" id="busuanzi_container_site_pv">
-      <span class="post-meta-item-icon">
-        <i class="fa fa-eye"></i>
-      </span>
-      <span class="site-pv" title="总访问量">
-        <span id="busuanzi_value_site_pv"></span>
-      </span>
-    </span>
-</div>
-  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
-  </div>
-
-<!-- 网站运行时间的设置 -->
-<span id="timeDate">载入天数...</span>
-<script>
-    var now = new Date();
-    function createtime() {
-        var grt= new Date("11/13/2024 09:00:00");//此处修改你的建站时间或者网站上线时间
-        now.setTime(now.getTime()+250);
-        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
-        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
-        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
-        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
-        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
-        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
-        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 "+hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
-    }
-    setInterval("createtime()",250);
-</script>
-    </div>
-  </footer>
-
-  
-  <div class="toggle sidebar-toggle" role="button">
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-  </div>
-  <div class="sidebar-dimmer"></div>
-  <div class="back-to-top" role="button" aria-label="返回顶部">
-    <i class="fa fa-arrow-up fa-lg"></i>
-    <span>0%</span>
-  </div>
-
-<noscript>
-  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
-</noscript>
-
-
-  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
-<script src="/js/third-party/search/local-search.js"></script>
-
-
-
-
-
-  <script src="/js/third-party/pace.js"></script>
-
-
-  
-  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-
-
-  
-
-  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
-<script src="/js/third-party/math/mathjax.js"></script>
-
-
-<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"hexowaline-ten.vercel.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"(发表评论)","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":true,"comment_count":true,"requiredFields":[],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/posts/de1f6638/"}</script>
-<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
-<script>
-document.addEventListener('page:loaded', () => {
-  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
-    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
-  ).then(() => 
-    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
-  );
-});
-</script>
-
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true}});</script></body>
-</html>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://cornfield404.github.io">Corn</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://cornfield404.github.io/posts/de1f6638/">https://cornfield404.github.io/posts/de1f6638/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://cornfield404.github.io" target="_blank">Corn Field</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%AE%97%E6%B3%95/">算法</a><a class="post-meta__tags" href="/tags/%E6%B7%B1%E6%90%9C/">深搜</a></div><div class="post-share"><div class="social-share" data-image="/img/avatar.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/6ce289f7/" title="花样滑冰"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">花样滑冰</div></div><div class="info-2"><div class="info-item-1">     .cd-timeline.svelte-1t2uafz .svelte-1t2uafz,.cd-timeline.svelte-1t2uafz .svelte-1t2uafz::after,.cd-timeline.svelte-1t2uafz .svelte-1t2uafz::before{-webkit-box-sizing:border-box;box-sizing:border-box}.cd-timeline.svelte-1t2uafz{font-size:1.6rem;font-family:"Droid Serif", serif;color:#7f8c97;background-color:#e9f0f5}.cd-timeline.svelte-1t2uafz a{color:#acb7c0;text-decoration:none}.cd-timeline.svelte-1t2uafz img{max-width:100%}.cd-timeline.svelte-1t2uafz h1,h2{font-family:"Open Sans",...</div></div></div></a><a class="pagination-related" href="/posts/b65704c0/" title="联愁杀"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">联愁杀</div></div><div class="info-2"><div class="info-item-1">故事梗概一礼比梢绘在打开家门时被人袭击，挣扎中抓到了袭击者的学生手册，并用男子带来的哑铃反击了袭击男子。警方赶到后，在走廊遇到了公寓内的其他住户籾山庆一，该住户称听到女子惨叫后出来查看。在袭击者的学生手册上，写着连环杀人案的其他受害者名字。 案发后的四年里，警方确定了嫌疑人，但没有找到嫌疑人且无法确定案件动机，为了查明自己为什么被袭击，一礼比梢绘请办案刑警双侣澄树委托“恋谜会”对案件进行推理。双侣澄树向所有人公布当年嫌犯的名字——口羽公彦。 案犯当年，他是一名高二学生，当年二月十五日，口羽公彦从家中离开后，去向不明。八月七日到八月八日间，架谷耕次郎被害，八月十一日犯罪声明被寄给媒体；九月四日，矢头仓美乡在放学后被杀害，九月八日犯罪声明被寄给媒体；十月二日，寸八寸义文被杀害，十月六日犯罪声明被寄给媒体；十一月六日，一礼比梢绘被袭击，警方根据现场痕迹认为口羽公彦是四起案件的凶手。               泉馆弓子的猜想                  ...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/662fe68c/" title="格雷编码"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-24</div><div class="info-item-2">格雷编码</div></div><div class="info-2"><div class="info-item-1">题目n 位格雷码序列是一个由 2n 个整数组成的序列，其中：  每个整数都在范围 [0, 2n - 1] 内（含 0 和 2n - 1） 第一个整数是 0 一个整数在序列中出现不超过一次 每对相邻整数的二进制表示恰好一位不同，且第一个和最后一个整数的二进制表示恰好一位不同  给你一个整数 n ，返回任一有效的 n 位格雷码序列。  思路一个找规律的题，n 位格雷编码可以由 n-1 位编码快速生成。其中前一半就是 n-1 位格雷编码，后一半由 n-1 位格雷编码倒排，且前面加 1 构成。  代码1234567891011121314class Solution:    def grayCode(self, n: int) -&gt; List[int]:        if n == 0:            return [0]        if n == 1:            return [0, 1]                temp = self.grayCode(n - 1)        result = []        for t in...</div></div></div></a><a class="pagination-related" href="/posts/7fcd667a/" title="柱状图中最大的矩形"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-20</div><div class="info-item-2">柱状图中最大的矩形</div></div><div class="info-2"><div class="info-item-1">题目给定 n 个非负整数，用来表示柱状图中各个柱子的高度。每个柱子彼此相邻，且宽度为 1。求在该柱状图中，能够勾勒出来的矩形的最大面积。  思路递增栈。当高度值逐渐增加就不断入栈，否则出栈并计算最大面积。  代码123456789101112class Solution:    def largestRectangleArea(self, heights: List[int]) -&gt; int:        stack = [-1]        result = 0        heights.append(-1)                for i, val in enumerate(heights):            while val &lt; heights[stack[-1]]:                h = heights[stack.pop()]                result = max(result, (i - stack[-1] - 1) * h)                stack.append(i)    ...</div></div></div></a><a class="pagination-related" href="/posts/1c771f88/" title="最小覆盖子串"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-17</div><div class="info-item-2">最小覆盖子串</div></div><div class="info-2"><div class="info-item-1">题目给你一个字符串 s、一个字符串 t。返回 s 中涵盖 t 所有字符的最小子串。如果 s 中不存在涵盖 t 所有字符的子串，则返回空字符串 “”。  思路双指针，先把后一个指针逐渐向后搜索直到找到可以覆盖 t 的字符串，然后把前面的指针逐渐向后挪，直到两个指针中间的字符串无法覆盖 t。另一个核心是如何判定字符串是否覆盖 t。可以采用 collections，当所有字符的计数小于等于 0 时，意味着覆盖了。  代码1234567891011121314151617181920212223242526272829303132class Solution:    def minWindow(self, s: str, t: str) -&gt; str:        from collections import Counter                sub_counter = Counter(t)        required = len(t)        start = 0        end = 0        min_length =...</div></div></div></a><a class="pagination-related" href="/posts/18e1d79c/" title="矩阵置零"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-13</div><div class="info-item-2">矩阵置零</div></div><div class="info-2"><div class="info-item-1">题目给定一个 m x n 的矩阵，如果一个元素为 0，则将其所在行和列的所有元素都设为 0。请使用原地算法。  思路题目本身比较简单，但进阶要求里要求空间复杂度为 $O(1)$。这样就无法记录每一行每一列的状态，否则空间复杂度就是 $O(m+n)$。思路是先把第一行和第一列是否包含 0 的状态用变量记录下来，然后用第一行和第一列的元素记录该行该列是否含 0，之后根据记录将对应的行或列设为 0，最后根据最开始的记录修改第一行第一列的值。  代码12345678910111213141516171819202122232425262728293031323334class Solution:    def setZeroes(self, matrix: List[List[int]]) -&gt; None:        first_row = False        first_col = False        h, w = len(matrix), len(matrix[0])                for t in matrix[0]:           ...</div></div></div></a><a class="pagination-related" href="/posts/ca4861d0/" title="编辑距离"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-12</div><div class="info-item-2">编辑距离</div></div><div class="info-2"><div class="info-item-1">题目给你两个单词 word1 和 word2，请返回将 word1 转换成 word2 所使用的最少操作数。 你可以对一个单词进行如下三种操作：  插入一个字符 删除一个字符 替换一个字符   思路动态规划。考虑 word1 到第 i 个字符及 word2 到第 j 个字符的子问题，可分为两种情况：  两个子字符串最后一个字符相同，则当前两个字符串的编辑距离与 word1 到第 i-1 个字符及 word2 到第 j-1 个字符的编辑距离相同； 最后一个字符不同，则可以进行以下三种操作： 修改最后一个字符使其相同，则当前两个字符串的编辑距离为 word1 到第 i-1 个字符及 word2 到第 j-1 个字符的编辑距离加 1； 删掉 word1 的最后一个字符，则当前两个字符串的编辑距离为 word1 到第 i-1 个字符及 word2 到第 j 个字符的编辑距离加 1； 在 word1 后增加一个字符，则当前两个字符串的编辑距离为 word1 到第 i 个字符及 word2 到第 j-1 个字符的编辑距离加...</div></div></div></a><a class="pagination-related" href="/posts/66e39f70/" title="接雨水"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-04</div><div class="info-item-2">接雨水</div></div><div class="info-2"><div class="info-item-1">题目给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。  思路动态规划，找到每个位置向左和向右的最大值，根据两个最大值及当前位置的高度，计算每个位置的水量，最后求和。  代码123456789101112131415161718192021class Solution:    def trap(self, height: List[int]) -&gt; int:        import numpy as np                length = len(height)        left_height = np.zeros(length)        right_height = np.zeros(length)                left_height[0] = 0        for i in range(1, length):            left_height[i] = max(height[i-1], left_height[i-1])               ...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Corn</div><div class="author-info-description">来者可追</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">35</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">44</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE"><span class="toc-number">1.</span> <span class="toc-text">题目</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF"><span class="toc-number">2.</span> <span class="toc-text">思路</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81"><span class="toc-number">3.</span> <span class="toc-text">代码</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><div class="content"><a class="title" href="/posts/5ea7715c/" title="2025愿望清单">2025愿望清单</a><time datetime="2025-01-03T11:09:47.000Z" title="发表于 2025-01-03 19:09:47">2025-01-03</time></div></div><div class="aside-list-item"><div class="content"><a class="title" href="/posts/826780ab/" title="SDXL">SDXL</a><time datetime="2024-12-27T05:23:39.000Z" title="发表于 2024-12-27 13:23:39">2024-12-27</time></div></div><div class="aside-list-item"><div class="content"><a class="title" href="/posts/f0775513/" title="DDPM">DDPM</a><time datetime="2024-12-26T10:35:25.000Z" title="发表于 2024-12-26 18:35:25">2024-12-26</time></div></div><div class="aside-list-item"><div class="content"><a class="title" href="/posts/57e95ee9/" title="InstructSeg">InstructSeg</a><time datetime="2024-12-26T02:46:31.000Z" title="发表于 2024-12-26 10:46:31">2024-12-26</time></div></div><div class="aside-list-item"><div class="content"><a class="title" href="/posts/28a6509c/" title="ViLLa">ViLLa</a><time datetime="2024-12-25T03:08:24.000Z" title="发表于 2024-12-25 11:08:24">2024-12-25</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By Corn</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true}});</script></body></html>
