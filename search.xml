@@ -1,6 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>cycleGAN</title>
+    <url>/posts/913f84d6/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networks<br>
+<strong>链接：</strong> <a href="https://arxiv.org/pdf/1703.10593">1703.10593</a><br>
+<strong>代码：</strong> <a href="https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix">GitHub - junyanz/pytorch-CycleGAN-and-pix2pix: Image-to-Image Translation in PyTorch</a><br>
+<strong>来源：</strong> ICCV 2017<br>
+<strong>单位：</strong> Berkeley AI Research (BAIR) laboratory, UC Berkeley</p>
+<hr>
+<h2 id="Motivation">Motivation</h2>
+<p>Image to image translation (比如：图像风格转换) 通常是用一组对齐的图像进行训练的，但是，现实任务里这种对齐的数据是很难获得的。例如我们需要训练一个把照片转换成梵高风格的转换器，就很难找到一组对齐的真实照片和梵高风格图片进行训练。因此，本文希望在没有这种数据对的情况下，进行训练。</p>
+<hr>
+<h2 id="思路">思路</h2>
+<p>原始的 GAN 模型可以保证把图像转换到另一个风格，但是无法保证转换之后是正确的。例如我们需要把照片转换成梵高风格，GAN 只需要从梵高风格的数据里找一张图作为生成结果就行了，这样判别器的 loss 永远都很低，但这满足不了我们的需求。因此 cycleGAN 采用了一种把数据再转换回来的方式，这也是 cycle 的含义。把照片转换到梵高风格，再用另一个转换器把梵高风格的照片转换回来，转换回来的照片与最初的输入照片应该比较接近，这说明模型真正学到了图像的内容，否则无论如何也无法转换回来。</p>
+<hr>
+<h2 id="方法">方法</h2>
+<p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2025-02-08%2016.51.16.png" alt="截屏2025-02-08 16.51.16.png"></p>
+<ul>
+<li>整体 loss 由两对生成器和判别器的 loss 以及 consistency loss 构成。其中生成器和判别器的 loss 用来监督 domain transfer 是否成功，consistency loss 用来保证图像内容一致；</li>
+<li>Consistency loss 采用 l1 loss。</li>
+</ul>
+<hr>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>技术积累</category>
+        <category>论文笔记</category>
+      </categories>
+      <tags>
+        <tag>论文笔记</tag>
+        <tag>高引</tag>
+        <tag>Image_Generation</tag>
+        <tag>GAN</tag>
+        <tag>ICCV2017</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>穹顶弥声</title>
+    <url>/posts/4b56af0/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h2 id="碎碎念">碎碎念</h2>
+<p>整体剧的形式比较像一个剧本杀，每个角色会经历相对独立的故事线，观众可以选择跟着一名角色体验他的故事。因为一共有 9 个角色，一场戏内观众最多可以跟随两名角色，所以其实看一场是没法体验完整的。<br>
+种草这种形式的剧很久了，但是一直没有去看，直到被大学室友拉着去。整体来说的体验超出了我的想象，我的预期是 6 分的话，实际体验大概有个 8.5 分左右。</p>
+<hr>
+<h2 id="优点">优点</h2>
+<ul>
+<li>绝大多数演员的水平都在水准之上，观众近距离观看演员的表演和台词也不会太尴尬，比如当天有一个角色是一个喝醉了有点癫癫的角色，在距离观众不到 1 米的情况下，表演也没有让人觉得出戏，这个角色是我当天印象最深的角色。</li>
+<li>另外一些现挂会让人觉得非常惊喜。比如当天第一轮的时候我选择跟了魔术师这条线，他会和观众在背后说他金主罗曼的隐私，所以当时他就问我们你们记得刚刚穿绿衣服的那个人么。但是因为之前大厅里面光线非常暗，那件衣服在我们几个观众印象里都是蓝色的。正好这个时候罗曼的演员进来了，我们几个观众就小声讨论说这件衣服原来真的是绿色。罗曼的演员就说怎么回事，一进来就听你们说我绿色绿色，什么绿色。然后魔术师也非常自然地转换了角色，变成面对金主很狗腿的样子，说他们色盲，看不出您的衣服是绿色。配合上之后的小绿人的称呼，这部分成了我对这部戏印象最深的地方。</li>
+<li>布景很不错，尤其是最开始的爆炸非常真实，大部分观众都有被吓到。后面不管是酒吧还是杂物间，反正就我去过的地方来说整体布景配合灯光不会让人觉得一眼假。</li>
+<li>形式还比较丰富，能感觉到团队有在尽力设计让大家觉得这个票比较值，也尽量给每个演员发挥的空间。比如开场的魔术、中间突然插入的唱段、在酒吧有一小段打戏以及最后有角色情感的爆发。</li>
+</ul>
+<hr>
+<h2 id="缺点">缺点</h2>
+<ul>
+<li>回想剧情其实就是一个类似剧本杀的设置，每个角色有一条故事线，只不过由玩家读剧本的形式转换成了跟着演员看完这条故事线。很难说这个故事好或者不好吧，就是没有什么特别的点。</li>
+<li>由于剧里有一些冲突的戏份，所以在一些特定的时候是需要观众退到空间之外的，这个时候会有一些出戏，被从故事里割裂开的感觉。但是因为打戏确实需要空间，所以可能也没什么特别好的解决办法。</li>
+</ul>
+<hr>
+<h2 id="关于票价">关于票价</h2>
+<p>我和朋友一起去的，两个人买套票是 760，如果一个人买一张票就需要 390。这个价格配上两个小时的时间我觉得是小贵的，但是考虑到每次换新的剧目就需要重新装修，并且这种形式是没办法靠扩大观众规模来摊低成本的，一场有个 40 人可能就极限了，所以价格整体会比较高也不算特别不合理。<br>
+另外有一个 128 看半场的票，感觉是给回头客准备的，如果想要补完所有的故事线，或者特别喜欢某个演员专门来看就可以选这个。</p>
+<hr>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>休闲娱乐</category>
+        <category>舞台欣赏</category>
+      </categories>
+      <tags>
+        <tag>舞台剧</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>深度学习相关代码</title>
     <url>/posts/96382a8f/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h2 id="Pytorch-实现-attention">Pytorch 实现 attention</h2>
@@ -147,9 +216,9 @@ M834 80h400000v40h-400000z"/></svg></span></span></span><span class="vlist-s">�
       </categories>
       <tags>
         <tag>论文笔记</tag>
+        <tag>高引</tag>
         <tag>Diffusion</tag>
         <tag>Image_Generation</tag>
-        <tag>高引</tag>
         <tag>ICLR2024</tag>
       </tags>
   </entry>
@@ -800,9 +869,9 @@ M834 80h400000v40h-400000z"/></svg></span></span></span><span class="vlist-s">�
       </categories>
       <tags>
         <tag>论文笔记</tag>
+        <tag>高引</tag>
         <tag>Diffusion</tag>
         <tag>Image_Generation</tag>
-        <tag>高引</tag>
         <tag>NIPS2020</tag>
       </tags>
   </entry>
@@ -1172,9 +1241,9 @@ E：仅在 S5 上执行 single scale encoder（AIFI），以减少计算量，�
       </categories>
       <tags>
         <tag>论文笔记</tag>
+        <tag>高引</tag>
         <tag>Diffusion</tag>
         <tag>Image_Generation</tag>
-        <tag>高引</tag>
         <tag>CVPR2022</tag>
       </tags>
   </entry>
@@ -1193,6 +1262,40 @@ E：仅在 S5 上执行 single scale encoder（AIFI），以减少计算量，�
 <p><strong>链接：</strong> <a href="https://zhuanlan.zhihu.com/p/86765356">https://zhuanlan.zhihu.com/p/86765356</a><br>
 说明了 BN、LN、IN 以及 GN 的区别。</p>
 <hr>
+<h2 id="不同的损失函数">不同的损失函数</h2>
+<p><strong>链接：</strong> <a href="https://blog.csdn.net/m0_38007695/article/details/114983574">损失函数整理（分类和回归）_分类损失函数-CSDN博客</a></p>
+<hr>
+<h2 id="Focal-loss">Focal loss</h2>
+<p><strong>链接：</strong> <a href="https://zhuanlan.zhihu.com/p/49981234">https://zhuanlan.zhihu.com/p/49981234</a></p>
+<hr>
+<h2 id="Seesaw-loss">Seesaw loss</h2>
+<p><strong>链接：</strong> <a href="https://zhuanlan.zhihu.com/p/339126633">https://zhuanlan.zhihu.com/p/339126633</a></p>
+<hr>
+<h2 id="IoU-及后续变体">IoU 及后续变体</h2>
+<p><strong>链接：</strong> <a href="https://zhuanlan.zhihu.com/p/94799295">https://zhuanlan.zhihu.com/p/94799295</a></p>
+<hr>
+<h2 id="Swin-Transformer">Swin Transformer</h2>
+<p><strong>链接：</strong> <a href="https://blog.csdn.net/qq_37541097/article/details/121119988">Swin-Transformer网络结构详解_swin transformer-CSDN博客</a></p>
+<hr>
+<h2 id="DETR">DETR</h2>
+<p><strong>链接：</strong> <a href="https://blog.csdn.net/baidu_36913330/article/details/120495817">深度学习之目标检测（十一）–DETR详解-CSDN博客</a></p>
+<hr>
+<h2 id="Deformable-DETR">Deformable DETR</h2>
+<p><strong>链接：</strong> <a href="https://zhuanlan.zhihu.com/p/372116181">https://zhuanlan.zhihu.com/p/372116181</a></p>
+<hr>
+<h2 id="位置编码">位置编码</h2>
+<p><a href="https://blog.csdn.net/xian0710830114/article/details/133377460">一文搞懂Transformer的位置编码-CSDN博客</a><br>
+<a href="https://zhuanlan.zhihu.com/p/580739696">https://zhuanlan.zhihu.com/p/580739696</a><br>
+<a href="https://zhuanlan.zhihu.com/p/580741145">https://zhuanlan.zhihu.com/p/580741145</a><br>
+<a href="https://hub.baai.ac.cn/view/29979">十分钟读懂旋转编码（RoPE） - 智源社区</a></p>
+<hr>
+<h2 id="深度学习手撕代码">深度学习手撕代码</h2>
+<p><a href="https://blog.csdn.net/weixin_43662553/category_11970248.html">深度学习基础_L☆★的博客-CSDN博客</a></p>
+<hr>
+<h2 id="传统方法">传统方法</h2>
+<p><a href="https://zhuanlan.zhihu.com/p/85829145">https://zhuanlan.zhihu.com/p/85829145</a><br>
+<a href="https://medium.com/@shartoo518/1-%E6%A6%82%E8%A7%88-5921fa471efb">SIFT 特征详解. SIFT特征即Scale-Invariant Feature… | by Tao Shatoo | Medium</a><br>
+<a href="https://blog.csdn.net/lanxuecc/article/details/52222369">机器学习 之 Haar特征-CSDN博客</a></p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
         <category>技术积累</category>
@@ -1579,6 +1682,36 @@ E：仅在 S5 上执行 single scale encoder（AIFI），以减少计算量，�
 
                 <span class="cd-timeline__date svelte-1t2uafz">2025-01-01</span>
             </div>
+        </div><div class="cd-timeline__block js-cd-block svelte-1t2uafz">
+            <div class="cd-timeline__img cd-timeline__img--movie js-cd-img svelte-1t2uafz">
+            </div>
+            <div class="cd-timeline__content js-cd-content svelte-1t2uafz">
+                <h2 class="svelte-1t2uafz">前压步、后 C</h2>
+                <p>双侧前压步基本可以压起来了，顺时针也相对稳定了
+后 C 也勉强可以连续滑行，但感觉还不到可以学习后压步的程度</p>
+
+                <span class="cd-timeline__date svelte-1t2uafz">2025-01-04</span>
+            </div>
+        </div><div class="cd-timeline__block js-cd-block svelte-1t2uafz">
+            <div class="cd-timeline__img cd-timeline__img--movie js-cd-img svelte-1t2uafz">
+            </div>
+            <div class="cd-timeline__content js-cd-content svelte-1t2uafz">
+                <h2 class="svelte-1t2uafz">前摇滚、后压步</h2>
+                <p>前摇滚可以连续滑起来了，后压步也可以压，虽然重心很不稳定。
+果然基础打好学其他步法会变得容易一些～</p>
+
+                <span class="cd-timeline__date svelte-1t2uafz">2025-01-18</span>
+            </div>
+        </div><div class="cd-timeline__block js-cd-block svelte-1t2uafz">
+            <div class="cd-timeline__img cd-timeline__img--movie js-cd-img svelte-1t2uafz">
+            </div>
+            <div class="cd-timeline__content js-cd-content svelte-1t2uafz">
+                <h2 class="svelte-1t2uafz">前摇滚、后压步、前压步</h2>
+                <p>基础还是需要反反复复地练。前摇滚确定了几个需要注意的点：后腿要一直伸直、前腿要一直保持弯曲。前压步顺时针方向掌握了手摆放的位置有变好一点。后压步还是卡卡的，只能滑一丢丢。
+被路人夸了进步快非常开心～</p>
+
+                <span class="cd-timeline__date svelte-1t2uafz">2025-01-25</span>
+            </div>
         </div>
     </div>
 </section>
@@ -1708,8 +1841,8 @@ E：仅在 S5 上执行 single scale encoder（AIFI），以减少计算量，�
       <tags>
         <tag>推理小说</tag>
         <tag>叙述性诡计</tag>
-        <tag>多重解答</tag>
         <tag>西泽保彦</tag>
+        <tag>多重解答</tag>
       </tags>
   </entry>
   <entry>
@@ -1949,9 +2082,9 @@ s 中的串联子串是指一个包含 words 中所有字符串以任意顺�
       </categories>
       <tags>
         <tag>推理小说</tag>
+        <tag>多重解答</tag>
         <tag>井上真伪</tag>
         <tag>逻辑流</tag>
-        <tag>多重解答</tag>
         <tag>轻小说风</tag>
         <tag>推荐书单</tag>
       </tags>
@@ -1985,9 +2118,9 @@ s 中的串联子串是指一个包含 words 中所有字符串以任意顺�
       </categories>
       <tags>
         <tag>论文笔记</tag>
-        <tag>高引</tag>
         <tag>LLM</tag>
         <tag>finetune</tag>
+        <tag>高引</tag>
         <tag>ACL2022</tag>
       </tags>
   </entry>
@@ -2013,9 +2146,9 @@ s 中的串联子串是指一个包含 words 中所有字符串以任意顺�
       </categories>
       <tags>
         <tag>论文笔记</tag>
-        <tag>高引</tag>
         <tag>LLM</tag>
         <tag>finetune</tag>
+        <tag>高引</tag>
         <tag>AI_Open2024</tag>
       </tags>
   </entry>
@@ -2051,10 +2184,10 @@ s 中的串联子串是指一个包含 words 中所有字符串以任意顺�
       </categories>
       <tags>
         <tag>论文笔记</tag>
-        <tag>高引</tag>
         <tag>LLM</tag>
         <tag>ICLR2022</tag>
         <tag>finetune</tag>
+        <tag>高引</tag>
       </tags>
   </entry>
   <entry>
