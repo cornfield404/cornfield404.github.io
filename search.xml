@@ -1,6 +1,232 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>不同VLLM比较</title>
+    <url>/posts/f8889f73/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p>整体来说不同模型的技术在逐渐趋同，最开始的大家尝试了一些不同的方案，比如 deepseek 用了两个视觉模型提取不同分辨率的特征，internvl 设计了非常复杂的训练流程，但是在产品迭代过程中这些都被舍弃掉了。</p>
+<p>目前 deepseek、internvl 和 qwen 比较起来：</p>
+<ul>
+<li>Deepseek 在视觉模型部分没有什么突出的特点，就是图像切成块输入+SigLIP；</li>
+<li>Internvl 主要有一个自己训的 6B 以及蒸馏的 300M 视觉模型；</li>
+<li>Qwen 可以接受任意尺度的图像输入，不需要像其他模型一样切块，同时设计了一个多维位置编码，用于适应视频输入。</li>
+</ul>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>技术积累</category>
+        <category>杂七杂八</category>
+      </categories>
+      <tags>
+        <tag>大模型</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>QwenVL</title>
+    <url>/posts/e0d8505c/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> Qwen-VL: A Versatile Vision-Language Model for Understanding, Localization, Text Reading, and Beyond<br>
+<strong>链接：</strong> <a href="https://arxiv.org/pdf/2308.12966">2308.12966</a><br>
+<strong>代码：</strong> <a href="https://github.com/QwenLM/Qwen-VL">GitHub - QwenLM/Qwen-VL: The official repo of Qwen-VL (通义千问-VL) chat &amp; pretrained large vision language model proposed by Alibaba Cloud.</a><br>
+<strong>来源：</strong> arxiv<br>
+<strong>单位：</strong> Alibaba Group</p>
+<hr>
+<p><strong>题目：</strong> Qwen 2-VL: Enhancing Vision-Language Model’s Perception of the World at Any Resolution<br>
+<strong>链接：</strong> <a href="https://arxiv.org/pdf/2409.12191">https://arxiv.org/pdf/2409.12191</a><br>
+<strong>代码：</strong> <a href="https://github.com/QwenLM/Qwen2-VL">https://github.com/QwenLM/Qwen2-VL</a><br>
+<strong>来源：</strong> arxiv<br>
+<strong>单位：</strong> Qwen Team Alibaba Group</p>
+<hr>
+<h2 id="模型结构">模型结构</h2>
+<h3 id="Visual-Encoder">Visual Encoder</h3>
+<p>采用了 Openclip’s ViT-bigG。</p>
+<h3 id="Position-aware-Vision-Language-Adapter">Position-aware Vision-Language Adapter</h3>
+<p>用 256 个 query 与 visual encoder 的输出进行 cross attention。这一步会把视觉 token 数量压缩到固定的 256 个 query。</p>
+<hr>
+<h2 id="Qwen2-VL">Qwen2-VL</h2>
+<h3 id="M-RoPE">M-RoPE</h3>
+<p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-12-18%2018.53.00.png" alt=""><br>
+在每个维度上应用 RoPE，然后把不同位置的 position embedding 拼起来，得到最终的位置编码。</p>
+<h3 id="Unified-Image-and-Video-Understanding">Unified Image and Video Understanding</h3>
+<p>输入是单张图时，会把图像复制一份，看作一个 2 帧的视频，从而实现视频和图像的统一。第一层卷积会采用 3D 卷积，使模型可以提取视频三维特征。</p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>技术积累</category>
+        <category>论文笔记</category>
+      </categories>
+      <tags>
+        <tag>论文笔记</tag>
+        <tag>大模型</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>InternVL</title>
+    <url>/posts/59ecffa9/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> InternVL: Scaling up Vision Foundation Models and Aligning<br>
+For Generic Visual-Linguistic Tasks<br>
+<strong>链接：</strong> <a href="https://arxiv.org/pdf/2312.14238">2312.14238</a><br>
+<strong>代码：</strong> <a href="https://github.com/OpenGVLab/InternVL">GitHub - OpenGVLab/InternVL: [CVPR 2024 Oral] InternVL Family: A Pioneering Open-Source Alternative to GPT-4o. 接近GPT-4o表现的开源多模态对话模型</a><br>
+<strong>来源：</strong> CVPR 2024<br>
+<strong>单位：</strong> OpenGVLab, Shanghai AI Laboratory；Nanjing University；The University of Hong Kong；The Chinese University of Hong Kong；Tsinghua University；University of Science and Technology of China；SenseTime Research</p>
+<hr>
+<p><strong>题目：</strong> How Far Are We to GPT-4 V? Closing the Gap to Commercial Multimodal Models with Open-Source Suites<br>
+<strong>链接：</strong> <a href="https://arxiv.org/pdf/2404.16821">2404.16821</a><br>
+<strong>代码：</strong> <a href="https://github.com/OpenGVLab/InternVL">GitHub - OpenGVLab/InternVL: [CVPR 2024 Oral] InternVL Family: A Pioneering Open-Source Alternative to GPT-4o. 接近GPT-4o表现的开源多模态对话模型</a><br>
+<strong>来源：</strong> arxiv<br>
+<strong>单位：</strong> Shanghai AI Laboratory；SenseTime Research；Tsinghua University；Nanjing University；Fudan University；The Chinese University of Hong Kong</p>
+<hr>
+<p><strong>题目：</strong> Expanding Performance Boundaries of Open-Source Multimodal Models with Model, Data, and Test-Time Scaling<br>
+<strong>链接：</strong> <a href="https://arxiv.org/pdf/2412.05271">2412.05271</a><br>
+<strong>代码：</strong> <a href="https://github.com/OpenGVLab/InternVL">GitHub - OpenGVLab/InternVL: [CVPR 2024 Oral] InternVL Family: A Pioneering Open-Source Alternative to GPT-4o. 接近GPT-4o表现的开源多模态对话模型</a><br>
+<strong>来源：</strong> arxiv<br>
+<strong>单位：</strong> Shanghai AI Laboratory；SenseTime Research；Tsinghua University；Nanjing University；Fudan University；The Chinese University of Hong Kong；Shanghai Jiao Tong University</p>
+<hr>
+<h2 id="Method">Method</h2>
+<p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2025-02-11%2015.59.21.png" alt="截屏2025-02-11 15.59.21.png"></p>
+<h3 id="各模块">各模块</h3>
+<h4 id="Large-Scale-Vision-Encoder">Large-Scale Vision Encoder</h4>
+<p>通过调整模型深度、head dimension、MLP ratio、模型宽度以及 head number 生成一个有 6B 参数量的 ViT 结构。</p>
+<h4 id="Language-Middleware">Language Middleware</h4>
+<p>在 LLaMA 的基础上加上 learnable query 和 cross attention layer，构成视觉文本对齐模块。我个人觉得这个相比 QFormer 或者 MLP 的优势可能是有比较好的初始化（LLaMA）部分可以直接用，另外，模型参数量比较大。</p>
+<h3 id="训练策略">训练策略</h3>
+<ul>
+<li>第一阶段采用对比学习，训练 InternViT 和 LLaMA；</li>
+<li>第二阶段训练 query 和 cross attention，类似于 QFormer；</li>
+<li>第三阶段把 InternViT 和 LLaMA 连到语言模型上，语言模型可以选择训练或冻结。</li>
+</ul>
+<hr>
+<h2 id="InternVL-1-5">InternVL 1.5</h2>
+<p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2025-02-11%2017.01.44.png" alt="截屏2025-02-11 17.01.44.png"></p>
+<h3 id="Strong-Vision-Encoder">Strong Vision Encoder</h3>
+<p>主要解决的是模型分辨率的问题：</p>
+<ul>
+<li>首先把输入图像由 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>224</mn><mo>×</mo><mn>224</mn></mrow><annotation encoding="application/x-tex">224\times 224</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">224</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">224</span></span></span></span> 更换为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>448</mn><mo>×</mo><mn>448</mn></mrow><annotation encoding="application/x-tex">448\times 448</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">448</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">448</span></span></span></span>，后面接语言模型，训练 vision encoder 和 MLP；</li>
+<li>然后把单张图替换为切块的多张图，再次 finetune。</li>
+</ul>
+<h3 id="Dynamic-High-Resolution">Dynamic High-Resolution</h3>
+<p>对图像 resize 并 padding，使图像的长宽都是 448 的倍数，然后按照 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>448</mn><mo>×</mo><mn>448</mn></mrow><annotation encoding="application/x-tex">448\times 448</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">448</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">448</span></span></span></span> 对图像切块。用视觉模型对每一块以及图像整体的缩略图分别提取特征。</p>
+<hr>
+<h2 id="InternVL-2-5">InternVL 2.5</h2>
+<h3 id="Vision-Encoder">Vision Encoder</h3>
+<p>和 1.5 的版本类似，不过又搞了个从 6B 蒸馏出来的 300 M。</p>
+<h3 id="Data-Formats-for-Different-Data-Types">Data Formats for Different Data Types</h3>
+<p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2025-02-11%2018.05.47.png" alt="截屏2025-02-11 18.05.47.png"><br>
+加入了多图和多帧：</p>
+<ul>
+<li>对于多图，每张图前面会有提示 token，用于提示当前是第几张图，同时会根据设定的图像数上限，决定每张图最多被裁成几份；</li>
+<li>对于视频，视频帧不会被裁，会直接缩放到 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>448</mn><mo>×</mo><mn>448</mn></mrow><annotation encoding="application/x-tex">448\times 448</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">448</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">448</span></span></span></span>。</li>
+</ul>
+<h3 id="训练流程">训练流程</h3>
+<ul>
+<li>首先训练 MLP，视觉和语言模型都不参与训练；</li>
+<li>然后训练视觉模型和 MLP（这一步是可选的）；</li>
+<li>最后 finetune 所有参数。</li>
+</ul>
+<hr>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>技术积累</category>
+        <category>论文笔记</category>
+      </categories>
+      <tags>
+        <tag>论文笔记</tag>
+        <tag>CVPR2024</tag>
+        <tag>大模型</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>DeepSeekVL</title>
+    <url>/posts/1675234e/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> DeepSeek-VL: Towards Real-World Vision-Language Understanding<br>
+<strong>链接：</strong> <a href="https://arxiv.org/pdf/2403.05525">2403.05525</a><br>
+<strong>代码：</strong> <a href="https://github.com/deepseek-ai/DeepSeek-VL">GitHub - deepseek-ai/DeepSeek-VL: DeepSeek-VL: Towards Real-World Vision-Language Understanding</a><br>
+<strong>来源：</strong> arxiv<br>
+<strong>单位：</strong> DeepSeek-AI</p>
+<hr>
+<p><strong>题目：</strong> DeepSeek-VL 2: Mixture-of-Experts Vision-Language Models for Advanced Multimodal Understanding<br>
+<strong>链接：</strong> <a href="https://arxiv.org/pdf/2412.10302">2412.10302</a><br>
+<strong>代码：</strong> <a href="https://github.com/deepseek-ai/DeepSeek-VL2">GitHub - deepseek-ai/DeepSeek-VL2: DeepSeek-VL2: Mixture-of-Experts Vision-Language Models for Advanced Multimodal Understanding</a><br>
+<strong>来源：</strong> arxiv<br>
+<strong>单位：</strong> DeepSeek-AI</p>
+<hr>
+<h2 id="模型">模型</h2>
+<h3 id="Hybrid-Vision-Encoder">Hybrid Vision Encoder</h3>
+<p>Vision encoder 由两个模型构成，以生成更丰富的视觉特征，仅用 SigLIP 图像特征单一，且仅能使用低分辨率图像作为输入，可能导致 OCR 等任务效果较差：</p>
+<ul>
+<li>SigLIP，接受 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>384</mn><mo>×</mo><mn>384</mn></mrow><annotation encoding="application/x-tex">384\times 384</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">384</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">384</span></span></span></span> 的数据作为输入，输出为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>576</mn><mo>×</mo><mn>1024</mn></mrow><annotation encoding="application/x-tex">576\times 1024</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">576</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1024</span></span></span></span>；</li>
+<li>SAM-B，接受 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1024</mn><mo>×</mo><mn>1024</mn></mrow><annotation encoding="application/x-tex">1024\times 1024</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">1024</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1024</span></span></span></span> 的数据作为输入，输出为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>64</mn><mo>×</mo><mn>64</mn><mo>×</mo><mn>256</mn></mrow><annotation encoding="application/x-tex">64\times 64\times 256</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">64</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">64</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">256</span></span></span></span>，经过插值及两个 stride 为 2 的卷积后，尺寸为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>24</mn><mo>×</mo><mn>24</mn><mo>×</mo><mn>1024</mn></mrow><annotation encoding="application/x-tex">24\times 24\times 1024</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">24</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">24</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1024</span></span></span></span>，reshape 后得到 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>576</mn><mo>×</mo><mn>1024</mn></mrow><annotation encoding="application/x-tex">576\times 1024</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">576</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1024</span></span></span></span>。</li>
+</ul>
+<h3 id="Vision-Language-Adaptor">Vision-Language Adaptor</h3>
+<p>先用一层 MLP 分别处理 SigLIP 及 SAM-B 生成的视觉特征，两个特征拼到一起之后，再过一个 MLP 用于把视觉特征和 LLM 对齐。</p>
+<hr>
+<h2 id="训练流程">训练流程</h2>
+<p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2025-02-11%2014.10.21.png" alt="截屏2025-02-11 14.10.21.png"></p>
+<ul>
+<li>用 caption 数据及 OCR 数据训练 adaptor 对齐视觉及文本模型；</li>
+<li>以语言数据与多模态数据比例大约为 7:3 生成第二阶段数据集，比训练 adaptor 和 LLM，加入大量语言数据是为了防止在纯文本任务上性能变差；</li>
+<li>仅 SAM-B 冻结，训练模型其他部分。</li>
+</ul>
+<hr>
+<h2 id="V2-的优化">V2 的优化</h2>
+<h3 id="Dynamic-Tiling-Strategy">Dynamic Tiling Strategy</h3>
+<p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2025-02-11%2015.03.06.png" alt="截屏2025-02-11 15.03.06.png"><br>
+V2 放弃了 V1 的多模型，采用了给图像分块的方式，对图像 resize 并 padding，使图像的长宽都是 384 的倍数，然后按照 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>384</mn><mo>×</mo><mn>384</mn></mrow><annotation encoding="application/x-tex">384\times 384</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">384</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">384</span></span></span></span> 对图像切块。用 SigLIP 对每一块以及图像整体的缩略图分别提取特征。</p>
+<h3 id="训练流程-2">训练流程</h3>
+<ul>
+<li>语言模型冻结，用图像文本对优化视觉模型和 adaptor，优化视觉模型的目的是让视觉模型适应这种图像输入方式；</li>
+<li>预训练整个模型，放开所有参数训练；</li>
+<li>SFT，增强训练模型的 instruction following 和对话能力，训练所有参数。</li>
+</ul>
+<hr>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>技术积累</category>
+        <category>论文笔记</category>
+      </categories>
+      <tags>
+        <tag>论文笔记</tag>
+        <tag>大模型</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Deformable_DETR</title>
+    <url>/posts/a782943f/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> Deformable DETR: Deformable Transformers for End-to-End Object Detection<br>
+<strong>链接：</strong> <a href="https://arxiv.org/pdf/2010.04159">2010.04159</a><br>
+<strong>代码：</strong> <a href="https://github.com/fundamentalvision/Deformable-DETR">GitHub - fundamentalvision/Deformable-DETR: Deformable DETR: Deformable Transformers for End-to-End Object Detection.</a><br>
+<strong>来源：</strong> ICLR 2021<br>
+<strong>单位：</strong> SenseTime Research、University of Science and Technology of China、The Chinese University of Hong Kong</p>
+<hr>
+<h2 id="DETR-的缺陷">DETR 的缺陷</h2>
+<p>Detr 存在训练收敛慢以及小物体检测性能差的缺陷。作者认为这两点都与 transformer 本身的特性有关。训练收敛慢是因为 attention 在最开始会对所有 pixel 均匀关注，因此需要很长时间收敛到有意义的区域。小物体检测性能差是由于 transformer 的计算是平方级的，因此想要利用高分辨率的 feature map 很困难。</p>
+<hr>
+<h2 id="Method">Method</h2>
+<p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2025-02-10%2013.09.22.png" alt="截屏2025-02-10 13.09.22.png"></p>
+<h3 id="Deformable-Attention-Module">Deformable Attention Module</h3>
+<p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2025-02-10%2012.48.25.png" alt="截屏2025-02-10 12.48.25.png"><br>
+结构如上图所示，与正常的 attention module 区别比较大：</p>
+<ul>
+<li>正常的 attention module 会利用 query 与 key 计算出 attention map，然后根据这个 attention map 对 value 进行加权，得到该 query 的输出；</li>
+<li>在 deformable attention module 里，attention map 是用 linear 层直接算出来的，关注哪些 pixel 也是用 linear 层算出来的，相当于根据算出来的 offset 在 value 里找到对应的值，然后用算出来的 attention weight 对这些值加权，得到该 query 的输出。</li>
+</ul>
+<h3 id="Multi-scale-Deformable-Attention-Module">Multi-scale Deformable Attention Module</h3>
+<p>Deformable attention module 可以比较容易地拓展到多层，只要对一个 query 在多层特征里计算 offset，加权的时候对多层特征加权就行了。</p>
+<h3 id="Deformable-Transformer-Encoder">Deformable Transformer Encoder</h3>
+<p>把 DETR 里的 encoder 换成了 deformable 版本，每一个 encoder 的输入和输出都是多尺度特征。因为这样子有不同 level 的同一个 pixel 参与计算，因此加入了一个 level embedding 用于区分不同尺度的特征。</p>
+<h3 id="Deformable-Transformer-Decoder">Deformable Transformer Decoder</h3>
+<p>Decoder 里仅有 cross attention 被替换，self attention 保持了原结构。Query point 由 query embedding 通过 linear 层计算得到，相当于预测的物体中心初始值。Detection head 输出物体中心相对 query point 的偏移，以及物体的长和宽。</p>
+<hr>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>技术积累</category>
+        <category>论文笔记</category>
+      </categories>
+      <tags>
+        <tag>论文笔记</tag>
+        <tag>高引</tag>
+        <tag>Image_Object_Detection</tag>
+        <tag>DETR</tag>
+        <tag>ICLR2021</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>cycleGAN</title>
     <url>/posts/913f84d6/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networks<br>
@@ -916,8 +1142,8 @@ LLM 输出的 detailed text embed 通过 global average pooling 得到 global te
       </categories>
       <tags>
         <tag>论文笔记</tag>
-        <tag>LLM</tag>
         <tag>Video_Segmentation</tag>
+        <tag>大模型</tag>
       </tags>
   </entry>
   <entry>
@@ -970,8 +1196,8 @@ Q^{l+1,v&#x27;}&amp;=\gamma\cdot Softmax((Q^{l+1,v}\times Q^{l+1,f^T})\times Q^{
       </categories>
       <tags>
         <tag>论文笔记</tag>
-        <tag>LLM</tag>
         <tag>Video_Segmentation</tag>
+        <tag>大模型</tag>
       </tags>
   </entry>
   <entry>
@@ -1087,7 +1313,7 @@ E：仅在 S5 上执行 single scale encoder（AIFI），以减少计算量，�
         <category>杂七杂八</category>
       </categories>
       <tags>
-        <tag>LLM</tag>
+        <tag>大模型</tag>
       </tags>
   </entry>
   <entry>
@@ -1134,7 +1360,7 @@ E：仅在 S5 上执行 single scale encoder（AIFI），以减少计算量，�
       </categories>
       <tags>
         <tag>论文笔记</tag>
-        <tag>LLM</tag>
+        <tag>大模型</tag>
       </tags>
   </entry>
   <entry>
@@ -1193,7 +1419,7 @@ E：仅在 S5 上执行 single scale encoder（AIFI），以减少计算量，�
 <p>递增栈。当高度值逐渐增加就不断入栈，否则出栈并计算最大面积。</p>
 <hr>
 <h2 id="代码">代码</h2>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">largestRectangleArea</span>(<span class="params">self, heights: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        stack = [-<span class="number">1</span>]</span><br><span class="line">        result = <span class="number">0</span></span><br><span class="line">        heights.append(-<span class="number">1</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> i, val <span class="keyword">in</span> <span class="built_in">enumerate</span>(heights):</span><br><span class="line">            <span class="keyword">while</span> val &lt; heights[stack[-<span class="number">1</span>]]:</span><br><span class="line">                h = heights[stack.pop()]</span><br><span class="line">                result = <span class="built_in">max</span>(result, (i - stack[-<span class="number">1</span>] - <span class="number">1</span>) * h)</span><br><span class="line">                stack.append(i)</span><br><span class="line">        <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">largestRectangleArea</span>(<span class="params">self, heights: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        stack = [-<span class="number">1</span>]</span><br><span class="line">        result = <span class="number">0</span></span><br><span class="line">        heights.append(-<span class="number">1</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> i, val <span class="keyword">in</span> <span class="built_in">enumerate</span>(heights):</span><br><span class="line">            <span class="keyword">while</span> val &lt; heights[stack[-<span class="number">1</span>]]:</span><br><span class="line">                h = heights[stack.pop()]</span><br><span class="line">                result = <span class="built_in">max</span>(result, (i - stack[-<span class="number">1</span>] - <span class="number">1</span>) * h)</span><br><span class="line">            stack.append(i)</span><br><span class="line">        <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
 <hr>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
@@ -1296,54 +1522,14 @@ E：仅在 S5 上执行 single scale encoder（AIFI），以减少计算量，�
 <p><a href="https://zhuanlan.zhihu.com/p/85829145">https://zhuanlan.zhihu.com/p/85829145</a><br>
 <a href="https://medium.com/@shartoo518/1-%E6%A6%82%E8%A7%88-5921fa471efb">SIFT 特征详解. SIFT特征即Scale-Invariant Feature… | by Tao Shatoo | Medium</a><br>
 <a href="https://blog.csdn.net/lanxuecc/article/details/52222369">机器学习 之 Haar特征-CSDN博客</a></p>
+<hr>
+<h2 id="LLM-面试八股">LLM 面试八股</h2>
+<p><a href="https://github.com/j0rGeT/LLMs_interview_notes">GitHub - j0rGeT/LLMs_interview_notes: LLMs interview notes and answers:该仓库主要记录大模型（LLMs）算法工程师相关的面试题和参考答案</a></p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
         <category>技术积累</category>
         <category>杂七杂八</category>
       </categories>
-  </entry>
-  <entry>
-    <title>qwen2-vl</title>
-    <url>/posts/5fae19d/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> Qwen 2-VL: Enhancing Vision-Language Model’s Perception of the World at Any Resolution<br>
-<strong>链接：</strong> <a href="https://arxiv.org/pdf/2409.12191">https://arxiv.org/pdf/2409.12191</a><br>
-<strong>代码：</strong> <a href="https://github.com/QwenLM/Qwen2-VL">https://github.com/QwenLM/Qwen2-VL</a><br>
-<strong>来源：</strong> arxiv<br>
-<strong>单位：</strong> Qwen Team Alibaba Group</p>
-<hr>
-<h2 id="目前方法的缺陷及-qwen2-vl-的解决方法">目前方法的缺陷及 qwen2-vl 的解决方法</h2>
-<ul>
-<li>当前大多数 LVLM 会固定输入图像的尺寸，这会导致高分辨率图像信息的丢失。Qwen2-vl 在训练过程中引入动态分辨率；</li>
-<li>当前大多数模型在处理视频时，会把视频帧看作互不关联的图像。Qwen2-vl 设计了 multimodal rotary position embedding 处理时空维度的信息。</li>
-</ul>
-<hr>
-<h2 id="Method">Method</h2>
-<h3 id="模型尺寸">模型尺寸</h3>
-<p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-12-18%2018.21.52.png" alt=""></p>
-<h3 id="模型结构">模型结构</h3>
-<p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-12-18%2018.26.03.png" alt=""></p>
-<ul>
-<li>Naive Dynamic Resolution：采用 Navit 以及 2D-RoPE；</li>
-<li>M-RoPE：<img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-12-18%2018.53.00.png" alt=""></li>
-<li>Unified Image and Video Understanding：输入是单张图时，会把图像复制一份，看作一个 2 帧的视频，从而实现视频和图像的统一。第一层卷积会采用 3D 卷积，使模型可以提取视频三维特征。</li>
-</ul>
-<h3 id="模型训练">模型训练</h3>
-<p>分为三个阶段：</p>
-<ul>
-<li>仅训练 ViT：语言模型从 qwen2 初始化，视觉模型从 DFN 的 ViT 权重初始化；训练的主要任务包括：learning image-text relationships、textual content recognition within images through OCR、image classification tasks；</li>
-<li>训练所有模块：引入更多任务和数据；</li>
-<li>仅训练语言模型：构建 instruction-following data 用于训练。</li>
-</ul>
-<hr>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>技术积累</category>
-        <category>论文笔记</category>
-      </categories>
-      <tags>
-        <tag>论文笔记</tag>
-        <tag>LLM</tag>
-      </tags>
   </entry>
   <entry>
     <title>git使用</title>
@@ -1496,8 +1682,8 @@ E：仅在 S5 上执行 single scale encoder（AIFI），以减少计算量，�
       </categories>
       <tags>
         <tag>论文笔记</tag>
-        <tag>LLM</tag>
         <tag>自动驾驶</tag>
+        <tag>大模型</tag>
       </tags>
   </entry>
   <entry>
@@ -1711,6 +1897,24 @@ E：仅在 S5 上执行 single scale encoder（AIFI），以减少计算量，�
 被路人夸了进步快非常开心～</p>
 
                 <span class="cd-timeline__date svelte-1t2uafz">2025-01-25</span>
+            </div>
+        </div><div class="cd-timeline__block js-cd-block svelte-1t2uafz">
+            <div class="cd-timeline__img cd-timeline__img--movie js-cd-img svelte-1t2uafz">
+            </div>
+            <div class="cd-timeline__content js-cd-content svelte-1t2uafz">
+                <h2 class="svelte-1t2uafz">前摇滚、后压步</h2>
+                <p>纠正了两个动作的细节</p>
+
+                <span class="cd-timeline__date svelte-1t2uafz">2025-02-15</span>
+            </div>
+        </div><div class="cd-timeline__block js-cd-block svelte-1t2uafz">
+            <div class="cd-timeline__img cd-timeline__img--movie js-cd-img svelte-1t2uafz">
+            </div>
+            <div class="cd-timeline__content js-cd-content svelte-1t2uafz">
+                <h2 class="svelte-1t2uafz">后压步</h2>
+                <p>逆时针方向后压步已经基本可以了，顺时针还差得多，感觉后压步加速更快，不知道是否是错觉</p>
+
+                <span class="cd-timeline__date svelte-1t2uafz">2025-02-22</span>
             </div>
         </div>
     </div>
@@ -1994,8 +2198,8 @@ s 中的串联子串是指一个包含 words 中所有字符串以任意顺�
         <category>读书笔记</category>
       </categories>
       <tags>
-        <tag>LLM</tag>
         <tag>读书笔记</tag>
+        <tag>大模型</tag>
       </tags>
   </entry>
   <entry>
@@ -2118,10 +2322,10 @@ s 中的串联子串是指一个包含 words 中所有字符串以任意顺�
       </categories>
       <tags>
         <tag>论文笔记</tag>
-        <tag>LLM</tag>
         <tag>finetune</tag>
         <tag>高引</tag>
         <tag>ACL2022</tag>
+        <tag>大模型</tag>
       </tags>
   </entry>
   <entry>
@@ -2146,10 +2350,10 @@ s 中的串联子串是指一个包含 words 中所有字符串以任意顺�
       </categories>
       <tags>
         <tag>论文笔记</tag>
-        <tag>LLM</tag>
         <tag>finetune</tag>
         <tag>高引</tag>
         <tag>AI_Open2024</tag>
+        <tag>大模型</tag>
       </tags>
   </entry>
   <entry>
@@ -2184,10 +2388,10 @@ s 中的串联子串是指一个包含 words 中所有字符串以任意顺�
       </categories>
       <tags>
         <tag>论文笔记</tag>
-        <tag>LLM</tag>
         <tag>ICLR2022</tag>
         <tag>finetune</tag>
         <tag>高引</tag>
+        <tag>大模型</tag>
       </tags>
   </entry>
   <entry>
