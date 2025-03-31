@@ -1,6 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>deepseek</title>
+    <url>/posts/bc9a4dc7/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> DeepSeek LLM Scaling Open-Source Language Models with Longtermism<br>
+<strong>链接：</strong> <a href="https://arxiv.org/pdf/2401.02954">2401.02954</a><br>
+<strong>代码：</strong> <a href="https://github.com/deepseek-ai/DeepSeek-LLM">GitHub - deepseek-ai/DeepSeek-LLM: DeepSeek LLM: Let there be answers</a><br>
+<strong>单位：</strong> DeepSeek-AI</p>
+<hr>
+<h2 id="Pre-Training">Pre-Training</h2>
+<h3 id="Data">Data</h3>
+<p>数据处理主要包含去重、过滤以及 remix 三个步骤。生成的 vocabulary 中的 token 数为 100015，其中有 15 个 special token。</p>
+<h3 id="Architecture">Architecture</h3>
+<p>Pre-norm structure、RMSNorm function、SwiGLU、RoPE、67B 模型采用了 Grouped-Query Attention</p>
+<h3 id="Infrastructures">Infrastructures</h3>
+<p>Megatron、flash attention、ZeRO-1<br>
+模型采用 bf16，但是 accumulate gradients 采用 fp32。</p>
+<hr>
+<h2 id="Scaling-Laws">Scaling Laws</h2>
+<p>当计算能力提升时，应该增大模型规模还是增大数据量，以达到最好的模型效果是一个需要研究的问题。</p>
+<h3 id="Scaling-Laws-for-Hyperparameters">Scaling Laws for Hyperparameters</h3>
+<p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2025-03-18%2016.57.22.png" alt="截屏2025-03-18 16.57.22.png"><br>
+随着计算能力的提升，batch size 的最佳值增加，learning rate 的最佳值降低。同时最佳值的取值范围都比较宽。</p>
+<h3 id="Estimating-Optimal-Model-and-Data-Scaling">Estimating Optimal Model and Data Scaling</h3>
+<p>本文采用的复杂度计算公式为：<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo>=</mo><mn>72</mn><msub><mi>n</mi><mrow><mi>l</mi><mi>a</mi><mi>y</mi><mi>e</mi><mi>r</mi></mrow></msub><msubsup><mi>d</mi><mrow><mi>m</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>l</mi></mrow><mn>2</mn></msubsup><mo>+</mo><mn>12</mn><msub><mi>n</mi><mrow><mi>l</mi><mi>a</mi><mi>y</mi><mi>e</mi><mi>r</mi></mrow></msub><msub><mi>d</mi><mrow><mi>m</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>l</mi></mrow></msub><msub><mi>l</mi><mrow><mi>s</mi><mi>e</mi><mi>q</mi></mrow></msub></mrow><annotation encoding="application/x-tex">M=72n_{layer}d_{model}^2+12n_{layer}d_{model}l_{seq}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.1002em;vertical-align:-0.2861em;"></span><span class="mord">72</span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">yer</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-2.4169em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2831em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.9805em;vertical-align:-0.2861em;"></span><span class="mord">12</span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">yer</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0197em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">se</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">q</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span>。根据实验得到了模型规模及数据规模随计算总量提升的公式，并给出了不同复杂度下的预估 loss。<br>
+<img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2025-03-21%2013.36.23.png" alt="截屏2025-03-21 13.36.23.png"><br>
+<img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2025-03-21%2013.36.36.png" alt="截屏2025-03-21 13.36.36.png"></p>
+<h3 id="Scaling-Laws-with-Different-Data">Scaling Laws with Different Data</h3>
+<p>当数据集质量增高时，最优分配策略会倾向于在模型上分配更多资源（即增大模型规模）。</p>
+<hr>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>技术积累</category>
+        <category>论文笔记</category>
+      </categories>
+      <tags>
+        <tag>论文笔记</tag>
+        <tag>大模型</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>GPT</title>
+    <url>/posts/5c298aee/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> Improving Language Understanding by Generative Pre-Training<br>
+<strong>链接：</strong> <a href="https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf">language_understanding_paper.pdf</a><br>
+<strong>单位：</strong> OpenAI</p>
+<hr>
+<h2 id="目标">目标</h2>
+<p>设计一个利用无标签数据进行 pretrain 的方法，使 pretrain 模型可以在利用少量标注数据 finetune 后就在下游任务上取得比较好的效果。</p>
+<hr>
+<h2 id="Framework">Framework</h2>
+<h3 id="Unsupervised-pre-training">Unsupervised pre-training</h3>
+<p>模型由多层 transformer decoder 构成，训练任务是由之前的 context 预测文本的下一个 token。</p>
+<h3 id="Supervised-fine-tuning">Supervised fine-tuning</h3>
+<p>在预训练模型基础上，增加 head，用 head 完成特定的任务，训练时仅训练 head 的参数。</p>
+<h3 id="Task-specific-input-transformations">Task-specific input transformations</h3>
+<p>针对不同任务设计了不同的处理方式。<br>
+<img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2025-03-07%2013.50.18.png" alt="截屏2025-03-07 13.50.18.png"></p>
+<hr>
+<p><strong>题目：</strong> Language Models are Unsupervised Multitask Learners<br>
+<strong>链接：</strong> <a href="https://storage.prod.researchhub.com/uploads/papers/2020/06/01/language-models.pdf">language-models.pdf</a><br>
+<strong>代码：</strong> <a href="https://github.com/openai/gpt-2">GitHub - openai/gpt-2: Code for the paper “Language Models are Unsupervised Multitask Learners”</a><br>
+<strong>单位：</strong> OpenAI</p>
+<hr>
+<h2 id="目标-2">目标</h2>
+<p>证明了预训练模型不需要 finetune 也可以在下游任务上取得不错的结果，这相对于之前的论文更近了一步，证明了通用大模型是可行的。</p>
+<hr>
+<h2 id="Approach">Approach</h2>
+<p>语言模型可以通过把 task 转化成语言 token 输入到模型里的方式，支持模型执行不同任务。</p>
+<h3 id="Training-Dataset">Training Dataset</h3>
+<p>搜集 reddit 里的链接网页，把这些网页视作被人工过滤过一遍的，有意义的网页，总数据量大约 40B。</p>
+<h3 id="Model">Model</h3>
+<p>大体沿用了上个版本的 transformer，主要修改的点：</p>
+<ul>
+<li>Post-norm 改成了 pre-norm，最后一个 block 后面额外加了一个 normalization；</li>
+<li>Vocabulary size 修改成了 50257。</li>
+</ul>
+<hr>
+<p><strong>题目：</strong> Language Models are Few-Shot Learners<br>
+<strong>链接：</strong> <a href="https://proceedings.neurips.cc/paper_files/paper/2020/file/1457c0d6bfcb4967418bfb8ac142f64a-Paper.pdf">proceedings.neurips.cc/paper_files/paper/2020/file/1457c0d6bfcb4967418bfb8ac142f64a-Paper.pdf</a><br>
+<strong>代码：</strong> <a href="https://github.com/openai/gpt-3">GitHub - openai/gpt-3: GPT-3: Language Models are Few-Shot Learners</a><br>
+<strong>来源：</strong> NIPS 2022<br>
+<strong>单位：</strong> OpenAI</p>
+<hr>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>技术积累</category>
+        <category>论文笔记</category>
+      </categories>
+      <tags>
+        <tag>论文笔记</tag>
+        <tag>高引</tag>
+        <tag>NIPS2020</tag>
+        <tag>大模型</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>不同VLLM比较</title>
     <url>/posts/f8889f73/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p>整体来说不同模型的技术在逐渐趋同，最开始的大家尝试了一些不同的方案，比如 deepseek 用了两个视觉模型提取不同分辨率的特征，internvl 设计了非常复杂的训练流程，但是在产品迭代过程中这些都被舍弃掉了。</p>
@@ -1915,6 +2010,33 @@ E：仅在 S5 上执行 single scale encoder（AIFI），以减少计算量，�
                 <p>逆时针方向后压步已经基本可以了，顺时针还差得多，感觉后压步加速更快，不知道是否是错觉</p>
 
                 <span class="cd-timeline__date svelte-1t2uafz">2025-02-22</span>
+            </div>
+        </div><div class="cd-timeline__block js-cd-block svelte-1t2uafz">
+            <div class="cd-timeline__img cd-timeline__img--movie js-cd-img svelte-1t2uafz">
+            </div>
+            <div class="cd-timeline__content js-cd-content svelte-1t2uafz">
+                <h2 class="svelte-1t2uafz">小兔跳、后内摇滚步、后压步</h2>
+                <p>后压步依旧在练习，新学了小兔跳和后内摇滚步，小兔跳还算可以，后内摇滚压不了一点</p>
+
+                <span class="cd-timeline__date svelte-1t2uafz">2025-03-08</span>
+            </div>
+        </div><div class="cd-timeline__block js-cd-block svelte-1t2uafz">
+            <div class="cd-timeline__img cd-timeline__img--movie js-cd-img svelte-1t2uafz">
+            </div>
+            <div class="cd-timeline__content js-cd-content svelte-1t2uafz">
+                <h2 class="svelte-1t2uafz">前内弧线，后外弧线</h2>
+                <p>前内弧线还能勉强控制一下，后外弧线真的压不了一点 QAQ</p>
+
+                <span class="cd-timeline__date svelte-1t2uafz">2025-03-15</span>
+            </div>
+        </div><div class="cd-timeline__block js-cd-block svelte-1t2uafz">
+            <div class="cd-timeline__img cd-timeline__img--movie js-cd-img svelte-1t2uafz">
+            </div>
+            <div class="cd-timeline__content js-cd-content svelte-1t2uafz">
+                <h2 class="svelte-1t2uafz">后内摇滚步</h2>
+                <p>课上基本没怎么学会，下课之后感觉有点悟了，但也不确定悟的对不对</p>
+
+                <span class="cd-timeline__date svelte-1t2uafz">2025-03-22</span>
             </div>
         </div>
     </div>

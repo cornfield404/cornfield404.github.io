@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>智能待办清单</title>
+    <style>
+        :root {
+            --main-color: #2196f3;
+            --bg-color: #f8fbff;
+            --border-color: #e0e0e0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: var(--bg-color);
+        }
+
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input, select {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            flex: 1;
+        }
+
+        button {
+            background: linear-gradient(135deg, var(--main-color), #1976d2);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .todo-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: white;
+            gap: 15px;
+        }
+
+        .todo-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .todo-meta {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .category-tag {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+        }
+
+        .work { background: #e3f2fd; color: #1976d2; }
+        .study { background: #f0f4c3; color: #827717; }
+        .life { background: #f8bbd0; color: #c2185b; }
+
+        .stats {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 6px;
+        }
+
+        .stats-form {
+            margin-top: 25px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 6px;
+        }
+
+        .stats-form h4 {
+            margin-top: 0;
+            margin-bottom: 12px;
+        }
+
+        .stats-list {
+            margin-top: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            background: white;
+        }
+
+        .stats-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stats-item:last-child {
+            border-bottom: none;
+        }
+
+        .stats-summary {
+            color: var(--main-color);
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .no-data {
+            color: #666;
+            text-align: center;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="input-group">
+            <input type="text" id="todoInput" placeholder="输入新任务...">
+            <select id="categorySelect">
+                <option value="work">工作</option>
+                <option value="study">学习</option>
+                <option value="life">生活</option>
+            </select>
+            <button onclick="addTodo()">添加</button>
+        </div>
+
+        <div class="filter-group">
+            <select id="filterCategory" onchange="filterTodos()">
+                <option value="all">所有分类</option>
+                <option value="work">工作</option>
+                <option value="study">学习</option>
+                <option value="life">生活</option>
+            </select>
+            <button onclick="toggleCompleted()" id="toggleButton">显示已完成</button>
+        </div>
+
+        <div id="uncompletedList" class="todo-list"></div>
+        <div id="completedList" class="todo-list hidden"></div>
+
+        <div class="stats">
+            <h3>实时统计</h3>
+            <p>今日新增: <span id="todayNew">0</span></p>
+            <p>本周完成: <span id="weekCompleted">0</span></p>
+            <p>分类统计: <span id="categoryStats">加载中...</span></p>
+        </div>
+
+        <div class="stats-form">
+            <h4>高级统计</h4>
+            <div class="input-group">
+                <input type="date" id="startDate">
+                <input type="date" id="endDate">
+                <select id="statCategory">
+                    <option value="all">所有分类</option>
+                    <option value="work">工作</option>
+                    <option value="study">学习</option>
+                    <option value="life">生活</option>
+                </select>
+                <select id="statType">
+                    <option value="created">新增任务</option>
+                    <option value="completed">完成任务</option>
+                </select>
+                <button onclick="customStats()">统计</button>
+            </div>
+            <div id="customStatsResult" class="stats-result">
+                <div class="stats-summary" id="statsSummary"></div>
+                <div class="stats-list" id="statsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let todos = JSON.parse(localStorage.getItem('todos')) || [];
+        let showCompleted = false;
+
+        function saveTodos() {
+            localStorage.setItem('todos', JSON.stringify(todos));
+        }
+
+        function addTodo() {
+            const input = document.getElementById('todoInput');
+            const category = document.getElementById('categorySelect').value;
+          
+            if (input.value.trim()) {
+                const newTodo = {
+                    id: Date.now(),
+                    content: input.value,
+                    category: category,
+                    createdAt: new Date(),
+                    completedAt: null,
+                    completed: false
+                };
+              
+                todos.push(newTodo);
+                saveTodos();
+                input.value = '';
+                renderTodos();
+                updateStats();
+            }
+        }
+
+        function toggleCompleted() {
+            showCompleted = !showCompleted;
+            document.getElementById('toggleButton').textContent = showCompleted ? '显示未完成' : '显示已完成';
+            document.getElementById('uncompletedList').classList.toggle('hidden', showCompleted);
+            document.getElementById('completedList').classList.toggle('hidden', !showCompleted);
+        }
+
+        function filterTodos() {
+            renderTodos();
+        }
+
+        function renderTodos() {
+            const filterCategory = document.getElementById('filterCategory').value;
+          
+            const uncompleted = todos.filter(todo => 
+                !todo.completed && (filterCategory === 'all' || todo.category === filterCategory)
+            );
+          
+            const completed = todos.filter(todo => 
+                todo.completed && (filterCategory === 'all' || todo.category === filterCategory)
+            );
+
+            renderList('uncompletedList', uncompleted);
+            renderList('completedList', completed);
+        }
+
+        function renderList(containerId, todos) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = todos.map(todo => `
+                <div class="todo-item ${todo.completed ? 'completed' : ''}">
+                    <input type="checkbox" ${todo.completed ? 'checked' : ''} 
+                           onchange="toggleTodo(${todo.id})">
+                    <div class="todo-content">
+                        <div class="category-tag ${todo.category}">
+                            ${getCategoryName(todo.category)}
+                        </div>
+                        <div contenteditable="true" onblur="updateTodo(${todo.id}, this.innerText)">
+                            ${todo.content}
+                        </div>
+                        <div class="todo-meta">
+                            创建: ${formatDate(todo.createdAt)}
+                            ${todo.completed ? `| 完成: ${formatDate(todo.completedAt)}` : ''}
+                        </div>
+                    </div>
+                    <button onclick="deleteTodo(${todo.id})">删除</button>
+                </div>
+            `).join('');
+        }
+
+        function getCategoryName(category) {
+            return {
+                work: '工作',
+                study: '学习',
+                life: '生活',
+                all: '所有分类'
+            }[category] || '未分类';
+        }
+
+        function formatDate(date) {
+            return new Date(date).toLocaleDateString('zh-CN');
+        }
+
+        function formatDateTime(date) {
+            const d = new Date(date);
+            return d.toLocaleDateString('zh-CN') + ' ' + d.toLocaleTimeString('zh-CN', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function updateStats() {
+            const today = new Date().setHours(0,0,0,0);
+            const oneWeekAgo = new Date(today - 6 * 24 * 60 * 60 * 1000);
+          
+            const todayNew = todos.filter(todo => 
+                new Date(todo.createdAt).setHours(0,0,0,0) === today
+            ).length;
+          
+            const weekCompleted = todos.filter(todo => 
+                todo.completed && new Date(todo.completedAt) >= oneWeekAgo
+            ).length;
+          
+            const categoryStats = ['work', 'study', 'life'].map(cat => 
+                `${getCategoryName(cat)}: ${todos.filter(t => t.category === cat).length}`
+            ).join(' · ');
+          
+            document.getElementById('todayNew').textContent = todayNew;
+            document.getElementById('weekCompleted').textContent = weekCompleted;
+            document.getElementById('categoryStats').textContent = categoryStats;
+        }
+
+        function customStats() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const category = document.getElementById('statCategory').value;
+            const statType = document.getElementById('statType').value;
+          
+            if (!startDate || !endDate) {
+                alert('请选择时间区间');
+                return;
+            }
+
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            end.setHours(23, 59, 59, 999);
+
+            const results = todos.filter(todo => {
+                const dateField = statType === 'created' ? 'createdAt' : 'completedAt';
+                const targetDate = new Date(todo[dateField]);
+              
+                return targetDate >= start && 
+                       targetDate <= end &&
+                       (category === 'all' || todo.category === category) &&
+                       (statType !== 'completed' || todo.completed);
+            });
+
+            const summaryHTML = `
+                <p>时间范围: ${startDate} 至 ${endDate}</p>
+                <p>统计类型: ${statType === 'created' ? '新增任务' : '完成任务'}</p>
+                <p>任务分类: ${getCategoryName(category)}</p>
+                <p>匹配数量: <strong>${results.length}</strong> 项</p>
+            `;
+
+            const listHTML = results.length ? 
+                results.map(todo => `
+                    <div class="stats-item">
+                        <div class="category-tag ${todo.category}">
+                            ${getCategoryName(todo.category)}
+                        </div>
+                        <div style="flex:1">
+                            <div>${todo.content}</div>
+                            <div class="todo-meta">
+                                ${statType === 'created' ? 
+                                    `创建: ${formatDateTime(todo.createdAt)}` : 
+                                    `完成: ${formatDateTime(todo.completedAt)}`
+                                }
+                            </div>
+                        </div>
+                        <div style="color:#666;font-size:0.9em">
+                            ID: ${todo.id}
+                        </div>
+                    </div>
+                `).join('') : 
+                '<div class="no-data">没有找到符合条件的任务</div>';
+
+            document.getElementById('statsSummary').innerHTML = summaryHTML;
+            document.getElementById('statsList').innerHTML = listHTML;
+        }
+
+        function toggleTodo(id) {
+            const todo = todos.find(t => t.id === id);
+            todo.completed = !todo.completed;
+            todo.completedAt = todo.completed ? new Date() : null;
+            saveTodos();
+            renderTodos();
+            updateStats();
+        }
+
+        function deleteTodo(id) {
+            todos = todos.filter(t => t.id !== id);
+            saveTodos();
+            renderTodos();
+            updateStats();
+        }
+
+        function updateTodo(id, newContent) {
+            const todo = todos.find(t => t.id === id);
+            todo.content = newContent.trim();
+            saveTodos();
+        }
+
+        renderTodos();
+        updateStats();
+    </script>
+</body>
+</html>
