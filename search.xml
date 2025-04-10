@@ -1,6 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>blog_note</title>
+    <url>/posts/2f6d7684/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h2 id="Pipeline-并行">Pipeline 并行</h2>
+<p>链接： <a href="https://zhuanlan.zhihu.com/p/613196255">https://zhuanlan.zhihu.com/p/613196255</a></p>
+<h3 id="为什么要这么设计">为什么要这么设计</h3>
+<p>模型越来越大，可能导致两个问题：</p>
+<ol>
+<li>中间结果占据的空间越来越大；</li>
+<li>模型大到无法在单张卡上运行的情况下，需要把模型拆分到不同的卡上运行，如果采用串行（0 号卡算法一个，1 号卡计算，所有卡算法后，最后一张卡计算 bp，然后逐步传回 0 号卡）则 GPU 利用率非常低。</li>
+</ol>
+<h3 id="解决办法">解决办法</h3>
+<ol>
+<li>针对第一个问题，可以不保存所有中间结果，仅保留上一张卡传入的输入，其余中间结果丢弃，需要计算的时候再重算一遍（时间换空间）；</li>
+<li>针对第二个问题，把每个 batch 拆分成更小的 mini-batch，每个 mini-batch 计算完就把结果传到下一个卡，然后计算下一个 mini-batch，以提升 GPU 利用率。</li>
+</ol>
+<hr>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>技术积累</category>
+        <category>博客笔记</category>
+      </categories>
+      <tags>
+        <tag>大模型</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>deepseek</title>
     <url>/posts/bc9a4dc7/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> DeepSeek LLM Scaling Open-Source Language Models with Longtermism<br>
@@ -35,8 +61,8 @@
         <category>论文笔记</category>
       </categories>
       <tags>
-        <tag>论文笔记</tag>
         <tag>大模型</tag>
+        <tag>论文笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -89,10 +115,10 @@
         <category>论文笔记</category>
       </categories>
       <tags>
+        <tag>大模型</tag>
         <tag>论文笔记</tag>
         <tag>高引</tag>
         <tag>NIPS2020</tag>
-        <tag>大模型</tag>
       </tags>
   </entry>
   <entry>
@@ -147,8 +173,8 @@
         <category>论文笔记</category>
       </categories>
       <tags>
-        <tag>论文笔记</tag>
         <tag>大模型</tag>
+        <tag>论文笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -221,9 +247,9 @@ For Generic Visual-Linguistic Tasks<br>
         <category>论文笔记</category>
       </categories>
       <tags>
+        <tag>大模型</tag>
         <tag>论文笔记</tag>
         <tag>CVPR2024</tag>
-        <tag>大模型</tag>
       </tags>
   </entry>
   <entry>
@@ -276,8 +302,8 @@ V2 放弃了 V1 的多模型，采用了给图像分块的方式，对图像 res
         <category>论文笔记</category>
       </categories>
       <tags>
-        <tag>论文笔记</tag>
         <tag>大模型</tag>
+        <tag>论文笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -349,9 +375,9 @@ V2 放弃了 V1 的多模型，采用了给图像分块的方式，对图像 res
         <category>论文笔记</category>
       </categories>
       <tags>
+        <tag>Image_Generation</tag>
         <tag>论文笔记</tag>
         <tag>高引</tag>
-        <tag>Image_Generation</tag>
         <tag>GAN</tag>
         <tag>ICCV2017</tag>
       </tags>
@@ -536,10 +562,10 @@ M834 80h400000v40h-400000z"/></svg></span></span></span><span class="vlist-s">�
         <category>论文笔记</category>
       </categories>
       <tags>
-        <tag>论文笔记</tag>
-        <tag>高引</tag>
-        <tag>Diffusion</tag>
         <tag>Image_Generation</tag>
+        <tag>论文笔记</tag>
+        <tag>Diffusion</tag>
+        <tag>高引</tag>
         <tag>ICLR2024</tag>
       </tags>
   </entry>
@@ -1189,10 +1215,10 @@ M834 80h400000v40h-400000z"/></svg></span></span></span><span class="vlist-s">�
         <category>论文笔记</category>
       </categories>
       <tags>
-        <tag>论文笔记</tag>
-        <tag>高引</tag>
-        <tag>Diffusion</tag>
         <tag>Image_Generation</tag>
+        <tag>论文笔记</tag>
+        <tag>Diffusion</tag>
+        <tag>高引</tag>
         <tag>NIPS2020</tag>
       </tags>
   </entry>
@@ -1236,9 +1262,9 @@ LLM 输出的 detailed text embed 通过 global average pooling 得到 global te
         <category>论文笔记</category>
       </categories>
       <tags>
+        <tag>大模型</tag>
         <tag>论文笔记</tag>
         <tag>Video_Segmentation</tag>
-        <tag>大模型</tag>
       </tags>
   </entry>
   <entry>
@@ -1290,9 +1316,9 @@ Q^{l+1,v&#x27;}&amp;=\gamma\cdot Softmax((Q^{l+1,v}\times Q^{l+1,f^T})\times Q^{
         <category>论文笔记</category>
       </categories>
       <tags>
+        <tag>大模型</tag>
         <tag>论文笔记</tag>
         <tag>Video_Segmentation</tag>
-        <tag>大模型</tag>
       </tags>
   </entry>
   <entry>
@@ -1345,8 +1371,8 @@ E：仅在 S5 上执行 single scale encoder（AIFI），以减少计算量，�
       <tags>
         <tag>论文笔记</tag>
         <tag>Image_Object_Detection</tag>
-        <tag>CVPR2024</tag>
         <tag>DETR</tag>
+        <tag>CVPR2024</tag>
       </tags>
   </entry>
   <entry>
@@ -1454,8 +1480,8 @@ E：仅在 S5 上执行 single scale encoder（AIFI），以减少计算量，�
         <category>论文笔记</category>
       </categories>
       <tags>
-        <tag>论文笔记</tag>
         <tag>大模型</tag>
+        <tag>论文笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -1561,10 +1587,10 @@ E：仅在 S5 上执行 single scale encoder（AIFI），以减少计算量，�
         <category>论文笔记</category>
       </categories>
       <tags>
-        <tag>论文笔记</tag>
-        <tag>高引</tag>
-        <tag>Diffusion</tag>
         <tag>Image_Generation</tag>
+        <tag>论文笔记</tag>
+        <tag>Diffusion</tag>
+        <tag>高引</tag>
         <tag>CVPR2022</tag>
       </tags>
   </entry>
@@ -1776,9 +1802,9 @@ E：仅在 S5 上执行 single scale encoder（AIFI），以减少计算量，�
         <category>论文笔记</category>
       </categories>
       <tags>
+        <tag>大模型</tag>
         <tag>论文笔记</tag>
         <tag>自动驾驶</tag>
-        <tag>大模型</tag>
       </tags>
   </entry>
   <entry>
@@ -1907,140 +1933,63 @@ E：仅在 S5 上执行 single scale encoder（AIFI），以减少计算量，�
   <entry>
     <title>花样滑冰</title>
     <url>/posts/6ce289f7/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><style>
-    .cd-timeline.svelte-1t2uafz .svelte-1t2uafz,.cd-timeline.svelte-1t2uafz .svelte-1t2uafz::after,.cd-timeline.svelte-1t2uafz .svelte-1t2uafz::before{-webkit-box-sizing:border-box;box-sizing:border-box}.cd-timeline.svelte-1t2uafz{font-size:1.6rem;font-family:"Droid Serif", serif;color:#7f8c97;background-color:#e9f0f5}.cd-timeline.svelte-1t2uafz a{color:#acb7c0;text-decoration:none}.cd-timeline.svelte-1t2uafz img{max-width:100%}.cd-timeline.svelte-1t2uafz h1,h2{font-family:"Open Sans", sans-serif;font-weight:bold}.cd-timeline.svelte-1t2uafz{overflow:hidden;margin:2em auto}.cd-timeline__container.svelte-1t2uafz{position:relative;width:90%;max-width:1170px;margin:0 auto;padding:2em 0}.cd-timeline__container.svelte-1t2uafz::before{content:'';position:absolute;top:0;left:18px;height:100%;width:4px;background:#d7e4ed}@media only screen and (min-width: 1170px){.cd-timeline.svelte-1t2uafz{margin-top:3em;margin-bottom:3em}.cd-timeline__container.svelte-1t2uafz::before{left:50%;margin-left:-2px}}.cd-timeline__block.svelte-1t2uafz{position:relative;margin:2em 0}.cd-timeline__block.svelte-1t2uafz:after{content:"";display:table;clear:both}.cd-timeline__block.svelte-1t2uafz:first-child{margin-top:0}.cd-timeline__block.svelte-1t2uafz:last-child{margin-bottom:0}@media only screen and (min-width: 1170px){.cd-timeline__block.svelte-1t2uafz{margin:4em 0}}.cd-timeline__img.svelte-1t2uafz{position:absolute;top:0;left:0;width:40px;height:40px;border-radius:50%;-webkit-box-shadow:0 0 0 4px white, inset 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 0 4px rgba(0, 0, 0, 0.05);box-shadow:0 0 0 4px white, inset 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 0 4px rgba(0, 0, 0, 0.05)}.cd-timeline__img.svelte-1t2uafz{background:#75ce66}@media only screen and (min-width: 1170px){.cd-timeline__img.svelte-1t2uafz{width:60px;height:60px;left:50%;margin-left:-30px;-webkit-transform:translateZ(0);transform:translateZ(0)}}@-webkit-keyframes svelte-1t2uafz-cd-bounce-1{0%{opacity:0;-webkit-transform:scale(0.5);transform:scale(0.5)}60%{opacity:1;-webkit-transform:scale(1.2);transform:scale(1.2)}100%{-webkit-transform:scale(1);transform:scale(1)}}@keyframes svelte-1t2uafz-cd-bounce-1{0%{opacity:0;-webkit-transform:scale(0.5);transform:scale(0.5)}60%{opacity:1;-webkit-transform:scale(1.2);transform:scale(1.2)}100%{-webkit-transform:scale(1);transform:scale(1)}}.cd-timeline__content.svelte-1t2uafz{position:relative;margin-left:60px;background:white;border-radius:0.25em;padding:1em;-webkit-box-shadow:0 3px 0 #d7e4ed;box-shadow:0 3px 0 #d7e4ed}.cd-timeline__content.svelte-1t2uafz:after{content:"";display:table;clear:both}.cd-timeline__content.svelte-1t2uafz::before{content:'';position:absolute;top:16px;right:100%;height:0;width:0;border:7px solid transparent;border-right:7px solid white}.cd-timeline__content.svelte-1t2uafz h2.svelte-1t2uafz{color:#303e49}.cd-timeline__content.svelte-1t2uafz p,.cd-timeline__date.svelte-1t2uafz{font-size:1.3rem}.cd-timeline__content.svelte-1t2uafz p{margin:1em 0;line-height:1.6}.cd-timeline__date.svelte-1t2uafz{display:inline-block}.cd-timeline__date.svelte-1t2uafz{float:left;padding:.8em 0;opacity:.7}@media only screen and (min-width: 768px){.cd-timeline__content.svelte-1t2uafz h2.svelte-1t2uafz{font-size:2rem}.cd-timeline__content.svelte-1t2uafz p{font-size:1.6rem}.cd-timeline__date.svelte-1t2uafz{font-size:1.4rem}}@media only screen and (min-width: 1170px){.cd-timeline__content.svelte-1t2uafz{margin-left:0;padding:1.6em;width:45%;-webkit-transform:translateZ(0);transform:translateZ(0)}.cd-timeline__content.svelte-1t2uafz::before{top:24px;left:100%;border-color:transparent;border-left-color:white}.cd-timeline__date.svelte-1t2uafz{position:absolute;width:100%;left:122%;top:6px;font-size:1.6rem}.cd-timeline__block.svelte-1t2uafz:nth-child(even) .cd-timeline__content.svelte-1t2uafz{float:right}.cd-timeline__block.svelte-1t2uafz:nth-child(even) .cd-timeline__content.svelte-1t2uafz::before{top:24px;left:auto;right:100%;border-color:transparent;border-right-color:white}.cd-timeline__block.svelte-1t2uafz:nth-child(even) .cd-timeline__date.svelte-1t2uafz{left:auto;right:122%;text-align:right}}@-webkit-keyframes svelte-1t2uafz-cd-bounce-2{0%{opacity:0;-webkit-transform:translateX(-100px);transform:translateX(-100px)}60%{opacity:1;-webkit-transform:translateX(20px);transform:translateX(20px)}100%{-webkit-transform:translateX(0);transform:translateX(0)}}@keyframes svelte-1t2uafz-cd-bounce-2{0%{opacity:0;-webkit-transform:translateX(-100px);transform:translateX(-100px)}60%{opacity:1;-webkit-transform:translateX(20px);transform:translateX(20px)}100%{-webkit-transform:translateX(0);transform:translateX(0)}}@-webkit-keyframes svelte-1t2uafz-cd-bounce-2-inverse{0%{opacity:0;-webkit-transform:translateX(100px);transform:translateX(100px)}60%{opacity:1;-webkit-transform:translateX(-20px);transform:translateX(-20px)}100%{-webkit-transform:translateX(0);transform:translateX(0)}}@keyframes svelte-1t2uafz-cd-bounce-2-inverse{0%{opacity:0;-webkit-transform:translateX(100px);transform:translateX(100px)}60%{opacity:1;-webkit-transform:translateX(-20px);transform:translateX(-20px)}100%{-webkit-transform:translateX(0);transform:translateX(0)}}
-    </style>
-<section class="cd-timeline js-cd-timeline svelte-1t2uafz">
-    <div class="cd-timeline__container svelte-1t2uafz">
-        <div class="cd-timeline__block js-cd-block svelte-1t2uafz">
-            <div class="cd-timeline__img cd-timeline__img--movie js-cd-img svelte-1t2uafz">
-            </div>
-            <div class="cd-timeline__content js-cd-content svelte-1t2uafz">
-                <h2 class="svelte-1t2uafz">前压步</h2>
-                <p>依旧是不敢压步的一天，左侧动作比较利索，但还需要借助一点外力，右侧蹬冰都不利索。</p>
-<p>教练：你自己压两步看看呢</p>
-<p>我：不敢 QAQ</p>
-
-                <span class="cd-timeline__date svelte-1t2uafz">2024-11-30</span>
-            </div>
-        </div><div class="cd-timeline__block js-cd-block svelte-1t2uafz">
-            <div class="cd-timeline__img cd-timeline__img--movie js-cd-img svelte-1t2uafz">
-            </div>
-            <div class="cd-timeline__content js-cd-content svelte-1t2uafz">
-                <h2 class="svelte-1t2uafz">前压步、前摇滚步</h2>
-                <p>压步熟练了一些，但是依旧得靠手保持平衡。
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><div class="timeline  green"><div class='timeline-item headline'><div class='timeline-item-title'><div class='item-circle'><p>2024</p>
+</div></div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>11-30</p>
+</div></div><div class='timeline-item-content'><p><strong>前压步</strong><br>
+依旧是不敢压步的一天，左侧动作比较利索，但还需要借助一点外力，右侧蹬冰都不利索。<br>
+教练：你自己压两步看看呢<br>
+我：不敢 QAQ</p>
+</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>12-14</p>
+</div></div><div class='timeline-item-content'><p><strong>前压步，前摇滚步</strong><br>
+压步熟练了一些，但是依旧得靠手保持平衡。<br>
 学了前摇滚，明明看起来是一种很和谐不别扭的步法，自己滑就不是这么回事了。</p>
-
-                <span class="cd-timeline__date svelte-1t2uafz">2024-12-14</span>
-            </div>
-        </div><div class="cd-timeline__block js-cd-block svelte-1t2uafz">
-            <div class="cd-timeline__img cd-timeline__img--movie js-cd-img svelte-1t2uafz">
-            </div>
-            <div class="cd-timeline__content js-cd-content svelte-1t2uafz">
-                <h2 class="svelte-1t2uafz">前压步</h2>
-                <p>压步似乎突然就悟了，已经没什么恐惧了，逆时针可以比较顺利，顺时针压的比较少，还有待观察。
+</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>12-21</p>
+</div></div><div class='timeline-item-content'><p><strong>前压步</strong><br>
+压步似乎突然就悟了，已经没什么恐惧了，逆时针可以比较顺利，顺时针压的比较少，还有待观察。<br>
 另外，被教练带着用超快的速度蹬冰滑了几圈，感受到了起飞的感觉，非常快乐。</p>
-
-                <span class="cd-timeline__date svelte-1t2uafz">2024-12-21</span>
-            </div>
-        </div><div class="cd-timeline__block js-cd-block svelte-1t2uafz">
-            <div class="cd-timeline__img cd-timeline__img--movie js-cd-img svelte-1t2uafz">
-            </div>
-            <div class="cd-timeline__content js-cd-content svelte-1t2uafz">
-                <h2 class="svelte-1t2uafz">前压步</h2>
-                <p>顺时针压步果然还有大问题 TAT 也算达成两面压步都摔过成就了，希望顺时针也可以像逆时针一样突然开窍。
+</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>12-28</p>
+</div></div><div class='timeline-item-content'><p><strong>前压步</strong><br>
+顺时针压步果然还有大问题 TAT 也算达成两面压步都摔过成就了，希望顺时针也可以像逆时针一样突然开窍。<br>
 被教练说上身完全没有控制，果然啥运动都得练核心 QAQ</p>
-
-                <span class="cd-timeline__date svelte-1t2uafz">2024-12-28</span>
-            </div>
-        </div><div class="cd-timeline__block js-cd-block svelte-1t2uafz">
-            <div class="cd-timeline__img cd-timeline__img--movie js-cd-img svelte-1t2uafz">
-            </div>
-            <div class="cd-timeline__content js-cd-content svelte-1t2uafz">
-                <h2 class="svelte-1t2uafz">前压步</h2>
-                <p>元旦冰场居然没什么人，快乐地滑了一下午，顺时针压步勉强也以压起来了，但是没有逆时针那种突然悟了觉得很稳很安心的感觉，单纯是出于封建迷信不希望新年第一个 flag 倒了的心态，在顽强对抗恐惧～
+</div></div></div>
+<div class="timeline  green"><div class='timeline-item headline'><div class='timeline-item-title'><div class='item-circle'><p>2025</p>
+</div></div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>01-01</p>
+</div></div><div class='timeline-item-content'><p><strong>前压步</strong><br>
+元旦冰场居然没什么人，快乐地滑了一下午，顺时针压步勉强也以压起来了，但是没有逆时针那种突然悟了觉得很稳很安心的感觉，单纯是出于封建迷信不希望新年第一个 flag 倒了的心态，在顽强对抗恐惧～<br>
 以为自己蹬得很努力了，一看拍的视频，龟速爬行 QAQ</p>
-
-                <span class="cd-timeline__date svelte-1t2uafz">2025-01-01</span>
-            </div>
-        </div><div class="cd-timeline__block js-cd-block svelte-1t2uafz">
-            <div class="cd-timeline__img cd-timeline__img--movie js-cd-img svelte-1t2uafz">
-            </div>
-            <div class="cd-timeline__content js-cd-content svelte-1t2uafz">
-                <h2 class="svelte-1t2uafz">前压步、后 C</h2>
-                <p>双侧前压步基本可以压起来了，顺时针也相对稳定了
+</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>01-04</p>
+</div></div><div class='timeline-item-content'><p><strong>前压步、后 C</strong><br>
+双侧前压步基本可以压起来了，顺时针也相对稳定了<br>
 后 C 也勉强可以连续滑行，但感觉还不到可以学习后压步的程度</p>
-
-                <span class="cd-timeline__date svelte-1t2uafz">2025-01-04</span>
-            </div>
-        </div><div class="cd-timeline__block js-cd-block svelte-1t2uafz">
-            <div class="cd-timeline__img cd-timeline__img--movie js-cd-img svelte-1t2uafz">
-            </div>
-            <div class="cd-timeline__content js-cd-content svelte-1t2uafz">
-                <h2 class="svelte-1t2uafz">前摇滚、后压步</h2>
-                <p>前摇滚可以连续滑起来了，后压步也可以压，虽然重心很不稳定。
+</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>01-18</p>
+</div></div><div class='timeline-item-content'><p><strong>前摇滚、后压步</strong><br>
+前摇滚可以连续滑起来了，后压步也可以压，虽然重心很不稳定。<br>
 果然基础打好学其他步法会变得容易一些～</p>
-
-                <span class="cd-timeline__date svelte-1t2uafz">2025-01-18</span>
-            </div>
-        </div><div class="cd-timeline__block js-cd-block svelte-1t2uafz">
-            <div class="cd-timeline__img cd-timeline__img--movie js-cd-img svelte-1t2uafz">
-            </div>
-            <div class="cd-timeline__content js-cd-content svelte-1t2uafz">
-                <h2 class="svelte-1t2uafz">前摇滚、后压步、前压步</h2>
-                <p>基础还是需要反反复复地练。前摇滚确定了几个需要注意的点：后腿要一直伸直、前腿要一直保持弯曲。前压步顺时针方向掌握了手摆放的位置有变好一点。后压步还是卡卡的，只能滑一丢丢。
+</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>01-25</p>
+</div></div><div class='timeline-item-content'><p><strong>前摇滚、后压步、前压步</strong><br>
+基础还是需要反反复复地练。前摇滚确定了几个需要注意的点：后腿要一直伸直、前腿要一直保持弯曲。前压步顺时针方向掌握了手摆放的位置有变好一点。后压步还是卡卡的，只能滑一丢丢。<br>
 被路人夸了进步快非常开心～</p>
-
-                <span class="cd-timeline__date svelte-1t2uafz">2025-01-25</span>
-            </div>
-        </div><div class="cd-timeline__block js-cd-block svelte-1t2uafz">
-            <div class="cd-timeline__img cd-timeline__img--movie js-cd-img svelte-1t2uafz">
-            </div>
-            <div class="cd-timeline__content js-cd-content svelte-1t2uafz">
-                <h2 class="svelte-1t2uafz">前摇滚、后压步</h2>
-                <p>纠正了两个动作的细节</p>
-
-                <span class="cd-timeline__date svelte-1t2uafz">2025-02-15</span>
-            </div>
-        </div><div class="cd-timeline__block js-cd-block svelte-1t2uafz">
-            <div class="cd-timeline__img cd-timeline__img--movie js-cd-img svelte-1t2uafz">
-            </div>
-            <div class="cd-timeline__content js-cd-content svelte-1t2uafz">
-                <h2 class="svelte-1t2uafz">后压步</h2>
-                <p>逆时针方向后压步已经基本可以了，顺时针还差得多，感觉后压步加速更快，不知道是否是错觉</p>
-
-                <span class="cd-timeline__date svelte-1t2uafz">2025-02-22</span>
-            </div>
-        </div><div class="cd-timeline__block js-cd-block svelte-1t2uafz">
-            <div class="cd-timeline__img cd-timeline__img--movie js-cd-img svelte-1t2uafz">
-            </div>
-            <div class="cd-timeline__content js-cd-content svelte-1t2uafz">
-                <h2 class="svelte-1t2uafz">小兔跳、后内摇滚步、后压步</h2>
-                <p>后压步依旧在练习，新学了小兔跳和后内摇滚步，小兔跳还算可以，后内摇滚压不了一点</p>
-
-                <span class="cd-timeline__date svelte-1t2uafz">2025-03-08</span>
-            </div>
-        </div><div class="cd-timeline__block js-cd-block svelte-1t2uafz">
-            <div class="cd-timeline__img cd-timeline__img--movie js-cd-img svelte-1t2uafz">
-            </div>
-            <div class="cd-timeline__content js-cd-content svelte-1t2uafz">
-                <h2 class="svelte-1t2uafz">前内弧线，后外弧线</h2>
-                <p>前内弧线还能勉强控制一下，后外弧线真的压不了一点 QAQ</p>
-
-                <span class="cd-timeline__date svelte-1t2uafz">2025-03-15</span>
-            </div>
-        </div><div class="cd-timeline__block js-cd-block svelte-1t2uafz">
-            <div class="cd-timeline__img cd-timeline__img--movie js-cd-img svelte-1t2uafz">
-            </div>
-            <div class="cd-timeline__content js-cd-content svelte-1t2uafz">
-                <h2 class="svelte-1t2uafz">后内摇滚步</h2>
-                <p>课上基本没怎么学会，下课之后感觉有点悟了，但也不确定悟的对不对</p>
-
-                <span class="cd-timeline__date svelte-1t2uafz">2025-03-22</span>
-            </div>
-        </div>
-    </div>
-</section>
+</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>02-15</p>
+</div></div><div class='timeline-item-content'><p><strong>前摇滚、后压步</strong><br>
+纠正了两个动作的细节</p>
+</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>02-22</p>
+</div></div><div class='timeline-item-content'><p><strong>后压步</strong><br>
+逆时针方向后压步已经基本可以了，顺时针还差得多，感觉后压步加速更快，不知道是否是错觉</p>
+</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>03-08</p>
+</div></div><div class='timeline-item-content'><p><strong>小兔跳、后内摇滚步、后压步</strong><br>
+后压步依旧在练习，新学了小兔跳和后内摇滚步，小兔跳还算可以，后内摇滚压不了一点</p>
+</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>03-15</p>
+</div></div><div class='timeline-item-content'><p><strong>前内弧线、后外弧线</strong><br>
+前内弧线还能勉强控制一下，后外弧线真的压不了一点 QAQ</p>
+</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>03-22</p>
+</div></div><div class='timeline-item-content'><p><strong>后内摇滚步</strong><br>
+课上基本没怎么学会，下课之后感觉有点悟了，但也不确定悟的对不对</p>
+</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>04-05</p>
+</div></div><div class='timeline-item-content'><p><strong>小兔跳、后内摇滚步、前外摇滚步、前压步、规尺转</strong><br>
+学的动作越来越多，分给每个动作的时间越来越少了，很难像以前一节课狂练一个动作。<br>
+动作基本都有不到位的地方，比如后内摇滚需要重心在冰刀中段，但是左脚总习惯踩刀尖，另外手部动作和头转动的方向一加上就保持不了平衡；前外摇滚和前压步蹲的动作依然不到位；小兔跳高度明显不好。<br>
+新学了规尺转，掌握的也不太行，下课之后勉勉强强每个方向能转一圈。</p>
+</div></div></div>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
         <category>生活琐事</category>
@@ -2320,8 +2269,8 @@ s 中的串联子串是指一个包含 words 中所有字符串以任意顺�
         <category>读书笔记</category>
       </categories>
       <tags>
-        <tag>读书笔记</tag>
         <tag>大模型</tag>
+        <tag>读书笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -2443,11 +2392,11 @@ s 中的串联子串是指一个包含 words 中所有字符串以任意顺�
         <category>论文笔记</category>
       </categories>
       <tags>
-        <tag>论文笔记</tag>
-        <tag>finetune</tag>
-        <tag>高引</tag>
-        <tag>ACL2022</tag>
         <tag>大模型</tag>
+        <tag>论文笔记</tag>
+        <tag>高引</tag>
+        <tag>finetune</tag>
+        <tag>ACL2022</tag>
       </tags>
   </entry>
   <entry>
@@ -2471,11 +2420,11 @@ s 中的串联子串是指一个包含 words 中所有字符串以任意顺�
         <category>论文笔记</category>
       </categories>
       <tags>
-        <tag>论文笔记</tag>
-        <tag>finetune</tag>
-        <tag>高引</tag>
-        <tag>AI_Open2024</tag>
         <tag>大模型</tag>
+        <tag>论文笔记</tag>
+        <tag>高引</tag>
+        <tag>finetune</tag>
+        <tag>AI_Open2024</tag>
       </tags>
   </entry>
   <entry>
@@ -2509,11 +2458,11 @@ s 中的串联子串是指一个包含 words 中所有字符串以任意顺�
         <category>论文笔记</category>
       </categories>
       <tags>
+        <tag>大模型</tag>
         <tag>论文笔记</tag>
+        <tag>高引</tag>
         <tag>ICLR2022</tag>
         <tag>finetune</tag>
-        <tag>高引</tag>
-        <tag>大模型</tag>
       </tags>
   </entry>
   <entry>
