@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>青春学院</title>
+    <url>/posts/2f6d7684/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h2 id="整体感受">整体感受</h2>
+<p>整体是一次非常差的观剧体验，首先买票的时候买的是《列车黄金大劫案》的票，也就是一个推理的剧本，现场所有人也都是为了推理剧本付的钱。结果当天到场后才通知因有演员生病，所以原定的剧目没办法演，临时改成了《青春学院》。也就是说，第一剧组没有备卡，第二无法正常表演没有提前通知，第三临时把演出内容换得毫不相干。<br>
+其次，作为一个 i 人，买票的时候我特意买了互动度最低的那一档的票，准备美美做个吃瓜群众，欣赏演员和 e 人观众的表演。结果换了本子之后，不知道是《青春学院》不分档还是怎么样，所有人都被拉入本子内高强度互动，究极痛苦。</p>
+<p>剧情本身其实没啥好说的，就是那种比较经典的回忆青春式剧情，对于学生或者比较怀念学生时代的人来说可能还行，对我来说就没啥意思，基本就是看了开头知道发展的那种剧。</p>
+<hr>
+<h2 id="一些还算可以的优点">一些还算可以的优点</h2>
+<ul>
+<li>虽然剧情很一般，且部分演员表演痕迹很重，但是有的演员还是挺不错的。演班主任的演员，不知道声音是天生的还是怎么弄的，听起来有点哑，很有那种老师的感觉。演喜欢打小报告的学生的那个演员，整体气质拿捏的也比较到位。</li>
+<li>虽然组织过程非常的草台班子，且后续退钱也不积极，但是催来催去还是给退了，也算挽回了一些损失。</li>
+<li>对于 e 人来说可能是比较有趣的表演形式，可以随意发挥，可以打乱演员的剧本和节奏，但是作为 i 人实在是敬谢不敏。</li>
+</ul>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>休闲娱乐</category>
+        <category>舞台欣赏</category>
+      </categories>
+      <tags>
+        <tag>舞台剧</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>blog_note</title>
     <url>/posts/2f6d7684/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h2 id="Pipeline-并行">Pipeline 并行</h2>
@@ -407,7 +430,10 @@ V2 放弃了 V1 的多模型，采用了给图像分块的方式，对图像 res
 <p>我和朋友一起去的，两个人买套票是 760，如果一个人买一张票就需要 390。这个价格配上两个小时的时间我觉得是小贵的，但是考虑到每次换新的剧目就需要重新装修，并且这种形式是没办法靠扩大观众规模来摊低成本的，一场有个 40 人可能就极限了，所以价格整体会比较高也不算特别不合理。<br>
 另外有一个 128 看半场的票，感觉是给回头客准备的，如果想要补完所有的故事线，或者特别喜欢某个演员专门来看就可以选这个。</p>
 <hr>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+<h2 id="照片">照片</h2>
+<div class="gallery-container" data-type="data" data-button="true">
+      <div class="gallery-items">[{"url":"https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/B00CE493-ADA5-4846-A52E-79A2DCFAB56C_1_105_c.jpeg","alt":"B00CE493-ADA5-4846-A52E-79A2DCFAB56C_1_105_c.jpeg"},{"url":"https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/0BD289D3-57DA-4485-81EF-1E4E1B05DE5E_1_105_c.jpeg","alt":"0BD289D3-57DA-4485-81EF-1E4E1B05DE5E_1_105_c.jpeg"},{"url":"https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/7B16B1A4-7EB0-454D-969E-C14EC0C1D43C_1_105_c.jpeg","alt":"7B16B1A4-7EB0-454D-969E-C14EC0C1D43C_1_105_c.jpeg"},{"url":"https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/52883F07-8528-4680-A901-23219008459C_1_105_c.jpeg","alt":"52883F07-8528-4680-A901-23219008459C_1_105_c.jpeg"}]</div>
+    </div><link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
         <category>休闲娱乐</category>
         <category>舞台欣赏</category>
@@ -1871,7 +1897,6 @@ E：仅在 S5 上执行 single scale encoder（AIFI），以减少计算量，�
 <hr>
 <h2 id="个人评价">个人评价</h2>
 <p>这本的大体框架我都挺喜欢的，不管是大梗还是多线叙事的架构都挺吸引我的。但是读下来整体感觉很碎，文笔不是最差的那种，但是也没啥优点，这么多人物看完都没留下很深刻的印象，不管是被害人、凶手还是侦探。</p>
-<hr>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
         <category>休闲娱乐</category>
@@ -2107,7 +2132,6 @@ E：仅在 S5 上执行 single scale encoder（AIFI），以减少计算量，�
 <h2 id="个人评价">个人评价</h2>
 <p>这本书整体靠每个人轮流提出推理并互相反驳推进，因此推理占了非常大的比例。同时，最后的反转比较出乎意料，虽然有癫癫的部分，但如果之前没想到还是比较震撼的。看完结局再回头看前文，也会发现作者埋了很多伏笔和暗示。</p>
 <p>个人不太喜欢的点是中间在不断抛出线索，甚至互相之间的反驳有时也是根据新提出的线索进行的。</p>
-<hr>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
         <category>休闲娱乐</category>
@@ -2349,7 +2373,6 @@ s 中的串联子串是指一个包含 words 中所有字符串以任意顺�
 <h2 id="个人评价">个人评价</h2>
 <p>很有趣的侦探形象，通常侦探是负责证明奇迹不存在的，然而这本书的侦探希望否定所有可能性以证明奇迹存在。故事的发展就是不断由其他人提出可能性，侦探对这些可能一一进行否定推动。在这样的设定里，提出可能性的人不需要证明这种可能性是真实存在的，只要有可能性就算成功，所以很多解答看起来非常牵强。个人最喜欢的环节是否定之否定那里，最初看到的时候非常震撼。</p>
 <p>比较明显的缺点应该是文风，文风和人物形象都过于轻小说化，个人不是很喜欢。</p>
-<hr>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
         <category>休闲娱乐</category>
