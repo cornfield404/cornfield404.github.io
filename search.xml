@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>种草书单</title>
+    <url>/posts/2f6d7684/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p>在各种地方经常被别人推荐的书吸引，在这里记录下，有时间就去看看，希望不会书单越来越长，但从未开始看 TAT</p>
+<ol>
+<li>《城市与狗》《酒吧长谈》
+<ul>
+<li>略萨的小说，在知乎上被<em>徐三石</em>种草的，答主的介绍非常有趣，以下为答案引用 <em>“略萨好在哪儿呢？他有一个非常牛逼的写作手法，叫“对话波”。举个例子，A和B此刻正坐在咖啡厅里聊天。A在对话过程中忽然问了一个问题，接下来的回答看似很通顺，但那句话不是B回答的，而是十年前的某一天C回答A的。略萨就是利用对话的这种表面上的连贯性，来实现对两个时空的穿插描写。我第一次读到时，真的起了一身鸡皮疙瘩。而且这种写法的妙处在于它很像悬疑作品，会吸引你去了解过去那个时空究竟发生了什么，以及对现下产生了什么样的影响。”</em></li>
+</ul>
+</li>
+</ol>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>生活琐事</category>
+        <category>点点滴滴</category>
+      </categories>
+      <tags>
+        <tag>书单</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>北京环球影城</title>
     <url>/posts/2f6d7684/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h2 id="整体感受">整体感受</h2>
@@ -30,9 +50,6 @@
         <category>生活琐事</category>
         <category>旅游记录</category>
       </categories>
-      <tags>
-        <tag>旅游记录</tag>
-      </tags>
   </entry>
   <entry>
     <title>青春学院</title>
@@ -84,9 +101,10 @@
       </tags>
   </entry>
   <entry>
-    <title>deepseek</title>
+    <title>DeepSeek</title>
     <url>/posts/bc9a4dc7/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> DeepSeek LLM Scaling Open-Source Language Models with Longtermism<br>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><ol class="series-items"><li><a href="/posts/bc9a4dc7/" title="DeepSeek">DeepSeek</a></li></ol>
+<p><strong>题目：</strong> DeepSeek LLM Scaling Open-Source Language Models with Longtermism<br>
 <strong>链接：</strong> <a href="https://arxiv.org/pdf/2401.02954">2401.02954</a><br>
 <strong>代码：</strong> <a href="https://github.com/deepseek-ai/DeepSeek-LLM">GitHub - deepseek-ai/DeepSeek-LLM: DeepSeek LLM: Let there be answers</a><br>
 <strong>单位：</strong> DeepSeek-AI</p>
@@ -119,7 +137,6 @@
       </categories>
       <tags>
         <tag>大模型</tag>
-        <tag>论文笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -615,8 +632,8 @@ M834 80h400000v40h-400000z"/></svg></span></span></span><span class="vlist-s">�
       </categories>
       <tags>
         <tag>论文笔记</tag>
-        <tag>Image_Generation</tag>
         <tag>Diffusion</tag>
+        <tag>Image_Generation</tag>
         <tag>高引</tag>
         <tag>ICLR2024</tag>
       </tags>
@@ -1268,8 +1285,8 @@ M834 80h400000v40h-400000z"/></svg></span></span></span><span class="vlist-s">�
       </categories>
       <tags>
         <tag>论文笔记</tag>
-        <tag>Image_Generation</tag>
         <tag>Diffusion</tag>
+        <tag>Image_Generation</tag>
         <tag>高引</tag>
         <tag>NIPS2020</tag>
       </tags>
@@ -1640,8 +1657,8 @@ E：仅在 S5 上执行 single scale encoder（AIFI），以减少计算量，�
       </categories>
       <tags>
         <tag>论文笔记</tag>
-        <tag>Image_Generation</tag>
         <tag>Diffusion</tag>
+        <tag>Image_Generation</tag>
         <tag>高引</tag>
         <tag>CVPR2022</tag>
       </tags>
@@ -1793,7 +1810,6 @@ E：仅在 S5 上执行 single scale encoder（AIFI），以减少计算量，�
 <hr>
 <h2 id="代码">代码</h2>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">minDistance</span>(<span class="params">self, word1: <span class="built_in">str</span>, word2: <span class="built_in">str</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        <span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">        result = np.zeros((<span class="built_in">len</span>(word1) + <span class="number">1</span>, <span class="built_in">len</span>(word2) + <span class="number">1</span>))</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(word1) + <span class="number">1</span>):</span><br><span class="line">            result[i][<span class="number">0</span>] = i</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(word2) + <span class="number">1</span>):</span><br><span class="line">            result[<span class="number">0</span>][i] = i</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="built_in">len</span>(word1) + <span class="number">1</span>):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="built_in">len</span>(word2) + <span class="number">1</span>):</span><br><span class="line">                <span class="keyword">if</span> word1[i - <span class="number">1</span>] == word2[j - <span class="number">1</span>]:</span><br><span class="line">                    result[i][j] = result[i - <span class="number">1</span>][j - <span class="number">1</span>]</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    result[i][j] = <span class="number">1</span> + <span class="built_in">min</span>(<span class="built_in">min</span>(result[i - <span class="number">1</span>][j - <span class="number">1</span>], result[i][j - <span class="number">1</span>]), result[i - <span class="number">1</span>][j])</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">int</span>(result[-<span class="number">1</span>][-<span class="number">1</span>])</span><br></pre></td></tr></table></figure>
-<hr>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
         <category>技术积累</category>
@@ -1802,6 +1818,7 @@ E：仅在 S5 上执行 single scale encoder（AIFI），以减少计算量，�
       <tags>
         <tag>算法</tag>
         <tag>动态规划</tag>
+        <tag>字符串</tag>
       </tags>
   </entry>
   <entry>
@@ -2040,15 +2057,19 @@ E：仅在 S5 上执行 single scale encoder（AIFI），以减少计算量，�
 学的动作越来越多，分给每个动作的时间越来越少了，很难像以前一节课狂练一个动作。<br>
 动作基本都有不到位的地方，比如后内摇滚需要重心在冰刀中段，但是左脚总习惯踩刀尖，另外手部动作和头转动的方向一加上就保持不了平衡；前外摇滚和前压步蹲的动作依然不到位；小兔跳高度明显不好。<br>
 新学了规尺转，掌握的也不太行，下课之后勉勉强强每个方向能转一圈。</p>
+</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>04-12</p>
+</div></div><div class='timeline-item-content'><p><strong>前 C、后 C、后内摇滚步、前外摇滚步、后压步、规尺转、双足转</strong><br>
+顶着大风去了冰场，以为会没什么人，结果 no zuo no die 的人还是挺多的。<br>
+前 C、后 C 技术明显更好了，摸冰更轻松了。前外摇滚步自己练习的时候感觉是更好了，主要是找到了压低重心的感觉，上课的时候教练还是觉得弧线不够长，感受了一下想要更长的弧线需要更快的速度，如果能加大蹬冰力度应该有希望。<br>
+后内摇滚步手脚还是无法协调，主要是加上手之后重心很容易飘，一飘动作就会断，下次试试加强核心的控制不确定是否有用。<br>
+后压步感觉顺时针方向多少还是有点别扭，不过和教练确认了重心前倾程度不严重，在这个基础上继续练应该就可以，教练强调了后背要挺直往后靠。<br>
+规尺转顺利了一些，逆时针方向也可以进入双足转了，但目前只能转两圈。</p>
 </div></div></div>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
         <category>生活琐事</category>
         <category>神奇技能</category>
       </categories>
-      <tags>
-        <tag>技能学习</tag>
-      </tags>
   </entry>
   <entry>
     <title>解数独</title>
@@ -2312,15 +2333,14 @@ s 中的串联子串是指一个包含 words 中所有字符串以任意顺�
 <hr>
 <h2 id="个人评价">个人评价</h2>
 <p>整体上是一本比较好的大模型入门书，不需要有太多基础知识，只要大概熟悉 python 就能看懂。用比较简单的例子，说明了大模型的各个模块的功能以及代码。但是整体确实比较浅，如果已经有过一定经验的话，再看意义就不大。</p>
-<hr>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
         <category>技术积累</category>
         <category>读书笔记</category>
       </categories>
       <tags>
-        <tag>读书笔记</tag>
         <tag>大模型</tag>
+        <tag>读书笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -2444,8 +2464,8 @@ s 中的串联子串是指一个包含 words 中所有字符串以任意顺�
         <tag>大模型</tag>
         <tag>论文笔记</tag>
         <tag>高引</tag>
-        <tag>finetune</tag>
         <tag>ACL2022</tag>
+        <tag>finetune</tag>
       </tags>
   </entry>
   <entry>
@@ -2510,8 +2530,8 @@ s 中的串联子串是指一个包含 words 中所有字符串以任意顺�
         <tag>大模型</tag>
         <tag>论文笔记</tag>
         <tag>高引</tag>
-        <tag>ICLR2022</tag>
         <tag>finetune</tag>
+        <tag>ICLR2022</tag>
       </tags>
   </entry>
   <entry>
