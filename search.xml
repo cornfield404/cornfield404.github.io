@@ -117,9 +117,16 @@
     <url>/posts/2f6d7684/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p>在各种地方经常被别人推荐的书吸引，在这里记录下，有时间就去看看，希望不会书单越来越长，但从未开始看 TAT</p>
 <ol>
-<li>《城市与狗》《酒吧长谈》
+<li>
+<p>《城市与狗》《酒吧长谈》</p>
 <ul>
 <li>略萨的小说，在知乎上被<em>徐三石</em>种草的，答主的介绍非常有趣，以下为答案引用 <em>“略萨好在哪儿呢？他有一个非常牛逼的写作手法，叫“对话波”。举个例子，A和B此刻正坐在咖啡厅里聊天。A在对话过程中忽然问了一个问题，接下来的回答看似很通顺，但那句话不是B回答的，而是十年前的某一天C回答A的。略萨就是利用对话的这种表面上的连贯性，来实现对两个时空的穿插描写。我第一次读到时，真的起了一身鸡皮疙瘩。而且这种写法的妙处在于它很像悬疑作品，会吸引你去了解过去那个时空究竟发生了什么，以及对现下产生了什么样的影响。”</em></li>
+</ul>
+</li>
+<li>
+<p>《哲学家们都干了什么》</p>
+<ul>
+<li>被<em>读客公众号</em>种草的书，据介绍是<em>最轻松好读、最严谨专业的哲学入门读物！</em>。</li>
 </ul>
 </li>
 </ol>
@@ -251,14 +258,14 @@
 <li>Flash attention；</li>
 <li>ZeRO-1；</li>
 <li>在 fp16 上训练，但梯度累计在 fp32 上；</li>
-<li>VLLM。</li>
+<li>VLLM</li>
 </ul>
 <hr>
 <h2 id="Scaling-Laws">Scaling Laws</h2>
 <p>当计算能力提升时，应该增大模型规模还是增大数据量，以达到最好的模型效果是一个需要研究的问题。</p>
 <h3 id="Scaling-Laws-for-Hyperparameters">Scaling Laws for Hyperparameters</h3>
 <ul>
-<li>为了保证之后在模型和数据规模上进行实验时，每组实验都能取得最佳性能，因此预先研究在不同的计算量下超参数的 scaling law，后面的实验就按照这个 scaling law 取超参;</li>
+<li>为了保证之后在模型和数据规模上进行实验时，每组实验都能取得最佳性能，因此预先研究在不同的计算量下超参数的 scaling law，后面的实验就按照这个 scaling law 取超参；</li>
 <li>实验现象：
 <ul>
 <li>泛化误差对于 batch size 和 learning rate 不是特别敏感，在一定范围内都能取得较优的效果；</li>
@@ -271,7 +278,7 @@
 <h3 id="Estimating-Optimal-Model-and-Data-Scaling">Estimating Optimal Model and Data Scaling</h3>
 <ul>
 <li>在一定计算量的情况下，找到模型大小与数据量的最佳分配方式；</li>
-<li>在本文中数据量有数据集中的 token 数来表示；</li>
+<li>在本文中数据量由数据集中的 token 数来表示；</li>
 <li>本文定义的模型规模由 non-embedding FLOPs/token 表示，论文中采用的公式为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo>=</mo><mn>72</mn><msub><mi>n</mi><mrow><mi>l</mi><mi>a</mi><mi>y</mi><mi>e</mi><mi>r</mi></mrow></msub><msubsup><mi>d</mi><mrow><mi>m</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>l</mi></mrow><mn>2</mn></msubsup><mo>+</mo><mn>12</mn><msub><mi>n</mi><mrow><mi>l</mi><mi>a</mi><mi>y</mi><mi>e</mi><mi>r</mi></mrow></msub><msub><mi>d</mi><mrow><mi>m</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>l</mi></mrow></msub><msub><mi>l</mi><mrow><mi>s</mi><mi>e</mi><mi>q</mi></mrow></msub></mrow><annotation encoding="application/x-tex">M=72n_{layer}d_{model}^2+12n_{layer}d_{model}l_{seq}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.1002em;vertical-align:-0.2861em;"></span><span class="mord">72</span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">yer</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-2.4169em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2831em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.9805em;vertical-align:-0.2861em;"></span><span class="mord">12</span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">yer</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0197em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">se</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">q</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span>，但论文中没有给出计算方法，以下是我自己推的：
 <ul>
 <li>模型 backward 计算量约为 forward 的两倍，可参考 <a href="https://arxiv.org/pdf/2001.08361">2001.08361</a>，因此只要计算出 forward 计算量，然后乘 3 就可以；</li>
@@ -2253,6 +2260,13 @@ E：仅在 S5 上执行 single scale encoder（AIFI），以减少计算量，�
 后内摇滚步手脚还是无法协调，主要是加上手之后重心很容易飘，一飘动作就会断，下次试试加强核心的控制不确定是否有用。<br>
 后压步感觉顺时针方向多少还是有点别扭，不过和教练确认了重心前倾程度不严重，在这个基础上继续练应该就可以，教练强调了后背要挺直往后靠。<br>
 规尺转顺利了一些，逆时针方向也可以进入双足转了，但目前只能转两圈。</p>
+</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>04-19</p>
+</div></div><div class='timeline-item-content'><p><strong>侧蹬冰、前后蛇形步、前外摇滚步、前内摇滚步、双足转</strong><br>
+侧蹬冰平衡基本能保持了，但有的时候感觉胯的位置很奇怪，可能还需要找找感觉调整一下。<br>
+后方蛇形步，教练强调了一些要领，主要是双脚尽量并拢，膝盖向前发力，脚下踩冰刀中段。目前膝盖比较容易内扣，感觉是发力习惯导致的，接下来在平时重点控制一下这种习惯，看看会不会有所改善。<br>
+前外摇滚这次强调了交叉步交叉的时候迈得要大一些，有助于弧线更好看。<br>
+新学的前内摇滚基本还处于摸索阶段，每一步都分三个阶段，蹲起蹲，起的时候浮腿收回贴住支撑腿，手臂转向，蹲的时候浮腿贴住支撑腿向前伸。目前的问题是平衡有些问题，在弧线末期经常控制不了，而且动作不太熟练，经常忘了转手臂。<br>
+双足转今天毫无感觉，无论如何也控制不了重心，不知为啥。</p>
 </div></div></div>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
