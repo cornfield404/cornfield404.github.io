@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>linux命令</title>
+    <url>/posts/8ebbbb0f/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h2 id="命令行恢复显示">命令行恢复显示</h2>
+<p>应对的情况：部分情况下 linux 命令行会无法显示命令，但是还是可以执行，希望能恢复输入命令的显示。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">stty echo</span><br></pre></td></tr></table></figure><link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>技术积累</category>
+        <category>杂七杂八</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>【DeepSeek系列（二）】DeepSeek Coder</title>
     <url>/posts/c0dbd124/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><ol class="series-items"><li><a href="/posts/6ed5720f/" title="【DeepSeek系列（一）】DeepSeek LLM">【DeepSeek系列（一）】DeepSeek LLM</a></li><li><a href="/posts/c0dbd124/" title="【DeepSeek系列（二）】DeepSeek Coder">【DeepSeek系列（二）】DeepSeek Coder</a></li></ol>
@@ -228,6 +242,12 @@
 <li>
 <p>《昨日的世界》</p>
 </li>
+<li>
+<p>《时间的女儿》《玫瑰的名字》</p>
+<ul>
+<li>历史推理小说代表</li>
+</ul>
+</li>
 </ol>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
@@ -295,7 +315,10 @@
   <entry>
     <title>大模型训练</title>
     <url>/posts/2f6d7684/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h2 id="Pipeline-并行">Pipeline 并行</h2>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h2 id="说明">说明</h2>
+<p>本篇笔记所参考的原 blog 以及图片全部来自知乎用户<a href="https://www.zhihu.com/people/lemonround">猛猿</a>，本篇笔记在原文基础上结合了少量自己的理解进行了提炼和整理，用于以后参考和复习。</p>
+<hr>
+<h2 id="Pipeline-并行">Pipeline 并行</h2>
 <p>链接： <a href="https://zhuanlan.zhihu.com/p/613196255">https://zhuanlan.zhihu.com/p/613196255</a></p>
 <h3 id="为什么要这么设计">为什么要这么设计</h3>
 <p>模型越来越大，可能导致两个问题：</p>
@@ -371,6 +394,35 @@
 <li>与每张 GPU 保存所有参数相比，ZeRO 通讯量增加并不明显，仅仅增加了 1.5 倍，但可以大幅降低显存占用。</li>
 </ul>
 <hr>
+<h2 id="张量并行">张量并行</h2>
+<h3 id="核心思路-3">核心思路</h3>
+<p>把模型的参数切开，放到不同的 GPU 上进行独立计算，然后再做聚合。</p>
+<h3 id="不同的权重切分方式">不同的权重切分方式</h3>
+<h4 id="按行切分">按行切分</h4>
+<img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/20250520110911.png" width="70%" height="70%" />
+<h4 id="按列切分">按列切分</h4>
+<img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/20250520111133.png" width="70%" height="70%" />
+<h3 id="MLP-层的处理方式">MLP 层的处理方式</h3>
+<h4 id="MLP-计算过程">MLP 计算过程</h4>
+<img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/20250520112024.png" width="70%" height="70%" />
+<h4 id="张量并行方式">张量并行方式</h4>
+<img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/20250520112123.png" width="80%" height="80%" />
+在 MLP 过程中对第一个矩阵采用列切割，第二个矩阵采用行切割。这样做的原因是 $GeLU(A+B)\neq GeLU(A)+GeLU(B)$，如果对第一个矩阵采用行切割的话需要在 $GeLU$ 前进行一次同步；而对第一个矩阵采用列切割可以避免掉这次同步操作。而对第一个矩阵采用列切割后，为了保证第二个矩阵乘法尺寸正确，只能对第二个权重矩阵采用行切割。
+<h4 id="通讯量计算">通讯量计算</h4>
+<p>Forward 的时候需要一次 AllReduce，backward 的时候需要一次 AllReduce，总通讯量为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><mi mathvariant="normal">Φ</mi></mrow><annotation encoding="application/x-tex">4\Phi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">4Φ</span></span></span></span>，其中 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Φ</mi><mo>=</mo><mi>b</mi><mo>×</mo><mi>s</mi><mo>×</mo><mi>h</mi></mrow><annotation encoding="application/x-tex">\Phi=b\times s \times h</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Φ</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7778em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">b</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">s</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">h</span></span></span></span>。</p>
+<h3 id="Self-Attention-层">Self-Attention 层</h3>
+<h4 id="张量并行方式-2">张量并行方式</h4>
+<img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/20250520164231.png" width="70%" height="70%" />
+多头注意力天然非常适合张量并行，因为多头注意力首先会对权重进行列切割，每一份对应一个 head 的权重。上图是一个 head 数为 2 的 demo，V、Q、K 分别进行列切割，分割后不同的 head 在不同 GPU 上单独计算，然后对 $output\_project$ 进行行切割。
+<h4 id="通讯量计算-2">通讯量计算</h4>
+<p>Forward 的时候需要一次 AllReduce，backward 的时候需要一次 AllReduce，总通讯量为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><mi mathvariant="normal">Φ</mi></mrow><annotation encoding="application/x-tex">4\Phi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">4Φ</span></span></span></span>，其中 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Φ</mi><mo>=</mo><mi>b</mi><mo>×</mo><mi>s</mi><mo>×</mo><mi>h</mi></mrow><annotation encoding="application/x-tex">\Phi=b\times s \times h</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Φ</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7778em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">b</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">s</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">h</span></span></span></span>。</p>
+<hr>
+<h2 id="张量并行-数据并行">张量并行+数据并行</h2>
+<h3 id="两种并行并存时的安排">两种并行并存时的安排</h3>
+<img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/20250520165725.png" width="70%" height="70%" />
+两种并行并存时，通常在不同机器之间做数据并行，在同一台机器上做张量并行。
+<h3 id="原因">原因</h3>
+<p>主要原因是张量并行需要在每一层进行通讯以保证结果正确，而数据并行里下一层的计算并不依赖上一层聚合后的结果。因此，张量并行对通讯要求相对更高，在同一台机器上性能更好。</p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
         <category>技术积累</category>
@@ -1984,64 +2036,6 @@ E：仅在 S5 上执行 single scale encoder（AIFI），以减少计算量，�
       </tags>
   </entry>
   <entry>
-    <title>比较好的技术解析文章</title>
-    <url>/posts/1528f15d/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h2 id="Vae-的原理">Vae 的原理</h2>
-<p><strong>链接：</strong> <a href="https://zhuanlan.zhihu.com/p/628604566">https://zhuanlan.zhihu.com/p/628604566</a><br>
-比较浅显易懂地说明了 vae 模型设计的出发点、基本原理以及损失函数的推导。</p>
-<hr>
-<h2 id="DDIM-原理">DDIM 原理</h2>
-<p><strong>链接：</strong> <a href="https://littlenyima.github.io/posts/14-denoising-diffusion-implicit-models/">笔记｜扩散模型（二）：DDIM 理论与实现 | 極東晝寢愛好家</a><br>
-我看到的 DDIM 的解析里讲的比较清楚的一个。</p>
-<hr>
-<h2 id="不同的-normalization">不同的 normalization</h2>
-<p><strong>链接：</strong> <a href="https://zhuanlan.zhihu.com/p/86765356">https://zhuanlan.zhihu.com/p/86765356</a><br>
-说明了 BN、LN、IN 以及 GN 的区别。</p>
-<hr>
-<h2 id="不同的损失函数">不同的损失函数</h2>
-<p><strong>链接：</strong> <a href="https://blog.csdn.net/m0_38007695/article/details/114983574">损失函数整理（分类和回归）_分类损失函数-CSDN博客</a></p>
-<hr>
-<h2 id="Focal-loss">Focal loss</h2>
-<p><strong>链接：</strong> <a href="https://zhuanlan.zhihu.com/p/49981234">https://zhuanlan.zhihu.com/p/49981234</a></p>
-<hr>
-<h2 id="Seesaw-loss">Seesaw loss</h2>
-<p><strong>链接：</strong> <a href="https://zhuanlan.zhihu.com/p/339126633">https://zhuanlan.zhihu.com/p/339126633</a></p>
-<hr>
-<h2 id="IoU-及后续变体">IoU 及后续变体</h2>
-<p><strong>链接：</strong> <a href="https://zhuanlan.zhihu.com/p/94799295">https://zhuanlan.zhihu.com/p/94799295</a></p>
-<hr>
-<h2 id="Swin-Transformer">Swin Transformer</h2>
-<p><strong>链接：</strong> <a href="https://blog.csdn.net/qq_37541097/article/details/121119988">Swin-Transformer网络结构详解_swin transformer-CSDN博客</a></p>
-<hr>
-<h2 id="DETR">DETR</h2>
-<p><strong>链接：</strong> <a href="https://blog.csdn.net/baidu_36913330/article/details/120495817">深度学习之目标检测（十一）–DETR详解-CSDN博客</a></p>
-<hr>
-<h2 id="Deformable-DETR">Deformable DETR</h2>
-<p><strong>链接：</strong> <a href="https://zhuanlan.zhihu.com/p/372116181">https://zhuanlan.zhihu.com/p/372116181</a></p>
-<hr>
-<h2 id="位置编码">位置编码</h2>
-<p><a href="https://blog.csdn.net/xian0710830114/article/details/133377460">一文搞懂Transformer的位置编码-CSDN博客</a><br>
-<a href="https://zhuanlan.zhihu.com/p/580739696">https://zhuanlan.zhihu.com/p/580739696</a><br>
-<a href="https://zhuanlan.zhihu.com/p/580741145">https://zhuanlan.zhihu.com/p/580741145</a><br>
-<a href="https://hub.baai.ac.cn/view/29979">十分钟读懂旋转编码（RoPE） - 智源社区</a></p>
-<hr>
-<h2 id="深度学习手撕代码">深度学习手撕代码</h2>
-<p><a href="https://blog.csdn.net/weixin_43662553/category_11970248.html">深度学习基础_L☆★的博客-CSDN博客</a></p>
-<hr>
-<h2 id="传统方法">传统方法</h2>
-<p><a href="https://zhuanlan.zhihu.com/p/85829145">https://zhuanlan.zhihu.com/p/85829145</a><br>
-<a href="https://medium.com/@shartoo518/1-%E6%A6%82%E8%A7%88-5921fa471efb">SIFT 特征详解. SIFT特征即Scale-Invariant Feature… | by Tao Shatoo | Medium</a><br>
-<a href="https://blog.csdn.net/lanxuecc/article/details/52222369">机器学习 之 Haar特征-CSDN博客</a></p>
-<hr>
-<h2 id="LLM-面试八股">LLM 面试八股</h2>
-<p><a href="https://github.com/j0rGeT/LLMs_interview_notes">GitHub - j0rGeT/LLMs_interview_notes: LLMs interview notes and answers:该仓库主要记录大模型（LLMs）算法工程师相关的面试题和参考答案</a></p>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>技术积累</category>
-        <category>杂七杂八</category>
-      </categories>
-  </entry>
-  <entry>
     <title>git使用</title>
     <url>/posts/4896de77/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h2 id="把本地分支上传到远程指定分支">把本地分支上传到远程指定分支</h2>
@@ -2400,6 +2394,20 @@ E：仅在 S5 上执行 single scale encoder（AIFI），以减少计算量，�
 后内摇滚一如既往地拉垮，强调了送胯的动作，同时双腿落冰时双腿都要站直。<br>
 后压步感觉还可以，就是速度比较慢。<br>
 规尺转采用了连续规尺转的全新练习方法，左腿做轴的时候还不错，右腿做轴的时候左腿老收不回来。</p>
+</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>05-10</p>
+</div></div><div class='timeline-item-content'><p><strong>侧蹬冰、前 C、后 C、小兔跳、后压步、单足前蛇形步、华尔兹跳</strong><br>
+侧蹬冰和教练说了奇怪的感觉，不过教练觉得动作是正常的。<br>
+前 C、后 C 没什么好说的，就正常练了练。小兔跳强调了后腿可以再往后拉一点。<br>
+后压步强调了支撑腿冰刀角度和要往后看，目前往后看会导致动作不稳定，主要是身体可能控制不住，这个需要慢慢练习。<br>
+单足前蛇形步刚刚学，目前还处在一个只能扭非常非常小的角度的程度，右脚对刃的感受更好一些，左脚基本就是蹭来蹭去。<br>
+华尔兹跳强调了几个要点：后腿弯曲的角度要到位，手臂靠肘部后拉，肩胯角度要基本平行，上的时候右腿右肩上提，左腿不能乱摆，落冰的时候从前拉到后面。</p>
+</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>05-17</p>
+</div></div><div class='timeline-item-content'><p><strong>前压步、后压步、单足前蛇形步、前外摇滚步、后内摇滚步、前外刃弧线</strong><br>
+复习了前压步和后压步，自从后压步要回头看就完全找不到感觉了，太悲伤了。<br>
+单足蛇形步还是处于一个在地上蹭的状态。<br>
+前摇整体还可以，就是强调了后腿要多往后面抻一点，后内动作还是很奇怪。<br>
+前外刃弧线不太保持得了上半身平衡，和之前的前内摇滚步一样，希望下周可以变好。<br>
+另外，根据教练建议去磨了刀，教练还建议去练练普拉提，准备等到其他事情尘埃落定之后再看。</p>
 </div></div></div>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
