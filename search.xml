@@ -1,6 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>【DeepSeek系列（三）】DeepSeek Math</title>
+    <url>/posts/94820d99/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><ol class="series-items"><li><a href="/posts/6ed5720f/" title="【DeepSeek系列（一）】DeepSeek LLM">【DeepSeek系列（一）】DeepSeek LLM</a></li><li><a href="/posts/c0dbd124/" title="【DeepSeek系列（二）】DeepSeek Coder">【DeepSeek系列（二）】DeepSeek Coder</a></li><li><a href="/posts/94820d99/" title="【DeepSeek系列（三）】DeepSeek Math">【DeepSeek系列（三）】DeepSeek Math</a></li></ol>
+<p><strong>题目：</strong> DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models<br>
+<strong>链接：</strong> <a href="https://arxiv.org/pdf/2402.03300">2402.03300</a><br>
+<strong>代码：</strong> <a href="https://github.com/deepseek-ai/DeepSeek-Math">GitHub - deepseek-ai/DeepSeek-Math: DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models</a><br>
+<strong>单位：</strong> DeepSeek-AI；Tsinghua University；Peking University</p>
+<hr>
+<h2 id="本文要点">本文要点</h2>
+<ol>
+<li>通过精心设计的数据处理过程，充分利用网络上的公开数据；</li>
+<li>设计了 GRPO 替代 PPO。</li>
+</ol>
+<hr>
+<h2 id="预训练数据收集">预训练数据收集</h2>
+<h3 id="数据收集流程">数据收集流程</h3>
+<p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/20250522180957.png" alt="image.png"></p>
+<ol>
+<li>把 OpenWebMath 作为 seed corpus。从 seed corpus 里随机抽 50w 数据作为证样本，从 Common Crawl 里随机抽 50w 数据作为负样本，训练一个 fastText model；</li>
+<li>在 Common Crawl 去重后的数据上运行 fastText model，找到数学相关的数据。为了保证筛出的样本质量，筛选数据时会根据 fastText model 预测的 score 对数据排序，仅保留分值较高的数据。在第一轮迭代里，仅保留前 40B tokens；</li>
+<li>根据 base URL 把数据分为不同的 domain。统计每个 domain 的数据在第一轮迭代被分为数学相关的比例，超过 10%的就认为这个 domain 是数学相关的。然后，手工对这些 domain 里与数学相关的部分进行标注。链接到这些 URL 但没在数据集里的网页也被加入 seed corpus；</li>
+<li>收集了更多数据后，重新训练 fastText 得到一个更好的模型，在下一轮里召回更多与数学相关的网页；</li>
+<li>4 轮之后得到 35.5M 数学相关的网页，120B tokens；第四轮停止的原因是第四轮迭代新收集的数据量很少了；</li>
+<li>采用了 <a href="/posts/c0dbd124/" title="【DeepSeek系列（二）】DeepSeek Coder">DeepSeek_Coder</a> 中 gram 过滤相同的方法过滤数据，防止测试数据进入训练集。</li>
+</ol>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>技术积累</category>
+        <category>论文笔记</category>
+      </categories>
+      <tags>
+        <tag>大模型</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>linux命令</title>
     <url>/posts/8ebbbb0f/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h2 id="命令行恢复显示">命令行恢复显示</h2>
@@ -17,7 +52,7 @@
   <entry>
     <title>【DeepSeek系列（二）】DeepSeek Coder</title>
     <url>/posts/c0dbd124/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><ol class="series-items"><li><a href="/posts/6ed5720f/" title="【DeepSeek系列（一）】DeepSeek LLM">【DeepSeek系列（一）】DeepSeek LLM</a></li><li><a href="/posts/c0dbd124/" title="【DeepSeek系列（二）】DeepSeek Coder">【DeepSeek系列（二）】DeepSeek Coder</a></li></ol>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><ol class="series-items"><li><a href="/posts/6ed5720f/" title="【DeepSeek系列（一）】DeepSeek LLM">【DeepSeek系列（一）】DeepSeek LLM</a></li><li><a href="/posts/c0dbd124/" title="【DeepSeek系列（二）】DeepSeek Coder">【DeepSeek系列（二）】DeepSeek Coder</a></li><li><a href="/posts/94820d99/" title="【DeepSeek系列（三）】DeepSeek Math">【DeepSeek系列（三）】DeepSeek Math</a></li></ol>
 <p><strong>题目：</strong> DeepSeek-Coder: When the Large Language Model Meets Programming - The Rise of Code Intelligence<br>
 <strong>链接：</strong> <a href="https://arxiv.org/pdf/2401.14196">2401.14196</a><br>
 <strong>代码：</strong> <a href="https://github.com/deepseek-ai/DeepSeek-Coder">GitHub - deepseek-ai/DeepSeek-Coder: DeepSeek Coder: Let the Code Write Itself</a><br>
@@ -435,7 +470,7 @@
   <entry>
     <title>【DeepSeek系列（一）】DeepSeek LLM</title>
     <url>/posts/6ed5720f/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><ol class="series-items"><li><a href="/posts/6ed5720f/" title="【DeepSeek系列（一）】DeepSeek LLM">【DeepSeek系列（一）】DeepSeek LLM</a></li><li><a href="/posts/c0dbd124/" title="【DeepSeek系列（二）】DeepSeek Coder">【DeepSeek系列（二）】DeepSeek Coder</a></li></ol>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><ol class="series-items"><li><a href="/posts/6ed5720f/" title="【DeepSeek系列（一）】DeepSeek LLM">【DeepSeek系列（一）】DeepSeek LLM</a></li><li><a href="/posts/c0dbd124/" title="【DeepSeek系列（二）】DeepSeek Coder">【DeepSeek系列（二）】DeepSeek Coder</a></li><li><a href="/posts/94820d99/" title="【DeepSeek系列（三）】DeepSeek Math">【DeepSeek系列（三）】DeepSeek Math</a></li></ol>
 <p><strong>题目：</strong> DeepSeek LLM Scaling Open-Source Language Models with Longtermism<br>
 <strong>链接：</strong> <a href="https://arxiv.org/pdf/2401.02954">2401.02954</a><br>
 <strong>代码：</strong> <a href="https://github.com/deepseek-ai/DeepSeek-LLM">GitHub - deepseek-ai/DeepSeek-LLM: DeepSeek LLM: Let there be answers</a><br>
@@ -857,8 +892,8 @@ V2 放弃了 V1 的多模型，采用了给图像分块的方式，对图像 res
         <category>论文笔记</category>
       </categories>
       <tags>
-        <tag>Image_Generation</tag>
         <tag>论文笔记</tag>
+        <tag>Image_Generation</tag>
         <tag>高引</tag>
         <tag>GAN</tag>
         <tag>ICCV2017</tag>
@@ -1039,9 +1074,9 @@ M834 80h400000v40h-400000z"/></svg></span></span></span><span class="vlist-s">�
         <category>论文笔记</category>
       </categories>
       <tags>
-        <tag>Image_Generation</tag>
         <tag>论文笔记</tag>
         <tag>Diffusion</tag>
+        <tag>Image_Generation</tag>
         <tag>高引</tag>
         <tag>ICLR2024</tag>
       </tags>
@@ -1692,9 +1727,9 @@ M834 80h400000v40h-400000z"/></svg></span></span></span><span class="vlist-s">�
         <category>论文笔记</category>
       </categories>
       <tags>
-        <tag>Image_Generation</tag>
         <tag>论文笔记</tag>
         <tag>Diffusion</tag>
+        <tag>Image_Generation</tag>
         <tag>高引</tag>
         <tag>NIPS2020</tag>
       </tags>
@@ -2028,9 +2063,9 @@ E：仅在 S5 上执行 single scale encoder（AIFI），以减少计算量，�
         <category>论文笔记</category>
       </categories>
       <tags>
-        <tag>Image_Generation</tag>
         <tag>论文笔记</tag>
         <tag>Diffusion</tag>
+        <tag>Image_Generation</tag>
         <tag>高引</tag>
         <tag>CVPR2022</tag>
       </tags>
@@ -2408,6 +2443,13 @@ E：仅在 S5 上执行 single scale encoder（AIFI），以减少计算量，�
 前摇整体还可以，就是强调了后腿要多往后面抻一点，后内动作还是很奇怪。<br>
 前外刃弧线不太保持得了上半身平衡，和之前的前内摇滚步一样，希望下周可以变好。<br>
 另外，根据教练建议去磨了刀，教练还建议去练练普拉提，准备等到其他事情尘埃落定之后再看。</p>
+</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>05-24</p>
+</div></div><div class='timeline-item-content'><p><strong>单足前蛇形步、前后压步、前内莫霍克、双足转</strong><br>
+单足蛇形步右脚找到了一丢感觉，左脚还是基本不行，左脚对刃的感受和掌控都比较差。<br>
+前压步强调了身体要向圆内倾斜，不能太直立；后压步强调了身体要往后靠，不能前倾。<br>
+新学了前内莫霍克，主要是要注意浮腿放下去的时候不能犹豫，要贴着滑行脚放，放下后滑行脚立刻蹬冰滑出，要注意蹬冰，不能直接抬起来。目前速度慢且完全准备充足的情况下可以做，稍微差一点就不行。<br>
+双足转强调了进入规尺的时候要用肩膀带动，肩膀从内扣到打开产生一个旋转的动力，目前找到了一点进入双足转之后旋转的感觉，差不多能转两圈，但是规尺依然不行，只能转半圈到一圈。<br>
+整体感觉自己核心力量非常差，需要重点提升。</p>
 </div></div></div>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
@@ -2810,8 +2852,8 @@ s 中的串联子串是指一个包含 words 中所有字符串以任意顺�
         <tag>大模型</tag>
         <tag>论文笔记</tag>
         <tag>高引</tag>
-        <tag>finetune</tag>
         <tag>ACL2022</tag>
+        <tag>finetune</tag>
       </tags>
   </entry>
   <entry>
@@ -2876,8 +2918,8 @@ s 中的串联子串是指一个包含 words 中所有字符串以任意顺�
         <tag>大模型</tag>
         <tag>论文笔记</tag>
         <tag>高引</tag>
-        <tag>ICLR2022</tag>
         <tag>finetune</tag>
+        <tag>ICLR2022</tag>
       </tags>
   </entry>
   <entry>
