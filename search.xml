@@ -856,81 +856,6 @@ GRPO 整体思路其实和 PPO 都差不多，主要的区别：</p>
       </tags>
   </entry>
   <entry>
-    <title>InternVL</title>
-    <url>/posts/59ecffa9/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> InternVL: Scaling up Vision Foundation Models and Aligning<br>
-For Generic Visual-Linguistic Tasks<br>
-<strong>链接：</strong> <a href="https://arxiv.org/pdf/2312.14238">2312.14238</a><br>
-<strong>代码：</strong> <a href="https://github.com/OpenGVLab/InternVL">GitHub - OpenGVLab/InternVL: [CVPR 2024 Oral] InternVL Family: A Pioneering Open-Source Alternative to GPT-4o. 接近GPT-4o表现的开源多模态对话模型</a><br>
-<strong>来源：</strong> CVPR 2024<br>
-<strong>单位：</strong> OpenGVLab, Shanghai AI Laboratory；Nanjing University；The University of Hong Kong；The Chinese University of Hong Kong；Tsinghua University；University of Science and Technology of China；SenseTime Research</p>
-<hr>
-<p><strong>题目：</strong> How Far Are We to GPT-4 V? Closing the Gap to Commercial Multimodal Models with Open-Source Suites<br>
-<strong>链接：</strong> <a href="https://arxiv.org/pdf/2404.16821">2404.16821</a><br>
-<strong>代码：</strong> <a href="https://github.com/OpenGVLab/InternVL">GitHub - OpenGVLab/InternVL: [CVPR 2024 Oral] InternVL Family: A Pioneering Open-Source Alternative to GPT-4o. 接近GPT-4o表现的开源多模态对话模型</a><br>
-<strong>来源：</strong> arxiv<br>
-<strong>单位：</strong> Shanghai AI Laboratory；SenseTime Research；Tsinghua University；Nanjing University；Fudan University；The Chinese University of Hong Kong</p>
-<hr>
-<p><strong>题目：</strong> Expanding Performance Boundaries of Open-Source Multimodal Models with Model, Data, and Test-Time Scaling<br>
-<strong>链接：</strong> <a href="https://arxiv.org/pdf/2412.05271">2412.05271</a><br>
-<strong>代码：</strong> <a href="https://github.com/OpenGVLab/InternVL">GitHub - OpenGVLab/InternVL: [CVPR 2024 Oral] InternVL Family: A Pioneering Open-Source Alternative to GPT-4o. 接近GPT-4o表现的开源多模态对话模型</a><br>
-<strong>来源：</strong> arxiv<br>
-<strong>单位：</strong> Shanghai AI Laboratory；SenseTime Research；Tsinghua University；Nanjing University；Fudan University；The Chinese University of Hong Kong；Shanghai Jiao Tong University</p>
-<hr>
-<h2 id="Method">Method</h2>
-<p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2025-02-11%2015.59.21.png" alt="截屏2025-02-11 15.59.21.png"></p>
-<h3 id="各模块">各模块</h3>
-<h4 id="Large-Scale-Vision-Encoder">Large-Scale Vision Encoder</h4>
-<p>通过调整模型深度、head dimension、MLP ratio、模型宽度以及 head number 生成一个有 6B 参数量的 ViT 结构。</p>
-<h4 id="Language-Middleware">Language Middleware</h4>
-<p>在 LLaMA 的基础上加上 learnable query 和 cross attention layer，构成视觉文本对齐模块。我个人觉得这个相比 QFormer 或者 MLP 的优势可能是有比较好的初始化（LLaMA）部分可以直接用，另外，模型参数量比较大。</p>
-<h3 id="训练策略">训练策略</h3>
-<ul>
-<li>第一阶段采用对比学习，训练 InternViT 和 LLaMA；</li>
-<li>第二阶段训练 query 和 cross attention，类似于 QFormer；</li>
-<li>第三阶段把 InternViT 和 LLaMA 连到语言模型上，语言模型可以选择训练或冻结。</li>
-</ul>
-<hr>
-<h2 id="InternVL-1-5">InternVL 1.5</h2>
-<p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2025-02-11%2017.01.44.png" alt="截屏2025-02-11 17.01.44.png"></p>
-<h3 id="Strong-Vision-Encoder">Strong Vision Encoder</h3>
-<p>主要解决的是模型分辨率的问题：</p>
-<ul>
-<li>首先把输入图像由 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>224</mn><mo>×</mo><mn>224</mn></mrow><annotation encoding="application/x-tex">224\times 224</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">224</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">224</span></span></span></span> 更换为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>448</mn><mo>×</mo><mn>448</mn></mrow><annotation encoding="application/x-tex">448\times 448</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">448</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">448</span></span></span></span>，后面接语言模型，训练 vision encoder 和 MLP；</li>
-<li>然后把单张图替换为切块的多张图，再次 finetune。</li>
-</ul>
-<h3 id="Dynamic-High-Resolution">Dynamic High-Resolution</h3>
-<p>对图像 resize 并 padding，使图像的长宽都是 448 的倍数，然后按照 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>448</mn><mo>×</mo><mn>448</mn></mrow><annotation encoding="application/x-tex">448\times 448</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">448</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">448</span></span></span></span> 对图像切块。用视觉模型对每一块以及图像整体的缩略图分别提取特征。</p>
-<hr>
-<h2 id="InternVL-2-5">InternVL 2.5</h2>
-<h3 id="Vision-Encoder">Vision Encoder</h3>
-<p>和 1.5 的版本类似，不过又搞了个从 6B 蒸馏出来的 300 M。</p>
-<h3 id="Data-Formats-for-Different-Data-Types">Data Formats for Different Data Types</h3>
-<p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2025-02-11%2018.05.47.png" alt="截屏2025-02-11 18.05.47.png"><br>
-加入了多图和多帧：</p>
-<ul>
-<li>对于多图，每张图前面会有提示 token，用于提示当前是第几张图，同时会根据设定的图像数上限，决定每张图最多被裁成几份；</li>
-<li>对于视频，视频帧不会被裁，会直接缩放到 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>448</mn><mo>×</mo><mn>448</mn></mrow><annotation encoding="application/x-tex">448\times 448</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">448</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">448</span></span></span></span>。</li>
-</ul>
-<h3 id="训练流程">训练流程</h3>
-<ul>
-<li>首先训练 MLP，视觉和语言模型都不参与训练；</li>
-<li>然后训练视觉模型和 MLP（这一步是可选的）；</li>
-<li>最后 finetune 所有参数。</li>
-</ul>
-<hr>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>技术积累</category>
-        <category>论文笔记</category>
-      </categories>
-      <tags>
-        <tag>大模型</tag>
-        <tag>论文笔记</tag>
-        <tag>CVPR2024</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>DeepSeekVL</title>
     <url>/posts/1675234e/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> DeepSeek-VL: Towards Real-World Vision-Language Understanding<br>
@@ -2623,6 +2548,12 @@ E：仅在 S5 上执行 single scale encoder（AIFI），以减少计算量，�
 自己练了一下，单足蛇形步右脚能摇起来一点点了，观察小朋友做这个动作，利用重心变化可以更好地带动内外刃变化，左脚能蹭起来一点点。<br>
 双足转拍了视频看，目前基本只能转两圈，多了轴和脚下就控制不住，不管规尺给的力多不多基本就只能在两圈～两圈半的水平。看考级要求需要至少 3 圈还需要努力。<br>
 莫霍克习惯了一下，就还是状态好的时候能转，状态差的时候不行。</p>
+</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>06-15</p>
+</div></div><div class='timeline-item-content'><p><strong>单足前蛇形步、双足转、莫霍克</strong><br>
+单足蛇形步依旧是右脚稍微好一点点，但是练完单足感觉双足有进步了，更敢压重心了<br>
+双足还是不行，和教练交流了一下，教练给的要点是：重心更多在左脚前脚掌，双脚内八要摆稳。<br>
+莫霍克已经在逐渐习惯了，就是前摇还比较长。<br>
+今天去的时候看到了一个胆子非常大的高龄玩家，顿时感到胆子大小和年龄没关系，主要还是看个人 TAT</p>
 </div></div></div>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
