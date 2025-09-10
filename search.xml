@@ -1,6 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Qwen_VL</title>
+    <url>/posts/70a9e6ed/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> Qwen-VL: A Versatile Vision-Language Model for Understanding, Localization, Text Reading, and Beyond<br>
+<strong>链接：</strong> <a href="https://arxiv.org/pdf/2308.12966">2308.12966</a><br>
+<strong>代码：</strong> <a href="https://github.com/QwenLM/Qwen-VL">GitHub - QwenLM/Qwen-VL: The official repo of Qwen-VL (通义千问-VL) chat &amp; pretrained large vision language model proposed by Alibaba Cloud.</a><br>
+<strong>单位：</strong> Alibaba Group</p>
+<hr>
+<h2 id="模型结构">模型结构</h2>
+<h3 id="LLM">LLM</h3>
+<p>Qwen-7B</p>
+<h3 id="Visual-Encoder">Visual Encoder</h3>
+<p>ViT-bigG</p>
+<h3 id="Position-aware-Vision-Language-Adapter">Position-aware Vision-Language Adapter</h3>
+<h4 id="该结构的目的">该结构的目的</h4>
+<p>因为图像生成的 token 数量比较多，因此该结构会把图像的 token 数进行压缩。</p>
+<h4 id="具体做法">具体做法</h4>
+<ul>
+<li>采用一层随机初始化的 cross attention 结构，随机初始化的 embedding 作为 query，图像 feature 作为 key 和 value；</li>
+<li>Embedding 数量为 256，因此图像 token 经过压缩后会变成 256 个；</li>
+<li>Cross attention 结构的 query 和 key 都有 position embedding。</li>
+</ul>
+<h4 id="该部分的实现代码">该部分的实现代码</h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Resampler</span>(nn.Module):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    A 2D perceiver-resampler network with one cross attention layers by</span></span><br><span class="line"><span class="string">        (grid_size**2) learnable queries and 2d sincos pos_emb</span></span><br><span class="line"><span class="string">    Outputs:</span></span><br><span class="line"><span class="string">        A tensor with the shape of (grid_size**2, embed_dim)</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params"></span></span><br><span class="line"><span class="params">        self,</span></span><br><span class="line"><span class="params">        grid_size,</span></span><br><span class="line"><span class="params">        embed_dim,</span></span><br><span class="line"><span class="params">        num_heads,</span></span><br><span class="line"><span class="params">        kv_dim=<span class="literal">None</span>,</span></span><br><span class="line"><span class="params">        norm_layer=nn.LayerNorm</span></span><br><span class="line"><span class="params">    </span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        <span class="variable language_">self</span>.num_queries = grid_size ** <span class="number">2</span></span><br><span class="line">        <span class="variable language_">self</span>.embed_dim = embed_dim</span><br><span class="line">        <span class="variable language_">self</span>.num_heads = num_heads</span><br><span class="line">        </span><br><span class="line">        <span class="variable language_">self</span>.pos_embed = nn.Parameter(</span><br><span class="line">            torch.from_numpy(get_2d_sincos_pos_embed(embed_dim, grid_size)).<span class="built_in">float</span>()</span><br><span class="line">        ).requires_grad_(<span class="literal">False</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="variable language_">self</span>.query = nn.Parameter(torch.zeros(<span class="variable language_">self</span>.num_queries, embed_dim))</span><br><span class="line">        trunc_normal_(<span class="variable language_">self</span>.query, std=<span class="number">.02</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> kv_dim <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> kv_dim != embed_dim:</span><br><span class="line">            <span class="variable language_">self</span>.kv_proj = nn.Linear(kv_dim, embed_dim, bias=<span class="literal">False</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="variable language_">self</span>.kv_proj = nn.Identity()</span><br><span class="line">        </span><br><span class="line">        <span class="variable language_">self</span>.attn = nn.MultiheadAttention(embed_dim, num_heads)</span><br><span class="line">        <span class="variable language_">self</span>.ln_q = norm_layer(embed_dim)</span><br><span class="line">        <span class="variable language_">self</span>.ln_kv = norm_layer(embed_dim)</span><br><span class="line">        </span><br><span class="line">        <span class="variable language_">self</span>.apply(<span class="variable language_">self</span>._init_weights)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_init_weights</span>(<span class="params">self, m</span>):</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">isinstance</span>(m, nn.Linear):</span><br><span class="line">            trunc_normal_(m.weight, std=<span class="number">.02</span>)</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">isinstance</span>(m, nn.Linear) <span class="keyword">and</span> m.bias <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                nn.init.constant_(m.bias, <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">elif</span> <span class="built_in">isinstance</span>(m, nn.LayerNorm):</span><br><span class="line">            nn.init.constant_(m.bias, <span class="number">0</span>)</span><br><span class="line">            nn.init.constant_(m.weight, <span class="number">1.0</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, attn_mask=<span class="literal">None</span></span>):</span><br><span class="line">    </span><br><span class="line">        pos_embed = get_abs_pos(<span class="variable language_">self</span>.pos_embed, x.size(<span class="number">1</span>))</span><br><span class="line">        </span><br><span class="line">        x = <span class="variable language_">self</span>.kv_proj(x)</span><br><span class="line">        x = <span class="variable language_">self</span>.ln_kv(x).permute(<span class="number">1</span>, <span class="number">0</span>, <span class="number">2</span>)</span><br><span class="line">        </span><br><span class="line">        N = x.shape[<span class="number">1</span>]</span><br><span class="line">        q = <span class="variable language_">self</span>.ln_q(<span class="variable language_">self</span>.query)</span><br><span class="line">        out = <span class="variable language_">self</span>.attn(</span><br><span class="line">            <span class="variable language_">self</span>._repeat(q, N) + <span class="variable language_">self</span>.pos_embed.unsqueeze(<span class="number">1</span>),</span><br><span class="line">            x + pos_embed.unsqueeze(<span class="number">1</span>),</span><br><span class="line">            x,</span><br><span class="line">            attn_mask=attn_mask)[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">return</span> out.permute(<span class="number">1</span>, <span class="number">0</span>, <span class="number">2</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_repeat</span>(<span class="params">self, query, N: <span class="built_in">int</span></span>):</span><br><span class="line">        <span class="keyword">return</span> query.unsqueeze(<span class="number">1</span>).repeat(<span class="number">1</span>, N, <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="模型输入输出">模型输入输出</h2>
+<h3 id="图像输入">图像输入</h3>
+<p>图像经过 visual encoder 和 adapter 处理之后，得到了固定数量的 token。图像 token 的前后加入了&lt;img&gt;和&lt;/img&gt;用于区分图像 token 和文本 token。</p>
+<h3 id="Bbox-的输入输出">Bbox 的输入输出</h3>
+<ul>
+<li>输入的 bbox 被 normalize 到 0～1000，格式是 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><msub><mi>X</mi><mrow><mi>t</mi><mi>o</mi><mi>p</mi><mi>l</mi><mi>e</mi><mi>f</mi><mi>t</mi></mrow></msub><mo separator="true">,</mo><msub><mi>Y</mi><mrow><mi>t</mi><mi>o</mi><mi>p</mi><mi>l</mi><mi>e</mi><mi>f</mi><mi>t</mi></mrow></msub><mo stretchy="false">)</mo><mo separator="true">,</mo><mo stretchy="false">(</mo><msub><mi>X</mi><mrow><mi>b</mi><mi>o</mi><mi>t</mi><mi>t</mi><mi>o</mi><mi>m</mi><mi>r</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>t</mi></mrow></msub><mo separator="true">,</mo><msub><mi>Y</mi><mrow><mi>b</mi><mi>o</mi><mi>t</mi><mi>t</mi><mi>o</mi><mi>m</mi><mi>r</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>t</mi></mrow></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(X_{topleft},Y_{topleft}),(X_{bottomright},Y_{bottomright})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">pl</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.2222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">pl</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">b</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">tt</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">m</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">g</span><span class="mord mathnormal mtight">h</span><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.2222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">b</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">tt</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">m</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">g</span><span class="mord mathnormal mtight">h</span><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>；</li>
+<li>Bbox 前后加入&lt;box&gt;和&lt;/box&gt;用于区分 bbox 和普通文本；</li>
+<li>&lt;ref&gt;和&lt;/ref&gt;用于标记描述 bbox 的文本。</li>
+</ul>
+<hr>
+<h2 id="模型训练">模型训练</h2>
+<p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/20250909175439.png" alt="image.png"></p>
+<h3 id="Pre-training">Pre-training</h3>
+<ul>
+<li>该阶段训练采用了大规模、弱标注、网上爬下来的图像-文本对；</li>
+<li>清洗后的数据共 1.4B 个图像-文本对，其中 77.3%是英文文本数据，22.7%是中文文本数据；<br>
+<img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/20250909180148.png" alt="图片描述" style="max-width: 70%; height: auto; display: block; margin: 0 auto;" /></li>
+<li>该阶段训练中，LLM 不参与训练，只有 ViT 和 adapter 参与训练；</li>
+<li>输入数据尺寸为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>224</mn><mo>×</mo><mn>224</mn></mrow><annotation encoding="application/x-tex">224\times 224</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">224</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">224</span></span></span></span>；</li>
+<li>Learning rate 的最大值是 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><msup><mi>e</mi><mrow><mo>−</mo><mn>4</mn></mrow></msup></mrow><annotation encoding="application/x-tex">2e^{-4}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord">2</span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">4</span></span></span></span></span></span></span></span></span></span></span></span>；</li>
+<li>Batch size 为 30720 个图像-文本对，共训练 50000 step，相当于 1 个 epoch 多点。</li>
+</ul>
+<h3 id="Multi-task-Pre-training">Multi-task Pre-training</h3>
+<ul>
+<li>引入了质量更高的 VL 数据，在下列 7 个任务上进行了训练：<br>
+<img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/20250909181405.png" alt="图片描述" style="max-width: 70%; height: auto; display: block; margin: 0 auto;" /></li>
+<li>在数据组织上，把同任务的数据放到同一个 sequence 里面，sequence 的长度为 2048；</li>
+<li>输入数据尺寸为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>448</mn><mo>×</mo><mn>448</mn></mrow><annotation encoding="application/x-tex">448\times 448</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">448</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">448</span></span></span></span>；</li>
+<li>模型的所有部分都参与训练。</li>
+</ul>
+<h3 id="Supervised-Fine-tuning">Supervised Fine-tuning</h3>
+<h4 id="目的">目的</h4>
+<p>增强对话能力。</p>
+<h4 id="具体做法-2">具体做法</h4>
+<ul>
+<li>数据一部分来源于 LLM 生成，一部分引入了手动处理（主要是一些更复杂的数据，比如 localization 以及多图数据）；</li>
+<li>训练时混合了纯文本数据和多模态数据；</li>
+<li>训练数据量为 350k；</li>
+<li>这步训练时冻结了 ViT，只训 LLM 和 adapter。</li>
+</ul>
+<hr>
+<h2 id="个人总结">个人总结</h2>
+<p>这篇文章的 adapter 后来也被抛弃了，当时的想法应该是借鉴了 detr 类的想法，把图像的整体包括物体的信息具体信息通过 query embedding 提取出来。训练遵循了初步图文对齐-&gt;在具体的图像任务上面 finetune-&gt;sft 的过程。</p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>技术积累</category>
+        <category>论文笔记</category>
+      </categories>
+      <tags>
+        <tag>大模型</tag>
+        <tag>高引</tag>
+        <tag>Qwen</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>捕风追影</title>
     <url>/posts/e848cceb/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><h2 id="整体感受">整体感受</h2>
@@ -1435,7 +1514,11 @@ P_i&amp;=\frac{1}{T}\sum_{t=1}^Ts_{i,t}&#x27;
 <h3 id="Jsonl-文件逐行读取">Jsonl 文件逐行读取</h3>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(file, <span class="string">&#x27;r&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> infile:</span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> infile:</span><br><span class="line">        data = json.loads(line)</span><br></pre></td></tr></table></figure>
 <h3 id="Jsonl-文件逐行写入">Jsonl 文件逐行写入</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(output_file, <span class="string">&#x27;a&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> fw:</span><br><span class="line">    json.dump(label, fw, ensure_ascii=<span class="literal">False</span>)</span><br><span class="line">    fw.write(<span class="string">&#x27;\n&#x27;</span>)</span><br></pre></td></tr></table></figure><link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(output_file, <span class="string">&#x27;a&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> fw:</span><br><span class="line">    json.dump(label, fw, ensure_ascii=<span class="literal">False</span>)</span><br><span class="line">    fw.write(<span class="string">&#x27;\n&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="Python-代码内拷贝文件">Python 代码内拷贝文件</h2>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">shutil.copy2(src_path, dst_path)</span><br></pre></td></tr></table></figure>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
         <category>技术积累</category>
         <category>杂七杂八</category>
@@ -2584,7 +2667,6 @@ SP 仅在 attention 和 MLP 的输入输出部分进行了处理，保持了原�
 <h3 id="均衡负载版-Ring-Attention">均衡负载版 Ring Attention</h3>
 <p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/20250826173653.png" alt="image.png"><br>
 用了个比较 tricky 的方法，对于 cp_size，把数据分成 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mi>p</mi><mi mathvariant="normal">_</mi><mi>s</mi><mi>i</mi><mi>z</mi><mi>e</mi><mo>×</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">cp\_size\times 2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9695em;vertical-align:-0.31em;"></span><span class="mord mathnormal">c</span><span class="mord mathnormal">p</span><span class="mord" style="margin-right:0.02778em;">_</span><span class="mord mathnormal">s</span><span class="mord mathnormal">i</span><span class="mord mathnormal">ze</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2</span></span></span></span> 个 chunk，然后把前面和后面的配成一对，一对 chunk 放到一个 gpu 上计算，这样计算负载就是均衡的。</p>
-<hr>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
         <category>技术积累</category>
@@ -2783,43 +2865,6 @@ SP 仅在 attention 和 MLP 的输入输出部分进行了处理，保持了原�
       </categories>
       <tags>
         <tag>大模型</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>QwenVL</title>
-    <url>/posts/e0d8505c/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> Qwen-VL: A Versatile Vision-Language Model for Understanding, Localization, Text Reading, and Beyond<br>
-<strong>链接：</strong> <a href="https://arxiv.org/pdf/2308.12966">2308.12966</a><br>
-<strong>代码：</strong> <a href="https://github.com/QwenLM/Qwen-VL">GitHub - QwenLM/Qwen-VL: The official repo of Qwen-VL (通义千问-VL) chat &amp; pretrained large vision language model proposed by Alibaba Cloud.</a><br>
-<strong>来源：</strong> arxiv<br>
-<strong>单位：</strong> Alibaba Group</p>
-<hr>
-<p><strong>题目：</strong> Qwen 2-VL: Enhancing Vision-Language Model’s Perception of the World at Any Resolution<br>
-<strong>链接：</strong> <a href="https://arxiv.org/pdf/2409.12191">https://arxiv.org/pdf/2409.12191</a><br>
-<strong>代码：</strong> <a href="https://github.com/QwenLM/Qwen2-VL">https://github.com/QwenLM/Qwen2-VL</a><br>
-<strong>来源：</strong> arxiv<br>
-<strong>单位：</strong> Qwen Team Alibaba Group</p>
-<hr>
-<h2 id="模型结构">模型结构</h2>
-<h3 id="Visual-Encoder">Visual Encoder</h3>
-<p>采用了 Openclip’s ViT-bigG。</p>
-<h3 id="Position-aware-Vision-Language-Adapter">Position-aware Vision-Language Adapter</h3>
-<p>用 256 个 query 与 visual encoder 的输出进行 cross attention。这一步会把视觉 token 数量压缩到固定的 256 个 query。</p>
-<hr>
-<h2 id="Qwen2-VL">Qwen2-VL</h2>
-<h3 id="M-RoPE">M-RoPE</h3>
-<p><img src="https://yumiwawa-1300546587.cos.ap-beijing.myqcloud.com/Obsidian/%E6%88%AA%E5%B1%8F2024-12-18%2018.53.00.png" alt=""><br>
-在每个维度上应用 RoPE，然后把不同位置的 position embedding 拼起来，得到最终的位置编码。</p>
-<h3 id="Unified-Image-and-Video-Understanding">Unified Image and Video Understanding</h3>
-<p>输入是单张图时，会把图像复制一份，看作一个 2 帧的视频，从而实现视频和图像的统一。第一层卷积会采用 3D 卷积，使模型可以提取视频三维特征。</p>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-      <categories>
-        <category>技术积累</category>
-        <category>论文笔记</category>
-      </categories>
-      <tags>
-        <tag>大模型</tag>
-        <tag>论文笔记</tag>
       </tags>
   </entry>
   <entry>
