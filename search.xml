@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Qwen</title>
+    <url>/posts/b1cb1ab3/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>技术积累</category>
+        <category>论文笔记</category>
+      </categories>
+      <tags>
+        <tag>大模型</tag>
+        <tag>高引</tag>
+        <tag>Qwen</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Qwen_VL</title>
     <url>/posts/70a9e6ed/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><p><strong>题目：</strong> Qwen-VL: A Versatile Vision-Language Model for Understanding, Localization, Text Reading, and Beyond<br>
@@ -67,7 +81,7 @@
 </ul>
 <hr>
 <h2 id="个人总结">个人总结</h2>
-<p>这篇文章的 adapter 后来也被抛弃了，当时的想法应该是借鉴了 detr 类的想法，把图像的整体包括物体的信息具体信息通过 query embedding 提取出来。训练遵循了初步图文对齐-&gt;在具体的图像任务上面 finetune-&gt;sft 的过程。</p>
+<p>这篇文章的 adapter 后来也被抛弃了，当时的想法应该是借鉴了 detr 类的想法，把图像的整体包括物体的信息具体信息通过 query embedding 提取出来。训练遵循了初步图文对齐-&gt;在具体的图像任务上面 finetune-&gt;sft 的过程。另外，这个模型应该是有多图能力的，但是在论文里面没提怎么处理的多图。</p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
         <category>技术积累</category>
@@ -75,7 +89,6 @@
       </categories>
       <tags>
         <tag>大模型</tag>
-        <tag>高引</tag>
         <tag>Qwen</tag>
       </tags>
   </entry>
@@ -4502,7 +4515,7 @@ E：仅在 S5 上执行 single scale encoder（AIFI），以减少计算量，�
 单足蛇形步强调了浮腿动作，向内的时候浮腿伸展，外刃的时候收回。<br>
 前内摇滚步强调了用刃的角度，要向 45 度到 30 度努力，目前只能大概 75 度到 60 度；后内摇滚步强调了身体的控制，要注意侧腰和手臂的拉扯。<br>
 教了个冰舞的步法组合：夏塞步+浮腿向后交叉换足（换足过程中由外刃转到内刃）+前压步+前内刃换到另一侧，所有动作需要在一个半圆上完成，动作差不多都能完成就是排不进一个半圆里，做完差不多需要一整个圆。<br>
-练了闭式莫霍克以及后转前的莫霍克，教练觉得不要在慢速下练会导致没法习惯快速，直接把速度加上去练就好。个人觉得只要身体能控制地比较好，脚下动作就还好，没转过去一般都是身体没转到位/刃没压住。<br>
+练了开式莫霍克以及后转前的莫霍克，教练觉得不要在慢速下练会导致没法习惯快速，直接把速度加上去练就好。个人觉得只要身体能控制地比较好，脚下动作就还好，没转过去一般都是身体没转到位/刃没压住。<br>
 华尔兹被教练带着小练了一下下。</p>
 </div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>06-02</p>
 </div></div><div class='timeline-item-content'><p><strong>单足前蛇形步、双足转、莫霍克</strong><br>
@@ -4603,6 +4616,9 @@ PS：感觉教练把我当成了某种只要把指令拆分地够细就可以精
 继续调整了前压步和弧线，前后压步都强调了二次蹬冰的动作，前压步主要靠第二次蹲，后压步主要靠重心完全压在后腿不能前移。<br>
 练了左侧的转三+落冰组合，强调了落冰的动作腿要蹬出去且要靠住右边，肩膀不要特别往后掀。自己练了右侧的转三基本也可以了，虽然还不是很有安全感，但是基本都能转过去了。<br>
 教练说现在离 1 级水平还差点，要多练练再考虑 11 月要不要报名考级。</p>
+</div></div><div class='timeline-item'><div class='timeline-item-title'><div class='item-circle'><p>09-14</p>
+</div></div><div class='timeline-item-content'><p><strong>各种练习</strong><br>
+教练不在的一天。自己基本把各种都练了一遍，好的点是转三好了很多，转过去的概率已经非常大了，浅浅试了一下前内转后外，右脚基本可以转过去了，只不过转完了站不太稳。不好的点是各种旋转和莫霍克依然不怎么样，莫霍克也不是转不过去，就是前摇很长，旋转还是那样，双足的第三圈基本就靠强行转了。</p>
 </div></div></div>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
