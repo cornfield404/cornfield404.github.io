@@ -26,7 +26,7 @@
 </ul>
 <h3 id="Tokenization">Tokenization</h3>
 <ul>
-<li>用了 <a href="%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%B8%B8%E7%94%A8%E7%9A%84%E6%8A%80%E5%B7%A7">BPE</a> 方法；</li>
+<li>用了 BPE 方法；</li>
 <li>采用 tiktoken 以及词表 cl100k 作为初始，并加入常用中文词汇和一些其他语言的词汇；</li>
 <li>数字拆分为单独的数字作为输入；</li>
 <li>最终的词表大小为 152K。</li>
@@ -35,10 +35,10 @@
 <p>Qwen 在 Llama 上进行了修改，具体的改动有：</p>
 <ul>
 <li>拆开 embedding 和 output projection，让它们分别训练；</li>
-<li>采用了 <a href="%E5%90%84%E7%A7%8D%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81">RoPE</a> 作为位置编码，且位置编码的精度为 FP32；</li>
+<li>采用了 RoPE 作为位置编码，且位置编码的精度为 FP32；</li>
 <li>QKV 层保留了 bias，其余层删掉了 bias；</li>
-<li><a href="%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%B8%B8%E7%94%A8%E7%9A%84%E6%8A%80%E5%B7%A7">Pre-Norm</a> + [RMSNorm](各种 normalization)；</li>
-<li><a href="%E5%90%84%E7%A7%8D%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0">SwiGLU</a></li>
+<li>Pre-Norm + RMSNorm；</li>
+<li><a href="%E5%90%84%E7%A7%8D%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0.md">SwiGLU</a></li>
 </ul>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
@@ -1084,7 +1084,7 @@ Post\ Norm&amp;:\ x_{t+1}=Norm(x_t+F_t(x_t))
   <entry>
     <title>【DeepSeek系列（八）】DeepSeek-r1</title>
     <url>/posts/11ac306a/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><ol class="series-items"><li><a href="/posts/11ac306a/" title="【DeepSeek系列（八）】DeepSeek-r1">【DeepSeek系列（八）】DeepSeek-r1</a></li></ol>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><ol class="series-items"><li><a href="/posts/6ed5720f/" title="【DeepSeek系列（一）】DeepSeek LLM">【DeepSeek系列（一）】DeepSeek LLM</a></li><li><a href="/posts/c0dbd124/" title="【DeepSeek系列（二）】DeepSeek Coder">【DeepSeek系列（二）】DeepSeek Coder</a></li><li><a href="/posts/94820d99/" title="【DeepSeek系列（三）】DeepSeek Math">【DeepSeek系列（三）】DeepSeek Math</a></li><li><a href="/posts/1675234e/" title="【DeepSeek系列（四）】DeepSeek VL">【DeepSeek系列（四）】DeepSeek VL</a></li><li><a href="/posts/f6aafe71/" title="【DeepSeek系列（五）】DeepSeek-v2">【DeepSeek系列（五）】DeepSeek-v2</a></li><li><a href="/posts/c6fbdee0/" title="【DeepSeek系列（六）】DeepSeek Coder-v2">【DeepSeek系列（六）】DeepSeek Coder-v2</a></li><li><a href="/posts/b6536419/" title="【DeepSeek系列（七）】DeepSeek-v3">【DeepSeek系列（七）】DeepSeek-v3</a></li><li><a href="/posts/11ac306a/" title="【DeepSeek系列（八）】DeepSeek-r1">【DeepSeek系列（八）】DeepSeek-r1</a></li></ol>
 <p><strong>题目：</strong> DeepSeek-R 1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning<br>
 <strong>链接：</strong> <a href="https://arxiv.org/pdf/2501.12948">2501.12948</a><br>
 <strong>单位：</strong> DeepSeek-AI</p>
@@ -1219,10 +1219,10 @@ DeepSeek-R1-Zero 的输出可能有多种语言混合且可读性比较差，比
       </categories>
       <tags>
         <tag>推理小说</tag>
-        <tag>日推</tag>
         <tag>逸木裕</tag>
         <tag>日常推理</tag>
         <tag>短篇集</tag>
+        <tag>日推</tag>
         <tag>本格推理大赏</tag>
       </tags>
   </entry>
@@ -1602,15 +1602,15 @@ P_i&amp;=\frac{1}{T}\sum_{t=1}^Ts_{i,t}&#x27;
         <category>观影记录</category>
       </categories>
       <tags>
+        <tag>动画电影</tag>
         <tag>日本电影</tag>
         <tag>柯南</tag>
-        <tag>动画电影</tag>
       </tags>
   </entry>
   <entry>
     <title>【DeepSeek系列（五）】DeepSeek-v2</title>
     <url>/posts/f6aafe71/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><ol class="series-items"><li><a href="/posts/c0dbd124/" title="【DeepSeek系列（二）】DeepSeek Coder">【DeepSeek系列（二）】DeepSeek Coder</a></li><li><a href="/posts/94820d99/" title="【DeepSeek系列（三）】DeepSeek Math">【DeepSeek系列（三）】DeepSeek Math</a></li><li><a href="/posts/f6aafe71/" title="【DeepSeek系列（五）】DeepSeek-v2">【DeepSeek系列（五）】DeepSeek-v2</a></li></ol>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><ol class="series-items"><li><a href="/posts/6ed5720f/" title="【DeepSeek系列（一）】DeepSeek LLM">【DeepSeek系列（一）】DeepSeek LLM</a></li><li><a href="/posts/c0dbd124/" title="【DeepSeek系列（二）】DeepSeek Coder">【DeepSeek系列（二）】DeepSeek Coder</a></li><li><a href="/posts/94820d99/" title="【DeepSeek系列（三）】DeepSeek Math">【DeepSeek系列（三）】DeepSeek Math</a></li><li><a href="/posts/1675234e/" title="【DeepSeek系列（四）】DeepSeek VL">【DeepSeek系列（四）】DeepSeek VL</a></li><li><a href="/posts/f6aafe71/" title="【DeepSeek系列（五）】DeepSeek-v2">【DeepSeek系列（五）】DeepSeek-v2</a></li><li><a href="/posts/c6fbdee0/" title="【DeepSeek系列（六）】DeepSeek Coder-v2">【DeepSeek系列（六）】DeepSeek Coder-v2</a></li><li><a href="/posts/b6536419/" title="【DeepSeek系列（七）】DeepSeek-v3">【DeepSeek系列（七）】DeepSeek-v3</a></li><li><a href="/posts/11ac306a/" title="【DeepSeek系列（八）】DeepSeek-r1">【DeepSeek系列（八）】DeepSeek-r1</a></li></ol>
 <p><strong>题目：</strong> DeepSeek-V2: A Strong, Economical, and Efficient Mixture-of-Experts Language Model<br>
 <strong>链接：</strong> <a href="https://arxiv.org/pdf/2405.04434">2405.04434</a><br>
 <strong>代码：</strong> <a href="https://github.com/deepseek-ai/DeepSeek-V2">GitHub - deepseek-ai/DeepSeek-V2: DeepSeek-V2: A Strong, Economical, and Efficient Mixture-of-Experts Language Model</a><br>
@@ -2160,7 +2160,7 @@ J_{GRPO}(\theta) &amp;= \mathbb{E}[q\sim P(Q),\{o_i\}_{i=1}^G\sim \pi_{\theta_{o
   <entry>
     <title>【DeepSeek系列（三）】DeepSeek Math</title>
     <url>/posts/94820d99/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><ol class="series-items"><li><a href="/posts/c0dbd124/" title="【DeepSeek系列（二）】DeepSeek Coder">【DeepSeek系列（二）】DeepSeek Coder</a></li><li><a href="/posts/94820d99/" title="【DeepSeek系列（三）】DeepSeek Math">【DeepSeek系列（三）】DeepSeek Math</a></li><li><a href="/posts/f6aafe71/" title="【DeepSeek系列（五）】DeepSeek-v2">【DeepSeek系列（五）】DeepSeek-v2</a></li></ol>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><ol class="series-items"><li><a href="/posts/6ed5720f/" title="【DeepSeek系列（一）】DeepSeek LLM">【DeepSeek系列（一）】DeepSeek LLM</a></li><li><a href="/posts/c0dbd124/" title="【DeepSeek系列（二）】DeepSeek Coder">【DeepSeek系列（二）】DeepSeek Coder</a></li><li><a href="/posts/94820d99/" title="【DeepSeek系列（三）】DeepSeek Math">【DeepSeek系列（三）】DeepSeek Math</a></li><li><a href="/posts/1675234e/" title="【DeepSeek系列（四）】DeepSeek VL">【DeepSeek系列（四）】DeepSeek VL</a></li><li><a href="/posts/f6aafe71/" title="【DeepSeek系列（五）】DeepSeek-v2">【DeepSeek系列（五）】DeepSeek-v2</a></li><li><a href="/posts/c6fbdee0/" title="【DeepSeek系列（六）】DeepSeek Coder-v2">【DeepSeek系列（六）】DeepSeek Coder-v2</a></li><li><a href="/posts/b6536419/" title="【DeepSeek系列（七）】DeepSeek-v3">【DeepSeek系列（七）】DeepSeek-v3</a></li><li><a href="/posts/11ac306a/" title="【DeepSeek系列（八）】DeepSeek-r1">【DeepSeek系列（八）】DeepSeek-r1</a></li></ol>
 <p><strong>题目：</strong> DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models<br>
 <strong>链接：</strong> <a href="https://arxiv.org/pdf/2402.03300">2402.03300</a><br>
 <strong>代码：</strong> <a href="https://github.com/deepseek-ai/DeepSeek-Math">GitHub - deepseek-ai/DeepSeek-Math: DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models</a><br>
@@ -2266,7 +2266,7 @@ GRPO 整体思路其实和 PPO 都差不多，主要的区别：</p>
   <entry>
     <title>【DeepSeek系列（二）】DeepSeek Coder</title>
     <url>/posts/c0dbd124/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><ol class="series-items"><li><a href="/posts/c0dbd124/" title="【DeepSeek系列（二）】DeepSeek Coder">【DeepSeek系列（二）】DeepSeek Coder</a></li><li><a href="/posts/94820d99/" title="【DeepSeek系列（三）】DeepSeek Math">【DeepSeek系列（三）】DeepSeek Math</a></li><li><a href="/posts/f6aafe71/" title="【DeepSeek系列（五）】DeepSeek-v2">【DeepSeek系列（五）】DeepSeek-v2</a></li></ol>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="/assets/js/Meting.min.js"></script><ol class="series-items"><li><a href="/posts/6ed5720f/" title="【DeepSeek系列（一）】DeepSeek LLM">【DeepSeek系列（一）】DeepSeek LLM</a></li><li><a href="/posts/c0dbd124/" title="【DeepSeek系列（二）】DeepSeek Coder">【DeepSeek系列（二）】DeepSeek Coder</a></li><li><a href="/posts/94820d99/" title="【DeepSeek系列（三）】DeepSeek Math">【DeepSeek系列（三）】DeepSeek Math</a></li><li><a href="/posts/1675234e/" title="【DeepSeek系列（四）】DeepSeek VL">【DeepSeek系列（四）】DeepSeek VL</a></li><li><a href="/posts/f6aafe71/" title="【DeepSeek系列（五）】DeepSeek-v2">【DeepSeek系列（五）】DeepSeek-v2</a></li><li><a href="/posts/c6fbdee0/" title="【DeepSeek系列（六）】DeepSeek Coder-v2">【DeepSeek系列（六）】DeepSeek Coder-v2</a></li><li><a href="/posts/b6536419/" title="【DeepSeek系列（七）】DeepSeek-v3">【DeepSeek系列（七）】DeepSeek-v3</a></li><li><a href="/posts/11ac306a/" title="【DeepSeek系列（八）】DeepSeek-r1">【DeepSeek系列（八）】DeepSeek-r1</a></li></ol>
 <p><strong>题目：</strong> DeepSeek-Coder: When the Large Language Model Meets Programming - The Rise of Code Intelligence<br>
 <strong>链接：</strong> <a href="https://arxiv.org/pdf/2401.14196">2401.14196</a><br>
 <strong>代码：</strong> <a href="https://github.com/deepseek-ai/DeepSeek-Coder">GitHub - deepseek-ai/DeepSeek-Coder: DeepSeek Coder: Let the Code Write Itself</a><br>
@@ -4395,10 +4395,10 @@ E：仅在 S5 上执行 single scale encoder（AIFI），以减少计算量，�
       <tags>
         <tag>推理小说</tag>
         <tag>叙述性诡计</tag>
+        <tag>日推</tag>
         <tag>市川忧人</tag>
         <tag>多线叙事</tag>
         <tag>鲇川哲也奖</tag>
-        <tag>日推</tag>
       </tags>
   </entry>
   <entry>
@@ -5021,8 +5021,8 @@ s 中的串联子串是指一个包含 words 中所有字符串以任意顺�
       <tags>
         <tag>推理小说</tag>
         <tag>逻辑流</tag>
-        <tag>推荐书单</tag>
         <tag>日推</tag>
+        <tag>推荐书单</tag>
         <tag>多重解答</tag>
         <tag>井上真伪</tag>
         <tag>轻小说风</tag>
